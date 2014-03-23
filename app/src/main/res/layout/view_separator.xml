@@ -1,0 +1,15 @@
+<!-- from
+~ http://stackoverflow.com/questions/5289536/android-listview-default-divider-styles-attributes
+-->
+
+<?xml version="1.0" encoding="utf-8"?>
+
+<View xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/Separator"
+    android:layout_width="wrap_content"
+    android:layout_height="1dp"
+    android:layout_marginLeft="?android:listPreferredItemPaddingLeft"
+    android:layout_marginRight="?android:listPreferredItemPaddingRight"
+    android:background="?android:attr/listDivider"
+    tools:ignore="NewApi"/>
