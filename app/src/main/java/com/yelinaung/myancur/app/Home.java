@@ -17,7 +17,6 @@
 package com.yelinaung.myancur.app;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -29,6 +28,8 @@ import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -53,6 +54,13 @@ public class Home extends ActionBarActivity {
   @InjectView(R.id.myr) TextView MYR;
   @InjectView(R.id.gbp) TextView GBP;
   @InjectView(R.id.thb) TextView THB;
+
+  @InjectView(R.id.usd_progress) ProgressBar usdProgress;
+  @InjectView(R.id.sgd_progress) ProgressBar sgdProgress;
+  @InjectView(R.id.euro_progress) ProgressBar euroProgress;
+  @InjectView(R.id.myr_progress) ProgressBar myrProgress;
+  @InjectView(R.id.gbp_progress) ProgressBar gbpProgress;
+  @InjectView(R.id.thb_progress) ProgressBar thbProgress;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -168,14 +176,11 @@ public class Home extends ActionBarActivity {
 
   private class GetData extends AsyncTask<Void, Void, Exchange> {
 
-    ProgressDialog mProgressDialog;
     Exchange ex;
 
     @Override protected void onPreExecute() {
       super.onPreExecute();
-      mProgressDialog = new ProgressDialog(Home.this);
-      mProgressDialog.setMessage("Downloading");
-      mProgressDialog.show();
+      showPg();
     }
 
     @Override protected Exchange doInBackground(Void... urls) {
@@ -198,7 +203,9 @@ public class Home extends ActionBarActivity {
 
     @Override protected void onPostExecute(Exchange ex) {
       super.onPostExecute(ex);
-      mProgressDialog.dismiss();
+
+      hidePg();
+
       USD.setText(ex.getUsd());
       SGD.setText(ex.getSgd());
       EURO.setText(ex.getEuro());
@@ -227,10 +234,8 @@ public class Home extends ActionBarActivity {
   }
 
   public class Exchange {
-    String info;
-    String description;
     int timestamp;
-    String usd, sgd, euro, myr, gbp, thb;
+    String usd, sgd, euro, myr, gbp, thb, description, info;
 
     public String getEuro() {
       return euro;
@@ -255,5 +260,37 @@ public class Home extends ActionBarActivity {
     public String getSgd() {
       return sgd;
     }
+  }
+
+  void showPg() {
+    usdProgress.setVisibility(View.VISIBLE);
+    sgdProgress.setVisibility(View.VISIBLE);
+    euroProgress.setVisibility(View.VISIBLE);
+    myrProgress.setVisibility(View.VISIBLE);
+    gbpProgress.setVisibility(View.VISIBLE);
+    thbProgress.setVisibility(View.VISIBLE);
+
+    USD.setVisibility(View.GONE);
+    SGD.setVisibility(View.GONE);
+    EURO.setVisibility(View.GONE);
+    MYR.setVisibility(View.GONE);
+    GBP.setVisibility(View.GONE);
+    THB.setVisibility(View.GONE);
+  }
+
+  void hidePg() {
+    usdProgress.setVisibility(View.GONE);
+    sgdProgress.setVisibility(View.GONE);
+    euroProgress.setVisibility(View.GONE);
+    myrProgress.setVisibility(View.GONE);
+    gbpProgress.setVisibility(View.GONE);
+    thbProgress.setVisibility(View.GONE);
+
+    USD.setVisibility(View.VISIBLE);
+    SGD.setVisibility(View.VISIBLE);
+    EURO.setVisibility(View.VISIBLE);
+    MYR.setVisibility(View.VISIBLE);
+    GBP.setVisibility(View.VISIBLE);
+    THB.setVisibility(View.VISIBLE);
   }
 }

@@ -56,7 +56,7 @@
         android:fontFamily="sans-serif-condensed"
         android:textSize="@dimen/text_label_size"
         android:textColor="@android:color/white"
-        android:layout_width="130dp"
+        android:layout_width="@dimen/rate_width"
         android:layout_height="wrap_content"/>
   </LinearLayout>
   <!-- Header ends -->
@@ -82,17 +82,25 @@
         android:textSize="@dimen/text_label_size"
         android:fontFamily="sans-serif-light"
         android:text="@string/usd"/>
-    <TextView
-        android:id="@+id/usd"
-        android:text="@string/usd_dummy"
-        android:paddingLeft="?android:listPreferredItemPaddingLeft"
-        android:paddingRight="?android:listPreferredItemPaddingRight"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:fontFamily="sans-serif-light"
-        android:textSize="@dimen/text_label_size"
-        android:layout_width="130dp"
-        android:layout_height="match_parent"/>
+    <FrameLayout
+        android:layout_width="@dimen/rate_width"
+        android:layout_height="match_parent">
+      <TextView
+          android:id="@+id/usd"
+          android:text="@string/usd_dummy"
+          android:paddingLeft="?android:listPreferredItemPaddingLeft"
+          android:paddingRight="?android:listPreferredItemPaddingRight"
+          android:fontFamily="sans-serif-light"
+          android:textSize="@dimen/text_label_size"
+          android:layout_gravity="center"
+          android:gravity="center"
+          android:layout_width="@dimen/rate_width"
+          android:layout_height="match_parent"/>
+      <include
+          android:id="@+id/usd_progress"
+          layout="@layout/pg"/>
+    </FrameLayout>
+
   </LinearLayout>
   <!-- USD Ends -->
 
@@ -121,17 +129,24 @@
         android:textSize="@dimen/text_label_size"
         android:fontFamily="sans-serif-light"
         android:text="@string/sgd"/>
-    <TextView
-        android:id="@+id/sgd"
-        android:text="@string/sgd_dummy"
-        android:paddingLeft="?android:listPreferredItemPaddingLeft"
-        android:paddingRight="?android:listPreferredItemPaddingRight"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:fontFamily="sans-serif-light"
-        android:textSize="@dimen/text_label_size"
-        android:layout_width="130dp"
-        android:layout_height="match_parent"/>
+    <FrameLayout
+        android:layout_width="@dimen/rate_width"
+        android:layout_height="match_parent">
+      <TextView
+          android:id="@+id/sgd"
+          android:text="@string/sgd_dummy"
+          android:paddingLeft="?android:listPreferredItemPaddingLeft"
+          android:paddingRight="?android:listPreferredItemPaddingRight"
+          android:layout_gravity="center"
+          android:gravity="center"
+          android:fontFamily="sans-serif-light"
+          android:textSize="@dimen/text_label_size"
+          android:layout_width="@dimen/rate_width"
+          android:layout_height="match_parent"/>
+      <include
+          android:id="@+id/sgd_progress"
+          layout="@layout/pg"/>
+    </FrameLayout>
   </LinearLayout>
   <!-- SGD Ends -->
 
@@ -160,17 +175,24 @@
         android:textSize="@dimen/text_label_size"
         android:fontFamily="sans-serif-light"
         android:text="@string/euro"/>
-    <TextView
-        android:id="@+id/euro"
-        android:text="@string/euro_dummy"
-        android:paddingLeft="?android:listPreferredItemPaddingLeft"
-        android:paddingRight="?android:listPreferredItemPaddingRight"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:fontFamily="sans-serif-light"
-        android:textSize="@dimen/text_label_size"
-        android:layout_width="130dp"
-        android:layout_height="match_parent"/>
+    <FrameLayout
+        android:layout_width="@dimen/rate_width"
+        android:layout_height="match_parent">
+      <TextView
+          android:id="@+id/euro"
+          android:text="@string/euro_dummy"
+          android:paddingLeft="?android:listPreferredItemPaddingLeft"
+          android:paddingRight="?android:listPreferredItemPaddingRight"
+          android:layout_gravity="center"
+          android:gravity="center"
+          android:fontFamily="sans-serif-light"
+          android:textSize="@dimen/text_label_size"
+          android:layout_width="@dimen/rate_width"
+          android:layout_height="match_parent"/>
+      <include
+          android:id="@+id/euro_progress"
+          layout="@layout/pg"/>
+    </FrameLayout>
   </LinearLayout>
   <!-- EURO Ends -->
 
@@ -199,17 +221,25 @@
         android:textSize="@dimen/text_small_label_size"
         android:fontFamily="sans-serif-light"
         android:text="@string/myr"/>
-    <TextView
-        android:id="@+id/myr"
-        android:text="@string/myr_dummy"
-        android:paddingLeft="?android:listPreferredItemPaddingLeft"
-        android:paddingRight="?android:listPreferredItemPaddingRight"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:fontFamily="sans-serif-light"
-        android:textSize="@dimen/text_label_size"
-        android:layout_width="130dp"
-        android:layout_height="match_parent"/>
+
+    <FrameLayout
+        android:layout_width="@dimen/rate_width"
+        android:layout_height="match_parent">
+      <TextView
+          android:id="@+id/myr"
+          android:text="@string/myr_dummy"
+          android:paddingLeft="?android:listPreferredItemPaddingLeft"
+          android:paddingRight="?android:listPreferredItemPaddingRight"
+          android:layout_gravity="center"
+          android:gravity="center"
+          android:fontFamily="sans-serif-light"
+          android:textSize="@dimen/text_label_size"
+          android:layout_width="@dimen/rate_width"
+          android:layout_height="match_parent"/>
+      <include
+          android:id="@+id/myr_progress"
+          layout="@layout/pg"/>
+    </FrameLayout>
   </LinearLayout>
   <!-- MYR Ends -->
 
@@ -238,17 +268,24 @@
         android:textSize="@dimen/text_small_label_size"
         android:fontFamily="sans-serif-light"
         android:text="@string/gbp"/>
-    <TextView
-        android:id="@+id/gbp"
-        android:text="@string/euro_dummy"
-        android:paddingLeft="?android:listPreferredItemPaddingLeft"
-        android:paddingRight="?android:listPreferredItemPaddingRight"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:fontFamily="sans-serif-light"
-        android:textSize="@dimen/text_label_size"
-        android:layout_width="130dp"
-        android:layout_height="match_parent"/>
+    <FrameLayout
+        android:layout_width="@dimen/rate_width"
+        android:layout_height="match_parent">
+      <TextView
+          android:id="@+id/gbp"
+          android:text="@string/euro_dummy"
+          android:paddingLeft="?android:listPreferredItemPaddingLeft"
+          android:paddingRight="?android:listPreferredItemPaddingRight"
+          android:layout_gravity="center"
+          android:gravity="center"
+          android:fontFamily="sans-serif-light"
+          android:textSize="@dimen/text_label_size"
+          android:layout_width="@dimen/rate_width"
+          android:layout_height="match_parent"/>
+      <include
+          android:id="@+id/gbp_progress"
+          layout="@layout/pg"/>
+    </FrameLayout>
   </LinearLayout>
   <!-- GBP Ends -->
 
@@ -277,17 +314,24 @@
         android:textSize="@dimen/text_label_size"
         android:fontFamily="sans-serif-light"
         android:text="@string/thb"/>
-    <TextView
-        android:id="@+id/thb"
-        android:text="@string/thb_dummy"
-        android:paddingLeft="?android:listPreferredItemPaddingLeft"
-        android:paddingRight="?android:listPreferredItemPaddingRight"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:fontFamily="sans-serif-light"
-        android:textSize="@dimen/text_label_size"
-        android:layout_width="130dp"
-        android:layout_height="match_parent"/>
+    <FrameLayout
+        android:layout_width="@dimen/rate_width"
+        android:layout_height="match_parent">
+      <TextView
+          android:id="@+id/thb"
+          android:text="@string/thb_dummy"
+          android:paddingLeft="?android:listPreferredItemPaddingLeft"
+          android:paddingRight="?android:listPreferredItemPaddingRight"
+          android:layout_gravity="center"
+          android:gravity="center"
+          android:fontFamily="sans-serif-light"
+          android:textSize="@dimen/text_label_size"
+          android:layout_width="@dimen/rate_width"
+          android:layout_height="match_parent"/>
+      <include
+          android:id="@+id/thb_progress"
+          layout="@layout/pg"/>
+    </FrameLayout>
   </LinearLayout>
   <!-- THB Ends -->
 

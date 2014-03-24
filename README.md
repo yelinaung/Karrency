@@ -5,7 +5,7 @@ Karrency - A Simple Exchange Rate Checker
 
 ![Alt](https://dl.dropboxusercontent.com/u/2709123/karrency.png)
 
-Data is provide by Central Bank of Myanmar [API](forex.cbm.gov.mm)
+Data is provide by Central Bank of Myanmar [API](http://forex.cbm.gov.mm)
 
 
 To Do
