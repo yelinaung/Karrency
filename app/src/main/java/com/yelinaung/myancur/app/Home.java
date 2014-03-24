@@ -180,7 +180,8 @@ public class Home extends ActionBarActivity {
 
     @Override protected void onPreExecute() {
       super.onPreExecute();
-      showPg();
+      showPg(usdProgress, sgdProgress, euroProgress, gbpProgress, myrProgress, thbProgress);
+      hideTv(USD, SGD, EURO, MYR, GBP, THB);
     }
 
     @Override protected Exchange doInBackground(Void... urls) {
@@ -204,7 +205,8 @@ public class Home extends ActionBarActivity {
     @Override protected void onPostExecute(Exchange ex) {
       super.onPostExecute(ex);
 
-      hidePg();
+      hidePg(usdProgress, sgdProgress, euroProgress, gbpProgress, myrProgress, thbProgress);
+      showTv(USD, SGD, EURO, MYR, GBP, THB);
 
       USD.setText(ex.getUsd());
       SGD.setText(ex.getSgd());
@@ -262,35 +264,27 @@ public class Home extends ActionBarActivity {
     }
   }
 
-  void showPg() {
-    usdProgress.setVisibility(View.VISIBLE);
-    sgdProgress.setVisibility(View.VISIBLE);
-    euroProgress.setVisibility(View.VISIBLE);
-    myrProgress.setVisibility(View.VISIBLE);
-    gbpProgress.setVisibility(View.VISIBLE);
-    thbProgress.setVisibility(View.VISIBLE);
-
-    USD.setVisibility(View.GONE);
-    SGD.setVisibility(View.GONE);
-    EURO.setVisibility(View.GONE);
-    MYR.setVisibility(View.GONE);
-    GBP.setVisibility(View.GONE);
-    THB.setVisibility(View.GONE);
+  void showPg(ProgressBar... pg) {
+    for (ProgressBar mPg : pg) {
+      mPg.setVisibility(View.VISIBLE);
+    }
   }
 
-  void hidePg() {
-    usdProgress.setVisibility(View.GONE);
-    sgdProgress.setVisibility(View.GONE);
-    euroProgress.setVisibility(View.GONE);
-    myrProgress.setVisibility(View.GONE);
-    gbpProgress.setVisibility(View.GONE);
-    thbProgress.setVisibility(View.GONE);
+  void hideTv(TextView... tv) {
+    for(TextView mTv : tv) {
+      mTv.setVisibility(View.GONE);
+    }
+  }
 
-    USD.setVisibility(View.VISIBLE);
-    SGD.setVisibility(View.VISIBLE);
-    EURO.setVisibility(View.VISIBLE);
-    MYR.setVisibility(View.VISIBLE);
-    GBP.setVisibility(View.VISIBLE);
-    THB.setVisibility(View.VISIBLE);
+  void hidePg(ProgressBar... pg) {
+    for (ProgressBar mPg : pg) {
+      mPg.setVisibility(View.GONE);
+    }
+  }
+
+  void showTv(TextView... tv) {
+    for(TextView mTv : tv) {
+      mTv.setVisibility(View.VISIBLE);
+    }
   }
 }
