@@ -291,7 +291,7 @@
             android:layout_height="match_parent">
           <TextView
               android:id="@+id/gbp"
-              android:text="@string/euro_dummy"
+              android:text="@string/gbp_dummy"
               android:paddingLeft="@dimen/listPreferredItemPaddingLeft"
               android:paddingRight="@dimen/listPreferredItemPaddingRight"
               android:layout_gravity="center"
