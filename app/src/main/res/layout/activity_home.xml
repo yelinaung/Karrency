@@ -21,13 +21,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     tools:context="com.yelinaung.myancur.app.Home"
-    tools:ignore="NewApi">
+    >
 
   <!-- Header starts -->
   <LinearLayout
-      android:divider="?android:dividerVertical"
       android:dividerPadding="8dp"
-      android:background="@android:color/holo_orange_dark"
+      android:background="@color/header_background"
       android:padding="10dp"
       android:orientation="horizontal"
       android:layout_width="match_parent"
@@ -37,11 +36,11 @@
         android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:paddingLeft="?android:listPreferredItemPaddingLeft"
-        android:paddingRight="?android:listPreferredItemPaddingRight"
+        android:paddingLeft="@dimen/listPreferredItemPaddingLeft"
+        android:paddingRight="@dimen/listPreferredItemPaddingRight"
         android:gravity="center"
         android:layout_gravity="center"
-        android:background="?android:selectableItemBackground"
+        android:background="?attr/selectableItemBackground"
         android:textSize="@dimen/text_label_size"
         android:textColor="@android:color/white"
         android:fontFamily="sans-serif-condensed"
@@ -49,8 +48,8 @@
     <TextView
         android:id="@+id/label_rate"
         android:text="@string/rate"
-        android:paddingLeft="?android:listPreferredItemPaddingLeft"
-        android:paddingRight="?android:listPreferredItemPaddingRight"
+        android:paddingLeft="@dimen/listPreferredItemPaddingLeft"
+        android:paddingRight="@dimen/listPreferredItemPaddingRight"
         android:gravity="center"
         android:layout_gravity="center"
         android:fontFamily="sans-serif-condensed"
@@ -72,7 +71,6 @@
       <!-- USD Starts -->
       <LinearLayout
           android:minHeight="?android:listPreferredItemHeight"
-          android:divider="?android:dividerVertical"
           android:dividerPadding="8dp"
           android:showDividers="middle"
           android:orientation="horizontal"
@@ -83,21 +81,25 @@
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:paddingLeft="?android:listPreferredItemPaddingLeft"
-            android:paddingRight="?android:listPreferredItemPaddingRight"
+            android:paddingLeft="@dimen/listPreferredItemPaddingLeft"
+            android:paddingRight="@dimen/listPreferredItemPaddingRight"
             android:gravity="center_vertical"
             android:layout_gravity="center"
             android:textSize="@dimen/text_label_size"
             android:fontFamily="sans-serif-light"
             android:text="@string/usd"/>
+
+        <include
+            layout="@layout/view_vertical_separator"/>
+
         <FrameLayout
             android:layout_width="@dimen/rate_width"
             android:layout_height="match_parent">
           <TextView
               android:id="@+id/usd"
               android:text="@string/usd_dummy"
-              android:paddingLeft="?android:listPreferredItemPaddingLeft"
-              android:paddingRight="?android:listPreferredItemPaddingRight"
+              android:paddingLeft="@dimen/listPreferredItemPaddingLeft"
+              android:paddingRight="@dimen/listPreferredItemPaddingRight"
               android:fontFamily="sans-serif-light"
               android:textSize="@dimen/text_label_size"
               android:layout_gravity="center"
@@ -112,12 +114,12 @@
       </LinearLayout>
       <!-- USD Ends -->
 
-      <include layout="@layout/view_separator"/>
+      <include
+          layout="@layout/view_horizontal_separator"/>
 
       <!-- SGD Starts -->
       <LinearLayout
           android:minHeight="?android:listPreferredItemHeight"
-          android:divider="?android:dividerVertical"
           android:dividerPadding="8dp"
           android:showDividers="middle"
           android:orientation="horizontal"
@@ -129,22 +131,25 @@
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:paddingLeft="?android:listPreferredItemPaddingLeft"
-            android:paddingRight="?android:listPreferredItemPaddingRight"
+            android:paddingLeft="@dimen/listPreferredItemPaddingLeft"
+            android:paddingRight="@dimen/listPreferredItemPaddingRight"
             android:gravity="center_vertical"
             android:layout_gravity="center"
-            android:background="?android:selectableItemBackground"
             android:textSize="@dimen/text_label_size"
             android:fontFamily="sans-serif-light"
             android:text="@string/sgd"/>
+
+        <include
+            layout="@layout/view_vertical_separator"/>
+
         <FrameLayout
             android:layout_width="@dimen/rate_width"
             android:layout_height="match_parent">
           <TextView
               android:id="@+id/sgd"
               android:text="@string/sgd_dummy"
-              android:paddingLeft="?android:listPreferredItemPaddingLeft"
-              android:paddingRight="?android:listPreferredItemPaddingRight"
+              android:paddingLeft="@dimen/listPreferredItemPaddingLeft"
+              android:paddingRight="@dimen/listPreferredItemPaddingRight"
               android:layout_gravity="center"
               android:gravity="center"
               android:fontFamily="sans-serif-light"
@@ -158,12 +163,11 @@
       </LinearLayout>
       <!-- SGD Ends -->
 
-      <include layout="@layout/view_separator"/>
+      <include layout="@layout/view_horizontal_separator"/>
 
       <!-- EURO Starts -->
       <LinearLayout
           android:minHeight="?android:listPreferredItemHeight"
-          android:divider="?android:dividerVertical"
           android:dividerPadding="8dp"
           android:showDividers="middle"
           android:orientation="horizontal"
@@ -175,22 +179,25 @@
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:paddingLeft="?android:listPreferredItemPaddingLeft"
-            android:paddingRight="?android:listPreferredItemPaddingRight"
+            android:paddingLeft="@dimen/listPreferredItemPaddingLeft"
+            android:paddingRight="@dimen/listPreferredItemPaddingRight"
             android:gravity="center_vertical"
             android:layout_gravity="center"
-            android:background="?android:selectableItemBackground"
             android:textSize="@dimen/text_label_size"
             android:fontFamily="sans-serif-light"
             android:text="@string/euro"/>
+
+        <include
+            layout="@layout/view_vertical_separator"/>
+
         <FrameLayout
             android:layout_width="@dimen/rate_width"
             android:layout_height="match_parent">
           <TextView
               android:id="@+id/euro"
               android:text="@string/euro_dummy"
-              android:paddingLeft="?android:listPreferredItemPaddingLeft"
-              android:paddingRight="?android:listPreferredItemPaddingRight"
+              android:paddingLeft="@dimen/listPreferredItemPaddingLeft"
+              android:paddingRight="@dimen/listPreferredItemPaddingRight"
               android:layout_gravity="center"
               android:gravity="center"
               android:fontFamily="sans-serif-light"
@@ -204,12 +211,11 @@
       </LinearLayout>
       <!-- EURO Ends -->
 
-      <include layout="@layout/view_separator"/>
+      <include layout="@layout/view_horizontal_separator"/>
 
       <!-- MYR Starts -->
       <LinearLayout
           android:minHeight="?android:listPreferredItemHeight"
-          android:divider="?android:dividerVertical"
           android:dividerPadding="8dp"
           android:showDividers="middle"
           android:orientation="horizontal"
@@ -221,14 +227,16 @@
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:paddingLeft="?android:listPreferredItemPaddingLeft"
-            android:paddingRight="?android:listPreferredItemPaddingRight"
+            android:paddingLeft="@dimen/listPreferredItemPaddingLeft"
+            android:paddingRight="@dimen/listPreferredItemPaddingRight"
             android:gravity="center_vertical"
             android:layout_gravity="center"
-            android:background="?android:selectableItemBackground"
             android:textSize="@dimen/text_small_label_size"
             android:fontFamily="sans-serif-light"
             android:text="@string/myr"/>
+
+        <include
+            layout="@layout/view_vertical_separator"/>
 
         <FrameLayout
             android:layout_width="@dimen/rate_width"
@@ -236,8 +244,8 @@
           <TextView
               android:id="@+id/myr"
               android:text="@string/myr_dummy"
-              android:paddingLeft="?android:listPreferredItemPaddingLeft"
-              android:paddingRight="?android:listPreferredItemPaddingRight"
+              android:paddingLeft="@dimen/listPreferredItemPaddingLeft"
+              android:paddingRight="@dimen/listPreferredItemPaddingRight"
               android:layout_gravity="center"
               android:gravity="center"
               android:fontFamily="sans-serif-light"
@@ -251,12 +259,11 @@
       </LinearLayout>
       <!-- MYR Ends -->
 
-      <include layout="@layout/view_separator"/>
+      <include layout="@layout/view_horizontal_separator"/>
 
       <!-- GBP Starts -->
       <LinearLayout
           android:minHeight="?android:listPreferredItemHeight"
-          android:divider="?android:dividerVertical"
           android:dividerPadding="8dp"
           android:showDividers="middle"
           android:orientation="horizontal"
@@ -268,22 +275,25 @@
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:paddingLeft="?android:listPreferredItemPaddingLeft"
-            android:paddingRight="?android:listPreferredItemPaddingRight"
+            android:paddingLeft="@dimen/listPreferredItemPaddingLeft"
+            android:paddingRight="@dimen/listPreferredItemPaddingRight"
             android:gravity="center_vertical"
             android:layout_gravity="center"
-            android:background="?android:selectableItemBackground"
             android:textSize="@dimen/text_small_label_size"
             android:fontFamily="sans-serif-light"
             android:text="@string/gbp"/>
+
+        <include
+            layout="@layout/view_vertical_separator"/>
+
         <FrameLayout
             android:layout_width="@dimen/rate_width"
             android:layout_height="match_parent">
           <TextView
               android:id="@+id/gbp"
               android:text="@string/euro_dummy"
-              android:paddingLeft="?android:listPreferredItemPaddingLeft"
-              android:paddingRight="?android:listPreferredItemPaddingRight"
+              android:paddingLeft="@dimen/listPreferredItemPaddingLeft"
+              android:paddingRight="@dimen/listPreferredItemPaddingRight"
               android:layout_gravity="center"
               android:gravity="center"
               android:fontFamily="sans-serif-light"
@@ -297,12 +307,11 @@
       </LinearLayout>
       <!-- GBP Ends -->
 
-      <include layout="@layout/view_separator"/>
+      <include layout="@layout/view_horizontal_separator"/>
 
       <!-- THB Starts -->
       <LinearLayout
           android:minHeight="?android:listPreferredItemHeight"
-          android:divider="?android:dividerVertical"
           android:dividerPadding="8dp"
           android:showDividers="middle"
           android:orientation="horizontal"
@@ -314,22 +323,25 @@
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:paddingLeft="?android:listPreferredItemPaddingLeft"
-            android:paddingRight="?android:listPreferredItemPaddingRight"
+            android:paddingLeft="@dimen/listPreferredItemPaddingLeft"
+            android:paddingRight="@dimen/listPreferredItemPaddingRight"
             android:gravity="center_vertical"
             android:layout_gravity="center"
-            android:background="?android:selectableItemBackground"
             android:textSize="@dimen/text_label_size"
             android:fontFamily="sans-serif-light"
             android:text="@string/thb"/>
+
+        <include
+            layout="@layout/view_vertical_separator"/>
+
         <FrameLayout
             android:layout_width="@dimen/rate_width"
             android:layout_height="match_parent">
           <TextView
               android:id="@+id/thb"
               android:text="@string/thb_dummy"
-              android:paddingLeft="?android:listPreferredItemPaddingLeft"
-              android:paddingRight="?android:listPreferredItemPaddingRight"
+              android:paddingLeft="@dimen/listPreferredItemPaddingLeft"
+              android:paddingRight="@dimen/listPreferredItemPaddingRight"
               android:layout_gravity="center"
               android:gravity="center"
               android:fontFamily="sans-serif-light"
@@ -343,7 +355,7 @@
       </LinearLayout>
       <!-- THB Ends -->
 
-      <include layout="@layout/view_separator"/>
+      <include layout="@layout/view_horizontal_separator"/>
     </LinearLayout>
 
   </ScrollView>
