@@ -38,4 +38,5 @@
         </ul>
     ]]></string>
 
+  <string name="no_connection">Could not refresh data. Please check your connection.</string>
 </resources>

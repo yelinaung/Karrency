@@ -21,6 +21,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -31,6 +33,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import java.io.IOException;
@@ -109,7 +112,12 @@ public class Home extends ActionBarActivity {
           .show();
       return true;
     } else if (id == R.id.action_sync) {
-      new GetData().execute();
+      ConnectionManager manager = new ConnectionManager(Home.this);
+      if(manager.isConnected()) {
+        new GetData().execute();
+      } else {
+        Toast.makeText(Home.this, R.string.no_connection, Toast.LENGTH_SHORT).show();
+      }
     }
     return super.onOptionsItemSelected(item);
   }
@@ -285,6 +293,29 @@ public class Home extends ActionBarActivity {
   void showTv(TextView... tv) {
     for(TextView mTv : tv) {
       mTv.setVisibility(View.VISIBLE);
+    }
+  }
+
+  public class ConnectionManager {
+    private Context mContext;
+
+    public ConnectionManager(Context context) {
+      this.mContext = context;
+    }
+
+    public boolean isConnected() {
+      ConnectivityManager connectivity = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+      if (connectivity != null) {
+        NetworkInfo[] info = connectivity.getAllNetworkInfo();
+        if (info != null)
+          for (int i = 0; i < info.length; i++) {
+            if (info[i].getState() == NetworkInfo.State.CONNECTED) {
+              return true;
+            }
+          }
+      }
+      return false;
     }
   }
 }
