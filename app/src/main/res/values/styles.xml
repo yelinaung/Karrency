@@ -3,12 +3,26 @@
   <!-- Base application theme. -->
   <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
     <!-- Customize your theme here. -->
-    <item name="actionOverflowButtonStyle">@style/ActionBarOverFlow</item>
+    <!--<item name="actionOverflowButtonStyle">@style/ActionBarOverFlow</item>-->
+    <item name="android:actionOverflowButtonStyle">@style/ActionBarOverFlow</item>
+
+    <item name="android:spinnerDropDownItemStyle">@style/ActionBarSpinnerStyle</item>
+    <item name="actionDropDownStyle">@style/ActionBarSpinnerStyle</item>
   </style>
 
   <!-- ActionBar Overflow -->
-  <style name="ActionBarOverFlow" parent="Widget.AppCompat.ActionBar">
+  <style name="ActionBarOverFlow" parent="Widget.AppCompat.ActionButton.Overflow">
     <item name="android:src">@drawable/ic_action_overflow</item>
+  </style>
+
+  <!-- ActionBar Spinner Style -->
+  <style name="ActionBarSpinnerStyle" parent="Widget.AppCompat.Spinner.DropDown.ActionBar">
+    <item name="android:textAppearance">@style/ActionBarSpinnerTextStyle</item>
+  </style>
+
+  <!-- ActionBar Spinner Text Style -->
+  <style name="ActionBarSpinnerTextStyle" parent="@android:style/Widget">
+    <item name="android:textColor">@android:color/white</item>
   </style>
 
 </resources>

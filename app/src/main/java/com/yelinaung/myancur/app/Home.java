@@ -83,9 +83,9 @@ public class Home extends ActionBarActivity implements ActionBar.OnNavigationLis
 
     // Specify a SpinnerAdapter to populate the dropdown list.
     ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActionBar.getThemedContext(),
-        android.R.layout.simple_spinner_item, android.R.id.text1, banks);
+        R.layout.actionbar_spinner, android.R.id.text1, banks);
 
-    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+    adapter.setDropDownViewResource(R.layout.actionbar_spinner_dropdown);
 
     // Set up the dropdown list navigation in the action bar.
     mActionBar.setListNavigationCallbacks(adapter, this);
