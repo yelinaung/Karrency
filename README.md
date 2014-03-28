@@ -8,6 +8,12 @@ It's compatible with Android 2.2.x (API lvl 8) onwards.
 
 Data is provide by Central Bank of Myanmar [API](http://forex.cbm.gov.mm)
 
+j
+Code Status
+-----------
+[![Build Status](https://travis-ci.org/yelinaung/Karrency.svg?branch=master)](https://travis-ci.org/yelinaung/Karrency)
+
+
 To Do
 -----
 
