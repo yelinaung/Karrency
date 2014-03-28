@@ -4,7 +4,7 @@ apply plugin: 'android'
 // Manifest version information!
 def versionMajor = 0
 def versionMinor = 1
-def versionPatch = 1
+def versionPatch = 2
 
 android {
   compileSdkVersion 19
