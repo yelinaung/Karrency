@@ -17,10 +17,10 @@
   -->
 
 <ProgressBar xmlns:android="http://schemas.android.com/apk/res/android"
-    style="?android:attr/progressBarStyle"
-    android:indeterminate="true"
+    style="?android:attr/progressBarStyleSmallInverse"
     android:visibility="gone"
+    android:indeterminate="true"
     android:layout_gravity="center"
-    android:layout_width="50dp"
-    android:layout_height="50dp"/>
+    android:layout_width="30dp"
+    android:layout_height="30dp"/>
 
