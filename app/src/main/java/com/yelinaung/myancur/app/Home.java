@@ -24,7 +24,9 @@ import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
@@ -50,6 +52,7 @@ import org.json.JSONObject;
 public class Home extends ActionBarActivity {
 
   public static final String BASE_URL = "http://forex.cbm.gov.mm/api";
+  private MenuItem menuItem;
 
   @InjectView(R.id.usd) TextView USD;
   @InjectView(R.id.sgd) TextView SGD;
@@ -69,6 +72,8 @@ public class Home extends ActionBarActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_home);
     ButterKnife.inject(this);
+    getSupportActionBar().setDisplayOptions(
+        ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_CUSTOM);
   }
 
   @Override public boolean onCreateOptionsMenu(Menu menu) {
@@ -93,31 +98,35 @@ public class Home extends ActionBarActivity {
   }
 
   @Override public boolean onOptionsItemSelected(MenuItem item) {
-    int id = item.getItemId();
-    if (id == R.id.action_about) {
-      PackageManager pm = getPackageManager();
-      String packageName = getPackageName();
-      String versionName;
-      try {
-        assert pm != null;
-        PackageInfo info = pm.getPackageInfo(packageName, 0);
-        versionName = info.versionName;
-      } catch (PackageManager.NameNotFoundException e) {
-        versionName = "";
-      }
-
-      new AlertDialog.Builder(Home.this).setTitle(R.string.about)
-          .setMessage(new SpannableStringBuilder().append(
-              Html.fromHtml(getString(R.string.about_body, versionName))))
-          .show();
-      return true;
-    } else if (id == R.id.action_sync) {
-      ConnectionManager manager = new ConnectionManager(Home.this);
-      if(manager.isConnected()) {
-        new GetData().execute();
-      } else {
-        Toast.makeText(Home.this, R.string.no_connection, Toast.LENGTH_SHORT).show();
-      }
+    menuItem = item;
+    switch (item.getItemId()) {
+      case R.id.action_about:
+        PackageManager pm = getPackageManager();
+        String packageName = getPackageName();
+        String versionName;
+        try {
+          assert pm != null;
+          PackageInfo info = pm.getPackageInfo(packageName, 0);
+          versionName = info.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+          versionName = "";
+        }
+        new AlertDialog.Builder(Home.this).setTitle(R.string.about)
+            .setMessage(new SpannableStringBuilder().append(
+                Html.fromHtml(getString(R.string.about_body, versionName))))
+            .show();
+        return true;
+      case R.id.action_sync:
+        ConnectionManager manager = new ConnectionManager(Home.this);
+        if (manager.isConnected()) {
+          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            menuItem.setActionView(R.layout.pg);
+            menuItem.expandActionView();
+          }
+          new GetData().execute();
+        } else {
+          Toast.makeText(Home.this, R.string.no_connection, Toast.LENGTH_SHORT).show();
+        }
     }
     return super.onOptionsItemSelected(item);
   }
@@ -213,6 +222,11 @@ public class Home extends ActionBarActivity {
     @Override protected void onPostExecute(Exchange ex) {
       super.onPostExecute(ex);
 
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+        menuItem.collapseActionView();
+        menuItem.setActionView(null);
+      }
+
       hidePg(usdProgress, sgdProgress, euroProgress, gbpProgress, myrProgress, thbProgress);
       showTv(USD, SGD, EURO, MYR, GBP, THB);
 
@@ -279,7 +293,7 @@ public class Home extends ActionBarActivity {
   }
 
   void hideTv(TextView... tv) {
-    for(TextView mTv : tv) {
+    for (TextView mTv : tv) {
       mTv.setVisibility(View.GONE);
     }
   }
@@ -291,7 +305,7 @@ public class Home extends ActionBarActivity {
   }
 
   void showTv(TextView... tv) {
-    for(TextView mTv : tv) {
+    for (TextView mTv : tv) {
       mTv.setVisibility(View.VISIBLE);
     }
   }
@@ -304,16 +318,18 @@ public class Home extends ActionBarActivity {
     }
 
     public boolean isConnected() {
-      ConnectivityManager connectivity = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+      ConnectivityManager connectivity =
+          (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
 
       if (connectivity != null) {
         NetworkInfo[] info = connectivity.getAllNetworkInfo();
-        if (info != null)
+        if (info != null) {
           for (int i = 0; i < info.length; i++) {
             if (info[i].getState() == NetworkInfo.State.CONNECTED) {
               return true;
             }
           }
+        }
       }
       return false;
     }
