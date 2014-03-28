@@ -33,6 +33,7 @@ import android.text.SpannableStringBuilder;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,10 +50,12 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Home extends ActionBarActivity {
+public class Home extends ActionBarActivity implements ActionBar.OnNavigationListener {
 
   public static final String BASE_URL = "http://forex.cbm.gov.mm/api";
   private MenuItem menuItem;
+  private ActionBar mActionBar;
+  private static final String STATE_SELECTED_NAVIGATION_ITEM = "selected_navigation_item";
 
   @InjectView(R.id.usd) TextView USD;
   @InjectView(R.id.sgd) TextView SGD;
@@ -72,8 +75,35 @@ public class Home extends ActionBarActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_home);
     ButterKnife.inject(this);
-    getSupportActionBar().setDisplayOptions(
-        ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_CUSTOM);
+    mActionBar = getSupportActionBar();
+    mActionBar.setDisplayShowTitleEnabled(false);
+    mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+
+    final String[] banks = getResources().getStringArray(R.array.banks);
+
+    // Specify a SpinnerAdapter to populate the dropdown list.
+    ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActionBar.getThemedContext(),
+        android.R.layout.simple_spinner_item, android.R.id.text1, banks);
+
+    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+    // Set up the dropdown list navigation in the action bar.
+    mActionBar.setListNavigationCallbacks(adapter, this);
+  }
+
+  @Override
+  public void onRestoreInstanceState(Bundle savedInstanceState) {
+    // Restore the previously serialized current dropdown position.
+    if (savedInstanceState.containsKey(STATE_SELECTED_NAVIGATION_ITEM)) {
+      mActionBar.setSelectedNavigationItem(savedInstanceState.getInt(STATE_SELECTED_NAVIGATION_ITEM));
+    }
+  }
+
+  @Override
+  public void onSaveInstanceState(Bundle outState) {
+    // Serialize the current dropdown position.
+    outState.putInt(STATE_SELECTED_NAVIGATION_ITEM, mActionBar
+        .getSelectedNavigationIndex());
   }
 
   @Override public boolean onCreateOptionsMenu(Menu menu) {
@@ -129,6 +159,11 @@ public class Home extends ActionBarActivity {
         }
     }
     return super.onOptionsItemSelected(item);
+  }
+
+  @Override public boolean onNavigationItemSelected(int i, long l) {
+    Toast.makeText(Home.this, "You selected " + i, Toast.LENGTH_SHORT).show();
+    return true;
   }
 
   public static class SharePref {

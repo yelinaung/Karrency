@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <array name="banks">
+    <item>CB Bank</item>
+    <item>KBZ Bank</item>
+    <item>AGD Bank</item>
+    <item>CentralBank</item>
+  </array>
+</resources>
