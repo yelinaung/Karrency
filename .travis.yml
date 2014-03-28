@@ -1,5 +1,10 @@
 language: java
 jdk: oraclejdk7
+
+# whitelist
+branches:
+  only:
+    - dev
 env:
   matrix:
     - ANDROID_TARGET=android-19  ANDROID_ABI=armeabi-v7a
