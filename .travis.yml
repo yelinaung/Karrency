@@ -1,10 +1,5 @@
 language: java
 jdk: oraclejdk7
-
-# whitelist
-# branches:
-#  only:
-#    - dev
 env:
   matrix:
     - ANDROID_TARGET=android-19  ANDROID_ABI=armeabi-v7a
@@ -16,14 +11,6 @@ before_install:
   - tar xzf android-sdk_r22.3-linux.tgz
   - export ANDROID_HOME=$PWD/android-sdk-linux
   - export PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools
-
- # Download desired version of Gradle
-  - wget http://services.gradle.org/distributions/gradle-1.8-bin.zip
-  - unzip -qq gradle-1.8-bin.zip
-  - export GRADLE_HOME=$PWD/gradle-1.8
-  - export PATH=$GRADLE_HOME/bin:$PATH
-  # just to test gradle version, against our provided one
-  - gradle -v
 
   # Install required components.
   # For a full list, run `android list sdk -a --extended`
@@ -42,6 +29,3 @@ before_install:
 before_script:
   - adb wait-for-device
   - adb shell input keyevent 82 &
-
-script:
-  - ./gradlew assemble
