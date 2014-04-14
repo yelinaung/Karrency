@@ -40,7 +40,7 @@
         android:paddingRight="@dimen/listPreferredItemPaddingRight"
         android:gravity="center"
         android:layout_gravity="center"
-        android:background="?attr/selectableItemBackground"
+        android:background="?android:attr/selectableItemBackground"
         android:textSize="@dimen/text_label_size"
         android:textColor="@android:color/white"
         android:fontFamily="sans-serif-condensed"

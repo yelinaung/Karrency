@@ -16,7 +16,10 @@
 
 package com.yelinaung.myancur.app;
 
+import android.app.ActionBar;
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -26,14 +29,11 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,12 +50,11 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Home extends ActionBarActivity implements ActionBar.OnNavigationListener {
+public class Home extends Activity implements ActionBar.TabListener {
 
   public static final String BASE_URL = "http://forex.cbm.gov.mm/api";
   private MenuItem menuItem;
   private ActionBar mActionBar;
-  private static final String STATE_SELECTED_NAVIGATION_ITEM = "selected_navigation_item";
 
   @InjectView(R.id.usd) TextView USD;
   @InjectView(R.id.sgd) TextView SGD;
@@ -75,35 +74,7 @@ public class Home extends ActionBarActivity implements ActionBar.OnNavigationLis
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_home);
     ButterKnife.inject(this);
-    mActionBar = getSupportActionBar();
-    mActionBar.setDisplayShowTitleEnabled(false);
-    mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-
-    final String[] banks = getResources().getStringArray(R.array.banks);
-
-    // Specify a SpinnerAdapter to populate the dropdown list.
-    ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActionBar.getThemedContext(),
-        R.layout.actionbar_spinner, android.R.id.text1, banks);
-
-    adapter.setDropDownViewResource(R.layout.actionbar_spinner_dropdown);
-
-    // Set up the dropdown list navigation in the action bar.
-    mActionBar.setListNavigationCallbacks(adapter, this);
-  }
-
-  @Override
-  public void onRestoreInstanceState(Bundle savedInstanceState) {
-    // Restore the previously serialized current dropdown position.
-    if (savedInstanceState.containsKey(STATE_SELECTED_NAVIGATION_ITEM)) {
-      mActionBar.setSelectedNavigationItem(savedInstanceState.getInt(STATE_SELECTED_NAVIGATION_ITEM));
-    }
-  }
-
-  @Override
-  public void onSaveInstanceState(Bundle outState) {
-    // Serialize the current dropdown position.
-    outState.putInt(STATE_SELECTED_NAVIGATION_ITEM, mActionBar
-        .getSelectedNavigationIndex());
+    mActionBar = getActionBar();
   }
 
   @Override public boolean onCreateOptionsMenu(Menu menu) {
@@ -161,9 +132,13 @@ public class Home extends ActionBarActivity implements ActionBar.OnNavigationLis
     return super.onOptionsItemSelected(item);
   }
 
-  @Override public boolean onNavigationItemSelected(int i, long l) {
-    Toast.makeText(Home.this, "You selected " + i, Toast.LENGTH_SHORT).show();
-    return true;
+  @Override public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
+  }
+
+  @Override public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
+  }
+
+  @Override public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
   }
 
   public static class SharePref {

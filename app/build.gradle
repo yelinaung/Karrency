@@ -12,7 +12,7 @@ android {
 
   sourceSets {
     defaultConfig {
-      minSdkVersion 8
+      minSdkVersion 16
       targetSdkVersion 19
       versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100
       versionName "${versionMajor}.${versionMinor}.${versionPatch}"
@@ -30,7 +30,6 @@ android {
   }
 
   dependencies {
-    compile 'com.android.support:appcompat-v7:19.0.1'
     compile 'com.jakewharton:butterknife:4.0.1'
     compile fileTree(dir: 'libs', include: ['*.jar'])
   }
