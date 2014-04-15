@@ -1,27 +1,24 @@
 /*
- * Copyright (c) 2014. Ye Lin Aung
+ * Copyright 2014 Ye Lin Aung
  *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *        http://www.apache.org/licenses/LICENSE-2.0
+ *    http://www.apache.org/licenses/LICENSE-2.0
  *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
-package com.yelinaung.myancur.app;
+package com.yelinaung.karrency.app.ui;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.FragmentTransaction;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
@@ -31,14 +28,20 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import com.yelinaung.karrency.app.model.Exchange;
+import com.yelinaung.karrency.app.util.SharePrefUtils;
+import com.yelinaung.myancur.app.R;
 import java.io.IOException;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -50,11 +53,9 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Home extends Activity implements ActionBar.TabListener {
+public class ExchangeRateFragment extends BaseFragment {
 
   public static final String BASE_URL = "http://forex.cbm.gov.mm/api";
-  private MenuItem menuItem;
-  private ActionBar mActionBar;
 
   @InjectView(R.id.usd) TextView USD;
   @InjectView(R.id.sgd) TextView SGD;
@@ -62,7 +63,6 @@ public class Home extends Activity implements ActionBar.TabListener {
   @InjectView(R.id.myr) TextView MYR;
   @InjectView(R.id.gbp) TextView GBP;
   @InjectView(R.id.thb) TextView THB;
-
   @InjectView(R.id.usd_progress) ProgressBar usdProgress;
   @InjectView(R.id.sgd_progress) ProgressBar sgdProgress;
   @InjectView(R.id.euro_progress) ProgressBar euroProgress;
@@ -70,40 +70,73 @@ public class Home extends Activity implements ActionBar.TabListener {
   @InjectView(R.id.gbp_progress) ProgressBar gbpProgress;
   @InjectView(R.id.thb_progress) ProgressBar thbProgress;
 
-  @Override protected void onCreate(Bundle savedInstanceState) {
+  private Context mContext;
+  private MenuItem menuItem;
+
+  public ExchangeRateFragment() {
+    // Required empty public constructor
+  }
+
+  public static ExchangeRateFragment newInstance() {
+    return new ExchangeRateFragment();
+  }
+
+  @Override
+  public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_home);
-    ButterKnife.inject(this);
-    mActionBar = getActionBar();
   }
 
-  @Override public boolean onCreateOptionsMenu(Menu menu) {
-    // Inflate the menu; this adds items to the action bar if it is present.
-    getMenuInflater().inflate(R.menu.home, menu);
-    return true;
+  @Override
+  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+      Bundle savedInstanceState) {
+
+    mContext = getActivity().getApplicationContext();
+
+    // Inflate the layout for this fragment
+    View rootView = inflater.inflate(R.layout.fragment_exchange_rate, container, false);
+    assert rootView != null;
+
+    // Inject the views here
+    ButterKnife.inject(this, rootView);
+
+    return rootView;
   }
 
-  @Override protected void onResume() {
+  @Override public void onAttach(Activity activity) {
+    super.onAttach(activity);
+  }
+
+  @Override public void onDetach() {
+    super.onDetach();
+  }
+
+  @Override public void onResume() {
     super.onResume();
-    if (SharePref.getInstance(Home.this).isFirstTime()) {
+    if (SharePrefUtils.getInstance(mContext).isFirstTime()) {
       new GetData().execute();
-      SharePref.getInstance(Home.this).noMoreFirstTime();
+      SharePrefUtils.getInstance(mContext).noMoreFirstTime();
     } else {
-      USD.setText(SharePref.getInstance(Home.this).getUSD());
-      SGD.setText(SharePref.getInstance(Home.this).getSGD());
-      EURO.setText(SharePref.getInstance(Home.this).getEURO());
-      MYR.setText(SharePref.getInstance(Home.this).getMYR());
-      GBP.setText(SharePref.getInstance(Home.this).getGBP());
-      THB.setText(SharePref.getInstance(Home.this).getTHB());
+      USD.setText(SharePrefUtils.getInstance(mContext).getUSD());
+      SGD.setText(SharePrefUtils.getInstance(mContext).getSGD());
+      EURO.setText(SharePrefUtils.getInstance(mContext).getEUR());
+      MYR.setText(SharePrefUtils.getInstance(mContext).getMYR());
+      GBP.setText(SharePrefUtils.getInstance(mContext).getGBP());
+      THB.setText(SharePrefUtils.getInstance(mContext).getTHB());
     }
+  }
+
+  @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    // Inflate the menu; this adds items to the action bar if it is present.
+    super.onCreateOptionsMenu(menu, inflater);
+    inflater.inflate(R.menu.home, menu);
   }
 
   @Override public boolean onOptionsItemSelected(MenuItem item) {
     menuItem = item;
     switch (item.getItemId()) {
       case R.id.action_about:
-        PackageManager pm = getPackageManager();
-        String packageName = getPackageName();
+        PackageManager pm = mContext.getPackageManager();
+        String packageName = mContext.getPackageName();
         String versionName;
         try {
           assert pm != null;
@@ -112,13 +145,13 @@ public class Home extends Activity implements ActionBar.TabListener {
         } catch (PackageManager.NameNotFoundException e) {
           versionName = "";
         }
-        new AlertDialog.Builder(Home.this).setTitle(R.string.about)
+        new AlertDialog.Builder(mContext).setTitle(R.string.about)
             .setMessage(new SpannableStringBuilder().append(
                 Html.fromHtml(getString(R.string.about_body, versionName))))
             .show();
         return true;
       case R.id.action_sync:
-        ConnectionManager manager = new ConnectionManager(Home.this);
+        ConnectionManager manager = new ConnectionManager(mContext);
         if (manager.isConnected()) {
           if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             menuItem.setActionView(R.layout.pg);
@@ -126,83 +159,37 @@ public class Home extends Activity implements ActionBar.TabListener {
           }
           new GetData().execute();
         } else {
-          Toast.makeText(Home.this, R.string.no_connection, Toast.LENGTH_SHORT).show();
+          Toast.makeText(mContext, R.string.no_connection, Toast.LENGTH_SHORT).show();
         }
     }
     return super.onOptionsItemSelected(item);
   }
 
-  @Override public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
+  private void showPg(ProgressBar... pg) {
+    for (ProgressBar mPg : pg) {
+      mPg.setVisibility(View.VISIBLE);
+    }
   }
 
-  @Override public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
+  private void hideTv(TextView... tv) {
+    for (TextView mTv : tv) {
+      mTv.setVisibility(View.GONE);
+    }
   }
 
-  @Override public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
+  private void hidePg(ProgressBar... pg) {
+    for (ProgressBar mPg : pg) {
+      mPg.setVisibility(View.GONE);
+    }
   }
 
-  public static class SharePref {
-    private static SharePref pref;
-    protected SharedPreferences mSharePreferences;
-    protected SharedPreferences.Editor mEditor;
-
-    public SharePref(Context context) {
-      mSharePreferences = context.getSharedPreferences("CPref", 0);
-      mEditor = mSharePreferences.edit();
-    }
-
-    public static SharePref getInstance(Context context) {
-      if (pref == null) {
-        pref = new SharePref(context);
-      }
-      return pref;
-    }
-
-    void saveCurrencies(String usd, String sgd, String euro, String myr, String gbp, String thb) {
-      mEditor.putString("USD", usd)
-          .putString("SGD", sgd)
-          .putString("EURO", euro)
-          .putString("MYR", myr)
-          .putString("GBP", gbp)
-          .putString("THB", thb)
-          .commit();
-    }
-
-    String getUSD() {
-      return mSharePreferences.getString("USD", "900");
-    }
-
-    String getSGD() {
-      return mSharePreferences.getString("SGD", "700");
-    }
-
-    String getEURO() {
-      return mSharePreferences.getString("EURO", "900");
-    }
-
-    String getMYR() {
-      return mSharePreferences.getString("MYR", "290");
-    }
-
-    String getGBP() {
-      return mSharePreferences.getString("GBP", "1500");
-    }
-
-    String getTHB() {
-      return mSharePreferences.getString("THB", "30");
-    }
-
-    boolean isFirstTime() {
-      return mSharePreferences.getBoolean("firstTime", true);
-    }
-
-    void noMoreFirstTime() {
-      mEditor.putBoolean("firstTime", false).commit();
+  private void showTv(TextView... tv) {
+    for (TextView mTv : tv) {
+      mTv.setVisibility(View.VISIBLE);
     }
   }
 
   private class GetData extends AsyncTask<Void, Void, Exchange> {
-
     Exchange ex;
 
     @Override protected void onPreExecute() {
@@ -240,16 +227,15 @@ public class Home extends Activity implements ActionBar.TabListener {
       hidePg(usdProgress, sgdProgress, euroProgress, gbpProgress, myrProgress, thbProgress);
       showTv(USD, SGD, EURO, MYR, GBP, THB);
 
-      USD.setText(ex.getUsd());
-      SGD.setText(ex.getSgd());
-      EURO.setText(ex.getEuro());
-      MYR.setText(ex.getMyr());
-      GBP.setText(ex.getGbp());
-      THB.setText(ex.getThb());
+      USD.setText(ex.usd);
+      SGD.setText(ex.sgd);
+      EURO.setText(ex.eur);
+      MYR.setText(ex.myr);
+      GBP.setText(ex.gbp);
+      THB.setText(ex.thb);
 
-      SharePref.getInstance(Home.this)
-          .saveCurrencies(ex.getUsd(), ex.getSgd(), ex.getEuro(), ex.getMyr(), ex.getGbp(),
-              ex.getThb());
+      SharePrefUtils.getInstance(mContext)
+          .saveCurrencies(ex.usd, ex.sgd, ex.eur, ex.myr, ex.gbp, ex.thb);
     }
 
     Exchange parse(String result) throws JSONException {
@@ -259,64 +245,11 @@ public class Home extends Activity implements ActionBar.TabListener {
       ex.timestamp = new JSONObject(result).getInt("timestamp");
       ex.usd = new JSONObject(new JSONObject(result).getString("rates")).getString("USD");
       ex.sgd = new JSONObject(new JSONObject(result).getString("rates")).getString("SGD");
-      ex.euro = new JSONObject(new JSONObject(result).getString("rates")).getString("EUR");
+      ex.eur = new JSONObject(new JSONObject(result).getString("rates")).getString("EUR");
       ex.myr = new JSONObject(new JSONObject(result).getString("rates")).getString("MYR");
       ex.gbp = new JSONObject(new JSONObject(result).getString("rates")).getString("GBP");
       ex.thb = new JSONObject(new JSONObject(result).getString("rates")).getString("THB");
       return ex;
-    }
-  }
-
-  public class Exchange {
-    int timestamp;
-    String usd, sgd, euro, myr, gbp, thb, description, info;
-
-    public String getEuro() {
-      return euro;
-    }
-
-    public String getMyr() {
-      return myr;
-    }
-
-    public String getGbp() {
-      return gbp;
-    }
-
-    public String getThb() {
-      return thb;
-    }
-
-    public String getUsd() {
-      return usd;
-    }
-
-    public String getSgd() {
-      return sgd;
-    }
-  }
-
-  void showPg(ProgressBar... pg) {
-    for (ProgressBar mPg : pg) {
-      mPg.setVisibility(View.VISIBLE);
-    }
-  }
-
-  void hideTv(TextView... tv) {
-    for (TextView mTv : tv) {
-      mTv.setVisibility(View.GONE);
-    }
-  }
-
-  void hidePg(ProgressBar... pg) {
-    for (ProgressBar mPg : pg) {
-      mPg.setVisibility(View.GONE);
-    }
-  }
-
-  void showTv(TextView... tv) {
-    for (TextView mTv : tv) {
-      mTv.setVisibility(View.VISIBLE);
     }
   }
 
@@ -334,8 +267,8 @@ public class Home extends Activity implements ActionBar.TabListener {
       if (connectivity != null) {
         NetworkInfo[] info = connectivity.getAllNetworkInfo();
         if (info != null) {
-          for (int i = 0; i < info.length; i++) {
-            if (info[i].getState() == NetworkInfo.State.CONNECTED) {
+          for (NetworkInfo anInfo : info) {
+            if (anInfo.getState() == NetworkInfo.State.CONNECTED) {
               return true;
             }
           }

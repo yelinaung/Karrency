@@ -1,0 +1,89 @@
+<!--
+  ~ Copyright 2014 Ye Lin Aung
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~    http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.yelinaung.karrency.app.ui.CalculatorFragment">
+
+  <LinearLayout
+      android:orientation="vertical"
+      android:paddingLeft="@dimen/listPreferredItemPaddingLeft"
+      android:paddingRight="@dimen/listPreferredItemPaddingRight"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content">
+    <Spinner
+        android:id="@+id/spinner_currencies"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:entries="@array/currencies"
+        android:prompt="@string/label_select_currency"/>
+
+    <include
+        layout="@layout/view_horizontal_separator"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"/>
+
+    <EditText
+        android:id="@+id/edittext_amount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:hint="@string/enter_amount"
+        android:textSize="@dimen/text_label_size"
+        android:fontFamily="sans-serif-light"
+        android:inputType="number"/>
+
+    <include
+        layout="@layout/view_horizontal_separator"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"/>
+
+    <TextView
+        android:id="@+id/textview_result"
+        android:fontFamily="sans-serif-light"
+        android:textSize="@dimen/text_label_size"
+        android:layout_marginTop="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+  </LinearLayout>
+
+  <FrameLayout
+      android:layout_width="fill_parent"
+      android:layout_height="0dp"
+      android:layout_weight="1"/>
+
+  <LinearLayout
+      style="?android:buttonBarStyle"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal">
+
+    <Button style="?android:buttonBarButtonStyle"
+        android:background="@color/accent_color"
+        android:id="@+id/calculate"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/text_label_size"
+        android:fontFamily="sans-serif-light"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/calculate"/>
+  </LinearLayout>
+
+</LinearLayout>

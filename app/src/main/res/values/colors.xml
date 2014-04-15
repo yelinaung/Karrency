@@ -17,4 +17,5 @@
 
 <resources>
   <color name="header_background">#ffff8800</color>
+  <color name="accent_color">#269dff</color>
 </resources>

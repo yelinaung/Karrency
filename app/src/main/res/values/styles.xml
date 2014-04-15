@@ -6,6 +6,8 @@
     <!--<item name="actionOverflowButtonStyle">@style/ActionBarOverFlow</item>-->
     <item name="android:actionOverflowButtonStyle">@style/ActionBarOverFlow</item>
 
+    <item name="android:actionBarTabTextStyle">@style/AppTheme.TabsText</item>
+
     <!--
     <item name="android:spinnerDropDownItemStyle">@style/ActionBarSpinnerStyle</item>
     <item name="actionDropDownStyle">@style/ActionBarSpinnerStyle</item>
@@ -31,4 +33,9 @@
   </style>
   -->
 
+  <!-- ActionBar Text Style -->
+  <style name="AppTheme.TabsText" parent="android:Widget.ActionBar.TabText">
+    <item name="android:textSize">20sp</item>
+    <item name="android:textColor">@android:color/black</item>
+  </style>
 </resources>
