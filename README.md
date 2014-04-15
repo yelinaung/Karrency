@@ -1,10 +1,10 @@
 Karrency
 ========
 
-Karrency - A Simple Exchange Rate Checker
-It's compatible with Android 2.2.x (API lvl 8) onwards.
+Karrency - A Simple Exchange Rate Checker & Currency Calculator.
+Minimum SDK 16 (ICS) is required. I can support for 2.3+ but I don't see a lot of people are using it.
 
-![Alt](https://dl.dropboxusercontent.com/u/2709123/karrency.png)
+![Alt](https://raw.githubusercontent.com/yelinaung/Karrency/master/device-2014-04-15-153208.png)
 
 Data is provide by Central Bank of Myanmar [API](http://forex.cbm.gov.mm)
 
@@ -17,7 +17,6 @@ To Do
 -----
 
  * Redesign the layout
- * To add Calculator
  * More "Sell/Buy" rates from other Banks
 
 Contributing
