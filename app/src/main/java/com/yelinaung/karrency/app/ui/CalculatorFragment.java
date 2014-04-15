@@ -35,7 +35,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import butterknife.ButterKnife;
@@ -47,7 +46,7 @@ import com.yelinaung.myancur.app.R;
 public class CalculatorFragment extends BaseFragment {
 
   @InjectView(R.id.spinner_currencies) Spinner mCurrencies;
-  @InjectView(R.id.edittext_amount) EditText mEditText;
+  @InjectView(R.id.edittext_amount) ClearableEditText mEditText;
   @InjectView(R.id.textview_result) TextView mResult;
   @InjectView(R.id.calculate) Button mCalculate;
 

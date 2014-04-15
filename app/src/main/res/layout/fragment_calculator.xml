@@ -39,7 +39,7 @@
         layout="@layout/view_horizontal_separator"
         />
 
-    <EditText
+    <com.yelinaung.karrency.app.ui.ClearableEditText
         android:id="@+id/edittext_amount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
