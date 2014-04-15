@@ -114,44 +114,45 @@ public class CalculatorFragment extends BaseFragment {
               if (mCurrencies.getSelectedItem()
                   .toString()
                   .equalsIgnoreCase("USD - " + sharePref.getUSD() + " MMK")) {
-                mResult.setText(
-                    ((Math.round(Float.parseFloat(sharePref.getUSD()))) * (Integer.parseInt(
-                        mEditText.getText().toString()))) + " "
-                );
+                mResult.setText(insertComma(
+                    ((Math.round(Float.parseFloat(sharePref.getUSD().replace(",", ""))))
+                        * (Long.parseLong(mEditText.getText().toString()))) + ""
+                ));
               } else if (mCurrencies.getSelectedItem()
                   .toString()
                   .equalsIgnoreCase("SGD - " + sharePref.getSGD() + " MMK")) {
-                mResult.setText(
+                mResult.setText(insertComma(
                     ((Math.round(Float.parseFloat(sharePref.getSGD()))) * (Integer.parseInt(
                         mEditText.getText().toString()))) + " "
-                );
+                ));
               } else if (mCurrencies.getSelectedItem()
                   .toString()
                   .equalsIgnoreCase("EUR - " + sharePref.getEUR() + " MMK")) {
+                // yah. there was a command so. Float.parseFloat can't parse
                 int special = Math.round(Float.parseFloat(sharePref.getEUR().replace(",", "")));
                 mResult.setText(
-                    (special * (Integer.parseInt(mEditText.getText().toString()))) + " ");
+                    insertComma((special * (Long.parseLong(mEditText.getText().toString()))) + ""));
               } else if (mCurrencies.getSelectedItem()
                   .toString()
                   .equalsIgnoreCase("MYR - " + sharePref.getMYR() + " MMK")) {
-                mResult.setText(
-                    ((Math.round(Float.parseFloat(sharePref.getMYR()))) * (Integer.parseInt(
+                mResult.setText(insertComma(
+                    ((Math.round(Float.parseFloat(sharePref.getMYR()))) * (Long.parseLong(
                         mEditText.getText().toString()))) + " "
-                );
+                ));
               } else if (mCurrencies.getSelectedItem()
                   .toString()
                   .equalsIgnoreCase("GBP - " + sharePref.getGBP() + " MMK")) {
-                mResult.setText(
-                    ((Math.round(Float.parseFloat(sharePref.getGBP()))) * (Integer.parseInt(
-                        mEditText.getText().toString()))) + " "
-                );
+                mResult.setText(insertComma(
+                    ((Math.round(Float.parseFloat(sharePref.getGBP().replace(",", ""))))
+                        * (Long.parseLong(mEditText.getText().toString()))) + " "
+                ));
               } else if (mCurrencies.getSelectedItem()
                   .toString()
                   .equalsIgnoreCase("THB - " + sharePref.getTHB() + " MMK")) {
-                mResult.setText(
-                    ((Math.round(Float.parseFloat(sharePref.getTHB()))) * (Integer.parseInt(
+                mResult.setText(insertComma(
+                    ((Math.round(Float.parseFloat(sharePref.getTHB()))) * (Long.parseLong(
                         mEditText.getText().toString()))) + " "
-                );
+                ));
               }
             }
           }
@@ -228,5 +229,18 @@ public class CalculatorFragment extends BaseFragment {
         return true;
     }
     return super.onOptionsItemSelected(item);
+  }
+
+  private String insertComma(String digits) {
+    String result = digits;
+    if (digits.length() <= 3) {
+      return digits;
+    } else {
+      for (int i = 0; i < (digits.length() - 1) / 3; i++) {
+        int commaPos = (digits.length() - 3) - (3 * i);
+        result = result.substring(0, commaPos) + "," + result.substring(commaPos);
+      }
+      return result;
+    }
   }
 }
