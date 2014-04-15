@@ -53,6 +53,7 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+@SuppressWarnings("ConstantConditions")
 public class ExchangeRateFragment extends BaseFragment {
 
   public static final String BASE_URL = "http://forex.cbm.gov.mm/api";
@@ -72,6 +73,7 @@ public class ExchangeRateFragment extends BaseFragment {
 
   private Context mContext;
   private MenuItem menuItem;
+  private View rootView;
 
   public ExchangeRateFragment() {
     // Required empty public constructor
@@ -93,7 +95,7 @@ public class ExchangeRateFragment extends BaseFragment {
     mContext = getActivity().getApplicationContext();
 
     // Inflate the layout for this fragment
-    View rootView = inflater.inflate(R.layout.fragment_exchange_rate, container, false);
+    rootView = inflater.inflate(R.layout.fragment_exchange_rate, container, false);
     assert rootView != null;
 
     // Inject the views here
@@ -145,7 +147,7 @@ public class ExchangeRateFragment extends BaseFragment {
         } catch (PackageManager.NameNotFoundException e) {
           versionName = "";
         }
-        new AlertDialog.Builder(mContext).setTitle(R.string.about)
+        new AlertDialog.Builder(rootView.getRootView().getContext()).setTitle(R.string.about)
             .setMessage(new SpannableStringBuilder().append(
                 Html.fromHtml(getString(R.string.about_body, versionName))))
             .show();

@@ -46,5 +46,6 @@
   <string name="dummy_result">Dummy Result</string>
   <string name="label_select_currency">Select Currency</string>
   <string name="label_enter_amount">Enter Amount</string>
+  <string name="label_mmk">MMK</string>
   <string name="calculate">Calculate</string>
 </resources>

@@ -17,11 +17,19 @@
 package com.yelinaung.karrency.app.ui;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.SpannableStringBuilder;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -35,6 +43,7 @@ import butterknife.InjectView;
 import com.yelinaung.karrency.app.util.SharePrefUtils;
 import com.yelinaung.myancur.app.R;
 
+@SuppressWarnings("ConstantConditions")
 public class CalculatorFragment extends BaseFragment {
 
   @InjectView(R.id.spinner_currencies) Spinner mCurrencies;
@@ -42,7 +51,9 @@ public class CalculatorFragment extends BaseFragment {
   @InjectView(R.id.textview_result) TextView mResult;
   @InjectView(R.id.calculate) Button mCalculate;
 
+  private Context mContext;
   private SharePrefUtils sharePref;
+  private View rootView;
 
   public static CalculatorFragment newInstance() {
     return new CalculatorFragment();
@@ -61,25 +72,24 @@ public class CalculatorFragment extends BaseFragment {
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
 
-    Context mContext = getActivity().getApplicationContext();
+    mContext = getActivity().getApplicationContext();
     sharePref = SharePrefUtils.getInstance(mContext);
 
-    View rootView = inflater.inflate(R.layout.fragment_calculator, container, false);
+    rootView = inflater.inflate(R.layout.fragment_calculator, container, false);
     assert rootView != null;
 
     ButterKnife.inject(this, rootView);
 
-    // TODO Probably, can iterate through SharePref and XML String array
-    //String[] currencies = {
-    //    "USD - " + sharePref.getUSD() + " MMK",
-    //    "SGD - " + sharePref.getSGD() + " MMK",
-    //    "EUR - " + sharePref.getEUR() + " MMK",
-    //    "MYR - " + sharePref.getMYR() + " MMK",
-    //    "GBP - " + sharePref.getGBP() + " MMK",
-    //    "THB - " + sharePref.getTHB() + " MMK"
-    //};
+    mResult.setText(" - ");
 
-    String[] currencies = getResources().getStringArray(R.array.currencies);
+    // TODO Probably, can iterate through SharePref and XML String array
+    String[] currencies = {
+        "USD - " + sharePref.getUSD() + " MMK", "SGD - " + sharePref.getSGD() + " MMK",
+        "EUR - " + sharePref.getEUR() + " MMK", "MYR - " + sharePref.getMYR() + " MMK",
+        "GBP - " + sharePref.getGBP() + " MMK", "THB - " + sharePref.getTHB() + " MMK"
+    };
+
+    //String[] currencies = getResources().getStringArray(R.array.currencies);
 
     final mSpinnerAdapter mSpinnerAdapter =
         new mSpinnerAdapter(mContext, R.layout.actionbar_spinner, currencies);
@@ -101,20 +111,46 @@ public class CalculatorFragment extends BaseFragment {
             if (mEditText.getText().toString().isEmpty()) {
               mEditText.setError(getString(R.string.enter_amount));
             } else {
-              if (mCurrencies.getSelectedItem().toString().equalsIgnoreCase("USD")) {
+              if (mCurrencies.getSelectedItem()
+                  .toString()
+                  .equalsIgnoreCase("USD - " + sharePref.getUSD() + " MMK")) {
                 mResult.setText(
                     ((Math.round(Float.parseFloat(sharePref.getUSD()))) * (Integer.parseInt(
-                        mEditText.getText().toString()))) + " MMK"
+                        mEditText.getText().toString()))) + " "
                 );
-              } else if (mCurrencies.getSelectedItem().toString().equalsIgnoreCase("SGD")) {
+              } else if (mCurrencies.getSelectedItem()
+                  .toString()
+                  .equalsIgnoreCase("SGD - " + sharePref.getSGD() + " MMK")) {
                 mResult.setText(
                     ((Math.round(Float.parseFloat(sharePref.getSGD()))) * (Integer.parseInt(
-                        mEditText.getText().toString()))) + " MMK"
+                        mEditText.getText().toString()))) + " "
                 );
-              } else if (mCurrencies.getSelectedItem().toString().equalsIgnoreCase("EUR")) {
+              } else if (mCurrencies.getSelectedItem()
+                  .toString()
+                  .equalsIgnoreCase("EUR - " + sharePref.getEUR() + " MMK")) {
+                int special = Math.round(Float.parseFloat(sharePref.getEUR().replace(",", "")));
                 mResult.setText(
-                    ((Math.round(Float.parseFloat(sharePref.getEUR()))) * (Integer.parseInt(
-                        mEditText.getText().toString()))) + " MMK"
+                    (special * (Integer.parseInt(mEditText.getText().toString()))) + " ");
+              } else if (mCurrencies.getSelectedItem()
+                  .toString()
+                  .equalsIgnoreCase("MYR - " + sharePref.getMYR() + " MMK")) {
+                mResult.setText(
+                    ((Math.round(Float.parseFloat(sharePref.getMYR()))) * (Integer.parseInt(
+                        mEditText.getText().toString()))) + " "
+                );
+              } else if (mCurrencies.getSelectedItem()
+                  .toString()
+                  .equalsIgnoreCase("GBP - " + sharePref.getGBP() + " MMK")) {
+                mResult.setText(
+                    ((Math.round(Float.parseFloat(sharePref.getGBP()))) * (Integer.parseInt(
+                        mEditText.getText().toString()))) + " "
+                );
+              } else if (mCurrencies.getSelectedItem()
+                  .toString()
+                  .equalsIgnoreCase("THB - " + sharePref.getTHB() + " MMK")) {
+                mResult.setText(
+                    ((Math.round(Float.parseFloat(sharePref.getTHB()))) * (Integer.parseInt(
+                        mEditText.getText().toString()))) + " "
                 );
               }
             }
@@ -164,5 +200,33 @@ public class CalculatorFragment extends BaseFragment {
     @Override public int getPosition(String item) {
       return super.getPosition(item) - 1;
     }
+  }
+
+  @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    // Inflate the menu; this adds items to the action bar if it is present.
+    super.onCreateOptionsMenu(menu, inflater);
+    inflater.inflate(R.menu.calc, menu);
+  }
+
+  @Override public boolean onOptionsItemSelected(MenuItem item) {
+    switch (item.getItemId()) {
+      case R.id.action_about:
+        PackageManager pm = mContext.getPackageManager();
+        String packageName = mContext.getPackageName();
+        String versionName;
+        try {
+          assert pm != null;
+          PackageInfo info = pm.getPackageInfo(packageName, 0);
+          versionName = info.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+          versionName = "";
+        }
+        new AlertDialog.Builder(rootView.getRootView().getContext()).setTitle(R.string.about)
+            .setMessage(new SpannableStringBuilder().append(
+                Html.fromHtml(getString(R.string.about_body, versionName))))
+            .show();
+        return true;
+    }
+    return super.onOptionsItemSelected(item);
   }
 }

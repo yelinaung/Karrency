@@ -18,6 +18,7 @@
   <!-- Default screen margins, per the Android Design guidelines. -->
   <dimen name="text_label_size">20sp</dimen>
   <dimen name="text_small_label_size">18sp</dimen>
+  <dimen name="result_font_size">25sp</dimen>
 
   <dimen name="rate_width">130dp</dimen>
 
