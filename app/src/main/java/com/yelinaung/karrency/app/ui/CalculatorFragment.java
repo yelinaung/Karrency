@@ -32,9 +32,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.animation.AnimationUtils;
+import android.view.animation.RotateAnimation;
+import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import butterknife.ButterKnife;
@@ -45,21 +50,29 @@ import com.yelinaung.myancur.app.R;
 @SuppressWarnings("ConstantConditions")
 public class CalculatorFragment extends BaseFragment {
 
+  private static int ANIMATION_DURATION = 300;
+
   @InjectView(R.id.spinner_currencies) Spinner mCurrencies;
   @InjectView(R.id.edittext_amount) ClearableEditText mEditText;
   @InjectView(R.id.textview_result) TextView mResult;
   @InjectView(R.id.calculate) Button mCalculate;
+  @InjectView(R.id.change) ImageButton mChange;
+  @InjectView(R.id.label_mmk) TextView mMMK;
 
+  boolean noSwap = true;
   private Context mContext;
   private SharePrefUtils sharePref;
   private View rootView;
-
-  public static CalculatorFragment newInstance() {
-    return new CalculatorFragment();
-  }
+  private int viewHeight;
+  private RotateAnimation rotateClockwise;
+  private RotateAnimation rotateAntiClockwise;
 
   public CalculatorFragment() {
     // Required empty public constructor
+  }
+
+  public static CalculatorFragment newInstance() {
+    return new CalculatorFragment();
   }
 
   @Override
@@ -100,7 +113,68 @@ public class CalculatorFragment extends BaseFragment {
     //        mContext)
     //);
 
+    ViewTreeObserver viewTreeObserver = mCurrencies.getViewTreeObserver();
+    if (viewTreeObserver.isAlive()) {
+      viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        @Override
+        public void onGlobalLayout() {
+          mCurrencies.getViewTreeObserver().addOnGlobalLayoutListener(this);
+          viewHeight = mCurrencies.getHeight();
+          mCurrencies.getLayoutParams();
+        }
+      });
+    }
+
     mCurrencies.setAdapter(mSpinnerAdapter);
+
+    rotateClockwise =
+        (RotateAnimation) AnimationUtils.loadAnimation(mContext, R.anim.rotate_clockwise);
+    rotateClockwise.setDuration(ANIMATION_DURATION);
+
+    rotateAntiClockwise =
+        (RotateAnimation) AnimationUtils.loadAnimation(mContext, R.anim.rotate_anitclockwise);
+    rotateAntiClockwise.setDuration(ANIMATION_DURATION);
+
+    mChange.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View v) {
+        if (noSwap) {
+
+          mChange.setAnimation(rotateClockwise);
+          rotateClockwise.start();
+
+          TranslateAnimation ta1 = new TranslateAnimation(0, 0, 0, viewHeight);
+          ta1.setDuration(ANIMATION_DURATION);
+          ta1.setFillAfter(true);
+          mCurrencies.startAnimation(ta1);
+          mCurrencies.bringToFront();
+
+          TranslateAnimation ta2 = new TranslateAnimation(0, 0, 0, -viewHeight);
+          ta2.setDuration(ANIMATION_DURATION);
+          ta2.setFillAfter(true);
+          mMMK.startAnimation(ta2);
+          mMMK.bringToFront();
+
+          noSwap = false;
+        } else {
+          mChange.setAnimation(rotateAntiClockwise);
+          rotateAntiClockwise.start();
+
+          TranslateAnimation ta1 = new TranslateAnimation(0, 0, viewHeight, 0);
+          ta1.setDuration(ANIMATION_DURATION);
+          ta1.setFillAfter(true);
+          mCurrencies.startAnimation(ta1);
+          mCurrencies.bringToFront();
+
+          TranslateAnimation ta2 = new TranslateAnimation(0, 0, -viewHeight, 0);
+          ta2.setDuration(ANIMATION_DURATION);
+          ta2.setFillAfter(true);
+          mMMK.startAnimation(ta2);
+          mMMK.bringToFront();
+
+          noSwap = true;
+        }
+      }
+    });
 
     mCurrencies.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
       @Override public void onItemSelected(AdapterView<?> parent, View view, int position,
@@ -176,32 +250,6 @@ public class CalculatorFragment extends BaseFragment {
     super.onDetach();
   }
 
-  public class mSpinnerAdapter extends ArrayAdapter<String> {
-    public mSpinnerAdapter(Context context, int resource, String[] data) {
-      super(context, resource, data);
-    }
-
-    @Override public View getView(int position, View convertView, ViewGroup parent) {
-      TextView v = (TextView) super.getView(position, convertView, parent);
-      assert v != null;
-      v.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
-      return v;
-    }
-
-    @Override public View getDropDownView(int position, View convertView, ViewGroup parent) {
-      TextView v = (TextView) super.getView(position, convertView, parent);
-      assert v != null;
-      v.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
-      v.setHeight(100);
-      v.setGravity(Gravity.CENTER_VERTICAL);
-      return v;
-    }
-
-    @Override public int getPosition(String item) {
-      return super.getPosition(item) - 1;
-    }
-  }
-
   @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
     // Inflate the menu; this adds items to the action bar if it is present.
     super.onCreateOptionsMenu(menu, inflater);
@@ -240,6 +288,32 @@ public class CalculatorFragment extends BaseFragment {
         result = result.substring(0, commaPos) + "," + result.substring(commaPos);
       }
       return result;
+    }
+  }
+
+  public class mSpinnerAdapter extends ArrayAdapter<String> {
+    public mSpinnerAdapter(Context context, int resource, String[] data) {
+      super(context, resource, data);
+    }
+
+    @Override public View getView(int position, View convertView, ViewGroup parent) {
+      TextView v = (TextView) super.getView(position, convertView, parent);
+      assert v != null;
+      v.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
+      return v;
+    }
+
+    @Override public View getDropDownView(int position, View convertView, ViewGroup parent) {
+      TextView v = (TextView) super.getView(position, convertView, parent);
+      assert v != null;
+      v.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
+      v.setHeight(100);
+      v.setGravity(Gravity.CENTER_VERTICAL);
+      return v;
+    }
+
+    @Override public int getPosition(String item) {
+      return super.getPosition(item) - 1;
     }
   }
 }

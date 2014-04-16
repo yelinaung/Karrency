@@ -100,7 +100,6 @@ public class ExchangeRateFragment extends BaseFragment {
 
     // Inject the views here
     ButterKnife.inject(this, rootView);
-
     return rootView;
   }
 

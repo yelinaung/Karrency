@@ -48,4 +48,7 @@
   <string name="label_enter_amount">Enter Amount</string>
   <string name="label_mmk">MMK</string>
   <string name="calculate">Calculate</string>
+  <string name="from">From</string>
+  <string name="to">To</string>
+  <string name="change">Change</string>
 </resources>
