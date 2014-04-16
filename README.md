@@ -2,6 +2,7 @@ Karrency
 ========
 
 Karrency - A Simple Exchange Rate Checker & Currency Calculator. (MMK <=> Other Currencies)
+
 Minimum SDK 16 (ICS) is required.
 I can support for 2.3+ but I don't see a lot of people are using it, so I dropped it.
 

@@ -18,6 +18,7 @@ package com.yelinaung.karrency.app.ui;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import com.google.analytics.tracking.android.EasyTracker;
 
 /**
  * Created by Ye Lin Aung on 14/04/14.
@@ -30,5 +31,11 @@ public class BaseFragment extends Fragment {
 
   @Override public void onResume() {
     super.onResume();
+  }
+
+  @Override
+  public void onStart() {
+    super.onStart();
+    EasyTracker.getInstance(getActivity()).activityStart(getActivity());  // Add this method.
   }
 }
