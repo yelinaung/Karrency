@@ -39,35 +39,39 @@
           android:layout_width="80dp"
           android:layout_height="wrap_content"
           android:fontFamily="sans-serif-light"
-          android:textSize="@dimen/result_font_size"
-          android:layout_alignTop="@+id/change" android:layout_alignParentLeft="true"
+          android:textSize="@dimen/text_label_size"
+          android:layout_marginTop="20dp"
+          android:layout_alignTop="@+id/change"
+          android:layout_alignParentLeft="true"
           android:layout_alignParentStart="true"/>
       <Spinner
           android:id="@+id/spinner_currencies"
-          android:layout_toRightOf="@id/label_from"
           android:layout_width="200dp"
-          android:layout_height="wrap_content"
+          android:layout_height="50dp"
           android:layout_marginBottom="5dp"
+          android:layout_marginLeft="70dp"
+          android:layout_marginTop="5dp"
           android:entries="@array/currencies"
           android:prompt="@string/label_select_currency"/>
       <TextView
           android:id="@+id/label_to"
           android:text="@string/to"
+          android:layout_marginTop="10dp"
           android:layout_below="@+id/spinner_currencies"
           android:layout_width="80dp"
           android:layout_height="wrap_content"
           android:fontFamily="sans-serif-light"
-          android:textSize="@dimen/result_font_size"/>
+          android:textSize="@dimen/text_label_size"/>
       <TextView
           android:id="@+id/label_mmk"
           android:layout_toRightOf="@id/label_to"
           android:text="@string/label_mmk"
-          android:textSize="@dimen/result_font_size"
+          android:textSize="@dimen/text_label_size"
           android:layout_below="@+id/spinner_currencies"
           android:gravity="center"
           android:fontFamily="sans-serif-light"
           android:layout_width="wrap_content"
-          android:layout_height="wrap_content"/>
+          android:layout_height="50dp"/>
       <ImageButton
           style="?android:attr/borderlessButtonStyle"
           android:id="@+id/change"
@@ -81,26 +85,26 @@
           android:layout_alignParentEnd="true"/>
     </RelativeLayout>
 
-    <!--<include-->
-    <!--android:layout_below="@id/spinner_currencies"-->
-    <!--layout="@layout/view_horizontal_separator"/>-->
+    <View
+        android:id="@+id/mSeparator"
+        android:layout_below="@+id/from_to_wrapper"
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="5dp"
+        android:background="?android:attr/listDivider"/>
 
     <com.yelinaung.karrency.app.ui.ClearableEditText
         android:id="@+id/edittext_amount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_below="@id/from_to_wrapper"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="15dp"
+        android:layout_below="@id/mSeparator"
         android:hint="@string/enter_amount"
         android:textSize="@dimen/result_font_size"
         android:fontFamily="sans-serif-light"
         android:inputType="number"/>
-
-    <include
-        layout="@layout/view_horizontal_separator"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp" android:id="@+id/include"/>
 
     <LinearLayout
         android:orientation="horizontal"
@@ -121,6 +125,7 @@
           android:layout_height="wrap_content"/>
 
       <TextView
+          android:id="@+id/result_currency"
           android:text="@string/label_mmk"
           android:textSize="@dimen/result_font_size"
           android:layout_weight="2"

@@ -4,16 +4,22 @@
   <string name="app_name">Karrency</string>
   <string name="action_about">About</string>
   <string name="action_sync">Sync</string>
- 
+
   <string name="calc">Calculator</string>
 
   <!-- Currency Label -->
-  <string name="usd">USD - US Dollar</string>
-  <string name="sgd">SGD - Singapore Dollar</string>
-  <string name="euro">EURO - Euro</string>
-  <string name="myr">MYR - Malaysian Ringgit</string>
-  <string name="gbp">GBP - British Pound Sterling</string>
-  <string name="thb">THB - Thai Baht</string>
+  <string name="usd_fulltext">USD - US Dollar</string>
+  <string name="sgd_fulltext">SGD - Singapore Dollar</string>
+  <string name="eur_fulltext">EURO - Euro</string>
+  <string name="myr_fulltext">MYR - Malaysian Ringgit</string>
+  <string name="gbp_fulltext">GBP - British Pound Sterling</string>
+  <string name="thb_fulltext">THB - Thai Baht</string>
+  <string name="usd">USD</string>
+  <string name="sgd">SGD</string>
+  <string name="eur">EUR</string>
+  <string name="myr">MYR</string>
+  <string name="gbp">GBP</string>
+  <string name="thb">THB</string>
   <string name="usd_dummy">900 Kyats</string>
   <string name="sgd_dummy">700 Kyats</string>
   <string name="euro_dummy">1,300 Kyats</string>
@@ -27,7 +33,7 @@
     <![CDATA[
         <b>Karrency</b><br>
         Version %s<br><br>
-        A simple exchange rate checker and calculator (soon!).
+        A simple exchange rate checker and calculator.
         Data is provided from Central Bank of Myanmar Official API
         <hr>
         <br>

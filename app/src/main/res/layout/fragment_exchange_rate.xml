@@ -89,7 +89,7 @@
             android:layout_gravity="center"
             android:textSize="@dimen/text_label_size"
             android:fontFamily="sans-serif-light"
-            android:text="@string/usd"/>
+            android:text="@string/usd_fulltext"/>
 
         <include
             layout="@layout/view_vertical_separator"/>
@@ -139,7 +139,7 @@
             android:layout_gravity="center"
             android:textSize="@dimen/text_label_size"
             android:fontFamily="sans-serif-light"
-            android:text="@string/sgd"/>
+            android:text="@string/sgd_fulltext"/>
 
         <include
             layout="@layout/view_vertical_separator"/>
@@ -187,7 +187,7 @@
             android:layout_gravity="center"
             android:textSize="@dimen/text_label_size"
             android:fontFamily="sans-serif-light"
-            android:text="@string/euro"/>
+            android:text="@string/eur_fulltext"/>
 
         <include
             layout="@layout/view_vertical_separator"/>
@@ -235,7 +235,7 @@
             android:layout_gravity="center"
             android:textSize="@dimen/text_small_label_size"
             android:fontFamily="sans-serif-light"
-            android:text="@string/myr"/>
+            android:text="@string/myr_fulltext"/>
 
         <include
             layout="@layout/view_vertical_separator"/>
@@ -283,7 +283,7 @@
             android:layout_gravity="center"
             android:textSize="@dimen/text_small_label_size"
             android:fontFamily="sans-serif-light"
-            android:text="@string/gbp"/>
+            android:text="@string/gbp_fulltext"/>
 
         <include
             layout="@layout/view_vertical_separator"/>
@@ -331,7 +331,7 @@
             android:layout_gravity="center"
             android:textSize="@dimen/text_label_size"
             android:fontFamily="sans-serif-light"
-            android:text="@string/thb"/>
+            android:text="@string/thb_fulltext"/>
 
         <include
             layout="@layout/view_vertical_separator"/>

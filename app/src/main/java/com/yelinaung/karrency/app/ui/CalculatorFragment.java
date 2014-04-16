@@ -16,6 +16,7 @@
 
 package com.yelinaung.karrency.app.ui;
 
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -58,6 +59,7 @@ public class CalculatorFragment extends BaseFragment {
   @InjectView(R.id.calculate) Button mCalculate;
   @InjectView(R.id.change) ImageButton mChange;
   @InjectView(R.id.label_mmk) TextView mMMK;
+  @InjectView(R.id.result_currency) TextView mResultCurrency;
 
   boolean noSwap = true;
   private Context mContext;
@@ -142,10 +144,15 @@ public class CalculatorFragment extends BaseFragment {
           mChange.setAnimation(rotateClockwise);
           rotateClockwise.start();
 
-          TranslateAnimation ta1 = new TranslateAnimation(0, 0, 0, viewHeight);
-          ta1.setDuration(ANIMATION_DURATION);
-          ta1.setFillAfter(true);
-          mCurrencies.startAnimation(ta1);
+          //ObjectAnimator ta1 = new TranslateAnimation(0, 0, 0, viewHeight);
+          ObjectAnimator objectAnimator =
+              ObjectAnimator.ofFloat(mCurrencies, "translationY", 0, viewHeight);
+          objectAnimator.setDuration(ANIMATION_DURATION);
+          objectAnimator.start();
+
+          //ta1.setDuration(ANIMATION_DURATION);
+          //ta1.setFillAfter(true);
+          //mCurrencies.startAnimation(ta1);
           mCurrencies.bringToFront();
 
           TranslateAnimation ta2 = new TranslateAnimation(0, 0, 0, -viewHeight);
@@ -159,10 +166,17 @@ public class CalculatorFragment extends BaseFragment {
           mChange.setAnimation(rotateAntiClockwise);
           rotateAntiClockwise.start();
 
-          TranslateAnimation ta1 = new TranslateAnimation(0, 0, viewHeight, 0);
-          ta1.setDuration(ANIMATION_DURATION);
-          ta1.setFillAfter(true);
-          mCurrencies.startAnimation(ta1);
+          mCurrencies.setY(0);
+
+          ObjectAnimator objectAnimator =
+              ObjectAnimator.ofFloat(mCurrencies, "translationY", viewHeight, 0);
+          objectAnimator.setDuration(ANIMATION_DURATION);
+          objectAnimator.start();
+
+          //TranslateAnimation ta1 = new TranslateAnimation(0, 0, viewHeight, 0);
+          //ta1.setDuration(ANIMATION_DURATION);
+          //ta1.setFillAfter(true);
+          //mCurrencies.startAnimation(ta1);
           mCurrencies.bringToFront();
 
           TranslateAnimation ta2 = new TranslateAnimation(0, 0, -viewHeight, 0);
@@ -181,51 +195,112 @@ public class CalculatorFragment extends BaseFragment {
           long id) {
         mCalculate.setOnClickListener(new View.OnClickListener() {
           @Override public void onClick(View v) {
-            if (mEditText.getText().toString().isEmpty()) {
-              mEditText.setError(getString(R.string.enter_amount));
+            if (noSwap) {
+              if (mEditText.getText().toString().isEmpty()) {
+                mEditText.setError(getString(R.string.enter_amount));
+              } else {
+                if (mCurrencies.getSelectedItem()
+                    .toString()
+                    .equalsIgnoreCase("USD - " + sharePref.getUSD() + " MMK")) {
+                  mResult.setText(insertComma(
+                      ((Math.round(Float.parseFloat(sharePref.getUSD().replace(",", ""))))
+                          * (Long.parseLong(mEditText.getText().toString()))) + ""
+                  ));
+                  mResultCurrency.setText(getString(R.string.label_mmk));
+                } else if (mCurrencies.getSelectedItem()
+                    .toString()
+                    .equalsIgnoreCase("SGD - " + sharePref.getSGD() + " MMK")) {
+                  mResult.setText(insertComma(
+                      ((Math.round(Float.parseFloat(sharePref.getSGD()))) * (Integer.parseInt(
+                          mEditText.getText().toString()))) + " "
+                  ));
+                  mResultCurrency.setText(getString(R.string.label_mmk));
+                } else if (mCurrencies.getSelectedItem()
+                    .toString()
+                    .equalsIgnoreCase("EUR - " + sharePref.getEUR() + " MMK")) {
+                  // yah. there was a command so. Float.parseFloat can't parse
+                  int special = Math.round(Float.parseFloat(sharePref.getEUR().replace(",", "")));
+                  mResult.setText(insertComma(
+                      (special * (Long.parseLong(mEditText.getText().toString()))) + ""));
+                  mResultCurrency.setText(getString(R.string.label_mmk));
+                } else if (mCurrencies.getSelectedItem()
+                    .toString()
+                    .equalsIgnoreCase("MYR - " + sharePref.getMYR() + " MMK")) {
+                  mResult.setText(insertComma(
+                      ((Math.round(Float.parseFloat(sharePref.getMYR()))) * (Long.parseLong(
+                          mEditText.getText().toString()))) + " "
+                  ));
+                  mResultCurrency.setText(getString(R.string.label_mmk));
+                } else if (mCurrencies.getSelectedItem()
+                    .toString()
+                    .equalsIgnoreCase("GBP - " + sharePref.getGBP() + " MMK")) {
+                  mResult.setText(insertComma(
+                      ((Math.round(Float.parseFloat(sharePref.getGBP().replace(",", ""))))
+                          * (Long.parseLong(mEditText.getText().toString()))) + " "
+                  ));
+                  mResultCurrency.setText(getString(R.string.label_mmk));
+                } else if (mCurrencies.getSelectedItem()
+                    .toString()
+                    .equalsIgnoreCase("THB - " + sharePref.getTHB() + " MMK")) {
+                  mResult.setText(insertComma(
+                      ((Math.round(Float.parseFloat(sharePref.getTHB()))) * (Long.parseLong(
+                          mEditText.getText().toString()))) + " "
+                  ));
+                  mResultCurrency.setText(getString(R.string.label_mmk));
+                }
+              }
             } else {
-              if (mCurrencies.getSelectedItem()
-                  .toString()
-                  .equalsIgnoreCase("USD - " + sharePref.getUSD() + " MMK")) {
-                mResult.setText(insertComma(
-                    ((Math.round(Float.parseFloat(sharePref.getUSD().replace(",", ""))))
-                        * (Long.parseLong(mEditText.getText().toString()))) + ""
-                ));
-              } else if (mCurrencies.getSelectedItem()
-                  .toString()
-                  .equalsIgnoreCase("SGD - " + sharePref.getSGD() + " MMK")) {
-                mResult.setText(insertComma(
-                    ((Math.round(Float.parseFloat(sharePref.getSGD()))) * (Integer.parseInt(
-                        mEditText.getText().toString()))) + " "
-                ));
-              } else if (mCurrencies.getSelectedItem()
-                  .toString()
-                  .equalsIgnoreCase("EUR - " + sharePref.getEUR() + " MMK")) {
-                // yah. there was a command so. Float.parseFloat can't parse
-                int special = Math.round(Float.parseFloat(sharePref.getEUR().replace(",", "")));
-                mResult.setText(
-                    insertComma((special * (Long.parseLong(mEditText.getText().toString()))) + ""));
-              } else if (mCurrencies.getSelectedItem()
-                  .toString()
-                  .equalsIgnoreCase("MYR - " + sharePref.getMYR() + " MMK")) {
-                mResult.setText(insertComma(
-                    ((Math.round(Float.parseFloat(sharePref.getMYR()))) * (Long.parseLong(
-                        mEditText.getText().toString()))) + " "
-                ));
-              } else if (mCurrencies.getSelectedItem()
-                  .toString()
-                  .equalsIgnoreCase("GBP - " + sharePref.getGBP() + " MMK")) {
-                mResult.setText(insertComma(
-                    ((Math.round(Float.parseFloat(sharePref.getGBP().replace(",", ""))))
-                        * (Long.parseLong(mEditText.getText().toString()))) + " "
-                ));
-              } else if (mCurrencies.getSelectedItem()
-                  .toString()
-                  .equalsIgnoreCase("THB - " + sharePref.getTHB() + " MMK")) {
-                mResult.setText(insertComma(
-                    ((Math.round(Float.parseFloat(sharePref.getTHB()))) * (Long.parseLong(
-                        mEditText.getText().toString()))) + " "
-                ));
+              if (mEditText.getText().toString().isEmpty()) {
+                mEditText.setError(getString(R.string.enter_amount));
+              } else {
+                if (mCurrencies.getSelectedItem()
+                    .toString()
+                    .equalsIgnoreCase("USD - " + sharePref.getUSD() + " MMK")) {
+                  mResult.setText(insertComma(
+                      ((Long.parseLong(mEditText.getText().toString())) / (Math.round(
+                          Float.parseFloat(sharePref.getUSD().replace(",", ""))))) + ""
+                  ));
+                  mResultCurrency.setText(getString(R.string.usd));
+                } else if (mCurrencies.getSelectedItem()
+                    .toString()
+                    .equalsIgnoreCase("SGD - " + sharePref.getSGD() + " MMK")) {
+                  mResult.setText(insertComma(
+                      ((Integer.parseInt(mEditText.getText().toString())) / (Math.round(
+                          Float.parseFloat(sharePref.getSGD())))) + " "
+                  ));
+                  mResultCurrency.setText(getString(R.string.sgd));
+                } else if (mCurrencies.getSelectedItem()
+                    .toString()
+                    .equalsIgnoreCase("EUR - " + sharePref.getEUR() + " MMK")) {
+                  int special = Math.round(Float.parseFloat(sharePref.getEUR().replace(",", "")));
+                  mResult.setText(insertComma(
+                      ((Long.parseLong(mEditText.getText().toString()))) / special + ""));
+                  mResultCurrency.setText(getString(R.string.eur));
+                } else if (mCurrencies.getSelectedItem()
+                    .toString()
+                    .equalsIgnoreCase("MYR - " + sharePref.getMYR() + " MMK")) {
+                  mResult.setText(insertComma(
+                      (Long.parseLong(mEditText.getText().toString())) / ((Math.round(
+                          Float.parseFloat(sharePref.getMYR())))) + " "
+                  ));
+                  mResultCurrency.setText(getString(R.string.myr));
+                } else if (mCurrencies.getSelectedItem()
+                    .toString()
+                    .equalsIgnoreCase("GBP - " + sharePref.getGBP() + " MMK")) {
+                  mResult.setText(insertComma(
+                      ((Long.parseLong(mEditText.getText().toString())) / (Math.round(
+                          Float.parseFloat(sharePref.getGBP().replace(",", ""))))) + " "
+                  ));
+                  mResultCurrency.setText(getString(R.string.gbp));
+                } else if (mCurrencies.getSelectedItem()
+                    .toString()
+                    .equalsIgnoreCase("THB - " + sharePref.getTHB() + " MMK")) {
+                  mResult.setText(insertComma(
+                      ((Long.parseLong(mEditText.getText().toString())) / (Math.round(
+                          Float.parseFloat(sharePref.getTHB())))) + " "
+                  ));
+                  mResultCurrency.setText(getString(R.string.thb));
+                }
               }
             }
           }
