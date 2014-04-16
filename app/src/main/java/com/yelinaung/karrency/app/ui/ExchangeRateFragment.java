@@ -24,7 +24,6 @@ import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
@@ -100,6 +99,7 @@ public class ExchangeRateFragment extends BaseFragment {
 
     // Inject the views here
     ButterKnife.inject(this, rootView);
+
     return rootView;
   }
 
@@ -113,6 +113,7 @@ public class ExchangeRateFragment extends BaseFragment {
 
   @Override public void onResume() {
     super.onResume();
+
     if (SharePrefUtils.getInstance(mContext).isFirstTime()) {
       new GetData().execute();
       SharePrefUtils.getInstance(mContext).noMoreFirstTime();
@@ -154,10 +155,11 @@ public class ExchangeRateFragment extends BaseFragment {
       case R.id.action_sync:
         ConnectionManager manager = new ConnectionManager(mContext);
         if (manager.isConnected()) {
-          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            menuItem.setActionView(R.layout.pg);
-            menuItem.expandActionView();
-          }
+          // FIXME
+          //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+          //  menuItem.setActionView(R.layout.pg);
+          //  menuItem.expandActionView();
+          //}
           new GetData().execute();
         } else {
           Toast.makeText(mContext, R.string.no_connection, Toast.LENGTH_SHORT).show();
@@ -220,10 +222,11 @@ public class ExchangeRateFragment extends BaseFragment {
     @Override protected void onPostExecute(Exchange ex) {
       super.onPostExecute(ex);
 
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-        menuItem.collapseActionView();
-        menuItem.setActionView(null);
-      }
+      // FIXME This is raising NPE when the app is launched for the first time
+      //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+      //  menuItem.collapseActionView();
+      //  menuItem.setActionView(null);
+      //}
 
       hidePg(usdProgress, sgdProgress, euroProgress, gbpProgress, myrProgress, thbProgress);
       showTv(USD, SGD, EURO, MYR, GBP, THB);
