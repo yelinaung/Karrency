@@ -33,7 +33,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.animation.AnimationUtils;
 import android.view.animation.RotateAnimation;
 import android.view.animation.TranslateAnimation;
@@ -98,13 +97,13 @@ public class CalculatorFragment extends BaseFragment {
     mResult.setText(" - ");
 
     // TODO Probably, can iterate through SharePref and XML String array
-    String[] currencies = {
-        "USD - " + sharePref.getUSD() + " MMK", "SGD - " + sharePref.getSGD() + " MMK",
-        "EUR - " + sharePref.getEUR() + " MMK", "MYR - " + sharePref.getMYR() + " MMK",
-        "GBP - " + sharePref.getGBP() + " MMK", "THB - " + sharePref.getTHB() + " MMK"
-    };
+    //String[] currencies = {
+    //    "USD - " + sharePref.getUSD() + " MMK", "SGD - " + sharePref.getSGD() + " MMK",
+    //    "EUR - " + sharePref.getEUR() + " MMK", "MYR - " + sharePref.getMYR() + " MMK",
+    //    "GBP - " + sharePref.getGBP() + " MMK", "THB - " + sharePref.getTHB() + " MMK"
+    //};
 
-    //String[] currencies = getResources().getStringArray(R.array.currencies);
+    String[] currencies = getResources().getStringArray(R.array.currencies);
 
     final mSpinnerAdapter mSpinnerAdapter =
         new mSpinnerAdapter(mContext, R.layout.actionbar_spinner, currencies);
@@ -116,17 +115,18 @@ public class CalculatorFragment extends BaseFragment {
     //        mContext)
     //);
 
-    ViewTreeObserver viewTreeObserver = mCurrencies.getViewTreeObserver();
-    if (viewTreeObserver.isAlive()) {
-      viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-        @Override
-        public void onGlobalLayout() {
-          mCurrencies.getViewTreeObserver().addOnGlobalLayoutListener(this);
-          viewHeight = mCurrencies.getHeight();
-          mCurrencies.getLayoutParams();
-        }
-      });
-    }
+    // I used it without knowing what the hack is ViewTreeObserver :S
+    //ViewTreeObserver viewTreeObserver = mCurrencies.getViewTreeObserver();
+    //if (viewTreeObserver.isAlive()) {
+    //  viewTreeObserver.addOnPreDrawListener(new ViewTreeObserver.addOnPreDrawListener() {
+    //    @Override
+    //    public void onGlobalLayout() {
+    //      mCurrencies.getViewTreeObserver().addOnGlobalLayoutListener(this);
+    //      viewHeight = mCurrencies.getHeight();
+    //      mCurrencies.getLayoutParams();
+    //    }
+    //  });
+    //}
 
     mCurrencies.setAdapter(mSpinnerAdapter);
 
@@ -140,6 +140,7 @@ public class CalculatorFragment extends BaseFragment {
 
     mChange.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
+        System.gc();
         if (noSwap) {
 
           mChange.setAnimation(rotateClockwise);
@@ -147,7 +148,7 @@ public class CalculatorFragment extends BaseFragment {
 
           //ObjectAnimator ta1 = new TranslateAnimation(0, 0, 0, viewHeight);
           ObjectAnimator objectAnimator =
-              ObjectAnimator.ofFloat(mCurrencies, "translationY", 0, viewHeight);
+              ObjectAnimator.ofFloat(mCurrencies, "translationY", 0, 150);
           objectAnimator.setDuration(ANIMATION_DURATION);
           objectAnimator.start();
 
@@ -156,13 +157,14 @@ public class CalculatorFragment extends BaseFragment {
           //mCurrencies.startAnimation(ta1);
           mCurrencies.bringToFront();
 
-          TranslateAnimation ta2 = new TranslateAnimation(0, 0, 0, -viewHeight);
+          TranslateAnimation ta2 = new TranslateAnimation(0, 0, 0, -150);
           ta2.setDuration(ANIMATION_DURATION);
           ta2.setFillAfter(true);
           mMMK.startAnimation(ta2);
           mMMK.bringToFront();
 
           noSwap = false;
+          System.gc();
         } else {
           mChange.setAnimation(rotateAntiClockwise);
           rotateAntiClockwise.start();
@@ -170,7 +172,7 @@ public class CalculatorFragment extends BaseFragment {
           mCurrencies.setY(0);
 
           ObjectAnimator objectAnimator =
-              ObjectAnimator.ofFloat(mCurrencies, "translationY", viewHeight, 0);
+              ObjectAnimator.ofFloat(mCurrencies, "translationY", 150, 0);
           objectAnimator.setDuration(ANIMATION_DURATION);
           objectAnimator.start();
 
@@ -180,7 +182,7 @@ public class CalculatorFragment extends BaseFragment {
           //mCurrencies.startAnimation(ta1);
           mCurrencies.bringToFront();
 
-          TranslateAnimation ta2 = new TranslateAnimation(0, 0, -viewHeight, 0);
+          TranslateAnimation ta2 = new TranslateAnimation(0, 0, -150, 0);
           ta2.setDuration(ANIMATION_DURATION);
           ta2.setFillAfter(true);
           mMMK.startAnimation(ta2);
@@ -202,7 +204,7 @@ public class CalculatorFragment extends BaseFragment {
               } else {
                 if (mCurrencies.getSelectedItem()
                     .toString()
-                    .equalsIgnoreCase("USD - " + sharePref.getUSD() + " MMK")) {
+                    .equalsIgnoreCase(getString(R.string.usd))) {
                   mResult.setText(insertComma(
                       ((Math.round(Float.parseFloat(sharePref.getUSD().replace(",", ""))))
                           * (Long.parseLong(mEditText.getText().toString()))) + ""
@@ -210,7 +212,7 @@ public class CalculatorFragment extends BaseFragment {
                   mResultCurrency.setText(getString(R.string.label_mmk));
                 } else if (mCurrencies.getSelectedItem()
                     .toString()
-                    .equalsIgnoreCase("SGD - " + sharePref.getSGD() + " MMK")) {
+                    .equalsIgnoreCase(getString(R.string.sgd))) {
                   mResult.setText(insertComma(
                       ((Math.round(Float.parseFloat(sharePref.getSGD()))) * (Integer.parseInt(
                           mEditText.getText().toString()))) + " "
@@ -218,7 +220,7 @@ public class CalculatorFragment extends BaseFragment {
                   mResultCurrency.setText(getString(R.string.label_mmk));
                 } else if (mCurrencies.getSelectedItem()
                     .toString()
-                    .equalsIgnoreCase("EUR - " + sharePref.getEUR() + " MMK")) {
+                    .equalsIgnoreCase(getString(R.string.eur))) {
                   // yah. there was a command so. Float.parseFloat can't parse
                   int special = Math.round(Float.parseFloat(sharePref.getEUR().replace(",", "")));
                   mResult.setText(insertComma(
@@ -226,7 +228,7 @@ public class CalculatorFragment extends BaseFragment {
                   mResultCurrency.setText(getString(R.string.label_mmk));
                 } else if (mCurrencies.getSelectedItem()
                     .toString()
-                    .equalsIgnoreCase("MYR - " + sharePref.getMYR() + " MMK")) {
+                    .equalsIgnoreCase(getString(R.string.myr))) {
                   mResult.setText(insertComma(
                       ((Math.round(Float.parseFloat(sharePref.getMYR()))) * (Long.parseLong(
                           mEditText.getText().toString()))) + " "
@@ -234,7 +236,7 @@ public class CalculatorFragment extends BaseFragment {
                   mResultCurrency.setText(getString(R.string.label_mmk));
                 } else if (mCurrencies.getSelectedItem()
                     .toString()
-                    .equalsIgnoreCase("GBP - " + sharePref.getGBP() + " MMK")) {
+                    .equalsIgnoreCase(getString(R.string.gbp))) {
                   mResult.setText(insertComma(
                       ((Math.round(Float.parseFloat(sharePref.getGBP().replace(",", ""))))
                           * (Long.parseLong(mEditText.getText().toString()))) + " "
@@ -242,7 +244,7 @@ public class CalculatorFragment extends BaseFragment {
                   mResultCurrency.setText(getString(R.string.label_mmk));
                 } else if (mCurrencies.getSelectedItem()
                     .toString()
-                    .equalsIgnoreCase("THB - " + sharePref.getTHB() + " MMK")) {
+                    .equalsIgnoreCase(getString(R.string.thb))) {
                   mResult.setText(insertComma(
                       ((Math.round(Float.parseFloat(sharePref.getTHB()))) * (Long.parseLong(
                           mEditText.getText().toString()))) + " "
@@ -256,7 +258,7 @@ public class CalculatorFragment extends BaseFragment {
               } else {
                 if (mCurrencies.getSelectedItem()
                     .toString()
-                    .equalsIgnoreCase("USD - " + sharePref.getUSD() + " MMK")) {
+                    .equalsIgnoreCase(getString(R.string.usd))) {
                   mResult.setText(insertComma(
                       ((Long.parseLong(mEditText.getText().toString())) / (Math.round(
                           Float.parseFloat(sharePref.getUSD().replace(",", ""))))) + ""
@@ -264,7 +266,7 @@ public class CalculatorFragment extends BaseFragment {
                   mResultCurrency.setText(getString(R.string.usd));
                 } else if (mCurrencies.getSelectedItem()
                     .toString()
-                    .equalsIgnoreCase("SGD - " + sharePref.getSGD() + " MMK")) {
+                    .equalsIgnoreCase(getString(R.string.usd))) {
                   mResult.setText(insertComma(
                       ((Integer.parseInt(mEditText.getText().toString())) / (Math.round(
                           Float.parseFloat(sharePref.getSGD())))) + " "
@@ -272,14 +274,14 @@ public class CalculatorFragment extends BaseFragment {
                   mResultCurrency.setText(getString(R.string.sgd));
                 } else if (mCurrencies.getSelectedItem()
                     .toString()
-                    .equalsIgnoreCase("EUR - " + sharePref.getEUR() + " MMK")) {
+                    .equalsIgnoreCase(getString(R.string.eur))) {
                   int special = Math.round(Float.parseFloat(sharePref.getEUR().replace(",", "")));
                   mResult.setText(insertComma(
                       ((Long.parseLong(mEditText.getText().toString()))) / special + ""));
                   mResultCurrency.setText(getString(R.string.eur));
                 } else if (mCurrencies.getSelectedItem()
                     .toString()
-                    .equalsIgnoreCase("MYR - " + sharePref.getMYR() + " MMK")) {
+                    .equalsIgnoreCase(getString(R.string.myr))) {
                   mResult.setText(insertComma(
                       (Long.parseLong(mEditText.getText().toString())) / ((Math.round(
                           Float.parseFloat(sharePref.getMYR())))) + " "
@@ -287,7 +289,7 @@ public class CalculatorFragment extends BaseFragment {
                   mResultCurrency.setText(getString(R.string.myr));
                 } else if (mCurrencies.getSelectedItem()
                     .toString()
-                    .equalsIgnoreCase("GBP - " + sharePref.getGBP() + " MMK")) {
+                    .equalsIgnoreCase(getString(R.string.gbp))) {
                   mResult.setText(insertComma(
                       ((Long.parseLong(mEditText.getText().toString())) / (Math.round(
                           Float.parseFloat(sharePref.getGBP().replace(",", ""))))) + " "
@@ -295,7 +297,7 @@ public class CalculatorFragment extends BaseFragment {
                   mResultCurrency.setText(getString(R.string.gbp));
                 } else if (mCurrencies.getSelectedItem()
                     .toString()
-                    .equalsIgnoreCase("THB - " + sharePref.getTHB() + " MMK")) {
+                    .equalsIgnoreCase(getString(R.string.thb))) {
                   mResult.setText(insertComma(
                       ((Long.parseLong(mEditText.getText().toString())) / (Math.round(
                           Float.parseFloat(sharePref.getTHB())))) + " "
