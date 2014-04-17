@@ -40,7 +40,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.yelinaung.karrency.app.model.Exchange;
 import com.yelinaung.karrency.app.util.SharePrefUtils;
-import com.yelinaung.myancur.app.R;
+import com.yelinaung.karrency.app.R;
 import java.io.IOException;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;

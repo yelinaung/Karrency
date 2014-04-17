@@ -73,6 +73,7 @@
     <orderEntry type="library" exported="" name="butterknife-4.0.1" level="project" />
     <orderEntry type="library" exported="" name="support-v4-19.1.0" level="project" />
     <orderEntry type="library" exported="" name="Analytics" level="project" />
+    <orderEntry type="library" exported="" name="crashlytics-1.1.11" level="project" />
   </component>
 </module>
 

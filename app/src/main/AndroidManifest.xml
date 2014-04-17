@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.yelinaung.myancur.app">
+    package="com.yelinaung.karrency.app">
 
   <uses-permission android:name="android.permission.INTERNET"/>
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
@@ -11,7 +11,7 @@
       android:label="@string/app_name"
       android:theme="@style/Theme.Karrency">
     <activity
-        android:name="com.yelinaung.karrency.app.ui.HomeActivity"
+        android:name=".ui.HomeActivity"
         android:configChanges="keyboardHidden|orientation"
         android:label="@string/app_name">
       <intent-filter>
@@ -20,6 +20,8 @@
         <category android:name="android.intent.category.LAUNCHER"/>
       </intent-filter>
     </activity>
+    <meta-data android:name="com.crashlytics.ApiKey"
+        android:value="10c6fe8841e559534f187322cd8818266f15dc32"/>
   </application>
 
 </manifest>

@@ -40,13 +40,14 @@ import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import com.yelinaung.karrency.app.R;
 import com.yelinaung.karrency.app.util.SharePrefUtils;
-import com.yelinaung.myancur.app.R;
 
 @SuppressWarnings("ConstantConditions")
 public class CalculatorFragment extends BaseFragment {
@@ -54,7 +55,7 @@ public class CalculatorFragment extends BaseFragment {
   private static int ANIMATION_DURATION = 300;
 
   @InjectView(R.id.spinner_currencies) Spinner mCurrencies;
-  @InjectView(R.id.edittext_amount) ClearableEditText mEditText;
+  @InjectView(R.id.edittext_amount) EditText mEditText;
   @InjectView(R.id.textview_result) TextView mResult;
   @InjectView(R.id.calculate) Button mCalculate;
   @InjectView(R.id.change) ImageButton mChange;

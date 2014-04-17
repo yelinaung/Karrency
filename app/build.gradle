@@ -1,4 +1,22 @@
+buildscript {
+    repositories {
+        maven { url 'http://download.crashlytics.com/maven' }
+    }
+
+    dependencies {
+        classpath 'com.crashlytics.tools.gradle:crashlytics-gradle:1.+'
+    }
+}
 apply plugin: 'android'
+apply plugin: 'crashlytics'
+repositories {
+    maven { url 'http://download.crashlytics.com/maven' }
+}
+
+dependencies {
+    compile 'com.crashlytics.android:crashlytics:1.+'
+}
+
 
 // Manifest version information!
 def versionMajor = 1

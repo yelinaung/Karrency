@@ -26,8 +26,9 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import com.crashlytics.android.Crashlytics;
 import com.google.analytics.tracking.android.EasyTracker;
-import com.yelinaung.myancur.app.R;
+import com.yelinaung.karrency.app.R;
 
 public class HomeActivity extends FragmentActivity implements ActionBar.TabListener {
 
@@ -35,6 +36,8 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    Crashlytics.start(this);
+
     setContentView(R.layout.activity_home);
 
     ButterKnife.inject(this);
@@ -75,6 +78,18 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
   @Override public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
   }
 
+  @Override
+  public void onStart() {
+    super.onStart();
+    EasyTracker.getInstance(this).activityStart(this);  // Add this method.
+  }
+
+  @Override
+  public void onStop() {
+    super.onStop();
+    EasyTracker.getInstance(this).activityStop(this);  // Add this method.
+  }
+
   public class PagerAdapter extends FragmentPagerAdapter {
 
     public PagerAdapter(FragmentManager fm) {
@@ -95,17 +110,5 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
     @Override public int getCount() {
       return 2;
     }
-  }
-
-  @Override
-  public void onStart() {
-    super.onStart();
-    EasyTracker.getInstance(this).activityStart(this);  // Add this method.
-  }
-
-  @Override
-  public void onStop() {
-    super.onStop();
-    EasyTracker.getInstance(this).activityStop(this);  // Add this method.
   }
 }

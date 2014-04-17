@@ -30,7 +30,7 @@ import android.view.View.OnFocusChangeListener;
 import android.view.View.OnTouchListener;
 import android.widget.EditText;
 import com.yelinaung.karrency.app.util.TextWatcherAdapter;
-import com.yelinaung.myancur.app.R;
+import com.yelinaung.karrency.app.R;
 
 /**
  * To change clear icon, set
