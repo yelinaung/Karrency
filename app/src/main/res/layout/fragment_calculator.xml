@@ -33,7 +33,7 @@
         android:layout_width="80dp"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-light"
-        android:textSize="@dimen/text_label_size"
+        android:textSize="@dimen/result_font_size"
         android:layout_marginTop="20dp"
         android:layout_alignTop="@+id/change"
         android:layout_alignParentLeft="true"
@@ -55,12 +55,12 @@
         android:layout_width="80dp"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-light"
-        android:textSize="@dimen/text_label_size"/>
+        android:textSize="@dimen/result_font_size"/>
     <TextView
         android:id="@+id/label_mmk"
         android:layout_toRightOf="@id/label_to"
         android:text="@string/label_mmk"
-        android:textSize="@dimen/text_label_size"
+        android:textSize="@dimen/result_font_size"
         android:layout_below="@+id/spinner_currencies"
         android:gravity="center"
         android:fontFamily="sans-serif-light"
@@ -90,7 +90,7 @@
       android:paddingRight="@dimen/listPreferredItemPaddingRight"
       android:background="?android:attr/listDivider"/>
 
-  <EditText
+  <com.yelinaung.karrency.app.ui.ClearableEditText
       android:id="@+id/edittext_amount"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
@@ -133,18 +133,5 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
   </LinearLayout>
-
-  <Button
-      style="?android:buttonBarButtonStyle"
-      android:layout_alignParentBottom="true"
-      android:background="@drawable/calculatebtn_selector"
-      android:id="@+id/calculate"
-      android:textColor="@android:color/white"
-      android:textSize="@dimen/text_label_size"
-      android:fontFamily="sans-serif-light"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:text="@string/calculate"/>
-
 
 </RelativeLayout>

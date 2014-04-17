@@ -21,7 +21,7 @@ dependencies {
 // Manifest version information!
 def versionMajor = 1
 def versionMinor = 0
-def versionPatch = 1
+def versionPatch = 2
 android {
   compileSdkVersion 19
   buildToolsVersion '19.0.3'

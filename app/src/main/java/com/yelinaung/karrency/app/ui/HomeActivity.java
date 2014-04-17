@@ -26,7 +26,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import com.crashlytics.android.Crashlytics;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.yelinaung.karrency.app.R;
 
@@ -36,7 +35,7 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    Crashlytics.start(this);
+    //Crashlytics.start(this);
 
     setContentView(R.layout.activity_home);
 
