@@ -38,9 +38,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import com.yelinaung.karrency.app.R;
 import com.yelinaung.karrency.app.model.Exchange;
 import com.yelinaung.karrency.app.util.SharePrefUtils;
-import com.yelinaung.karrency.app.R;
 import java.io.IOException;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -114,9 +114,20 @@ public class ExchangeRateFragment extends BaseFragment {
   @Override public void onResume() {
     super.onResume();
 
+    ConnManager manager = new ConnManager(mContext);
     if (SharePrefUtils.getInstance(mContext).isFirstTime()) {
-      new GetData().execute();
-      SharePrefUtils.getInstance(mContext).noMoreFirstTime();
+      if (manager.isConnected()) {
+        new GetData().execute();
+        SharePrefUtils.getInstance(mContext).noMoreFirstTime();
+      } else {
+        Toast.makeText(mContext, R.string.no_connection, Toast.LENGTH_SHORT).show();
+        USD.setText("-");
+        SGD.setText("-");
+        EURO.setText("-");
+        MYR.setText("-");
+        GBP.setText("-");
+        THB.setText("-");
+      }
     } else {
       USD.setText(SharePrefUtils.getInstance(mContext).getUSD());
       SGD.setText(SharePrefUtils.getInstance(mContext).getSGD());
@@ -153,7 +164,7 @@ public class ExchangeRateFragment extends BaseFragment {
             .show();
         return true;
       case R.id.action_sync:
-        ConnectionManager manager = new ConnectionManager(mContext);
+        ConnManager manager = new ConnManager(mContext);
         if (manager.isConnected()) {
           // FIXME
           //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
@@ -257,10 +268,10 @@ public class ExchangeRateFragment extends BaseFragment {
     }
   }
 
-  public class ConnectionManager {
+  public class ConnManager {
     private Context mContext;
 
-    public ConnectionManager(Context context) {
+    public ConnManager(Context context) {
       this.mContext = context;
     }
 
