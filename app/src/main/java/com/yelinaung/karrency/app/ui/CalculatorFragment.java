@@ -62,7 +62,6 @@ public class CalculatorFragment extends BaseFragment {
   @InjectView(R.id.result_currency) TextView mResultCurrency;
 
   boolean noSwap = true;
-  boolean crazyFlag;
   private Context mContext;
   private SharePrefUtils sharePref;
   private View rootView;
@@ -555,5 +554,9 @@ public class CalculatorFragment extends BaseFragment {
     //
     //}
     //});
+  }
+
+  // TODO Refact with this method
+  private void calculateMMKToOther(String from, String to, String amount) {
   }
 }

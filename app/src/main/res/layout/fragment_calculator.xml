@@ -22,6 +22,8 @@
 
   <RelativeLayout
       android:id="@+id/from_to_wrapper"
+      android:layout_marginLeft="@dimen/listPreferredItemPaddingLeft"
+      android:layout_marginRight="@dimen/listPreferredItemPaddingRight"
       android:paddingLeft="@dimen/listPreferredItemPaddingLeft"
       android:paddingRight="@dimen/listPreferredItemPaddingRight"
       android:layout_width="match_parent"
@@ -40,7 +42,7 @@
         android:layout_alignParentStart="true"/>
     <Spinner
         android:id="@+id/spinner_currencies"
-        android:layout_width="200dp"
+        android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="70dp"
@@ -97,11 +99,12 @@
       android:layout_marginTop="5dp"
       android:layout_marginBottom="15dp"
       android:layout_below="@id/mSeparator"
+      android:maxLength="15"
       android:hint="@string/enter_amount"
       android:textSize="@dimen/result_font_size"
       android:fontFamily="sans-serif-light"
-      android:paddingLeft="@dimen/listPreferredItemPaddingLeft"
-      android:paddingRight="@dimen/listPreferredItemPaddingRight"
+      android:layout_marginLeft="@dimen/listPreferredItemPaddingLeft"
+      android:layout_marginRight="@dimen/listPreferredItemPaddingRight"
       android:inputType="number"/>
 
   <LinearLayout
