@@ -63,11 +63,11 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
   @Override public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
     switch (tab.getPosition()) {
       case 0:
-        ExchangeRateFragment.newInstance();
+        new ExchangeRateFragment();
       case 1:
-        CalculatorFragment.newInstance();
+        new CalculatorFragment();
       default:
-        ExchangeRateFragment.newInstance();
+        new ExchangeRateFragment();
     }
     mPager.setCurrentItem(tab.getPosition());
   }
