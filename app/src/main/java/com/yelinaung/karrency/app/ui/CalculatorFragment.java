@@ -48,6 +48,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.yelinaung.karrency.app.R;
 import com.yelinaung.karrency.app.util.SharePrefUtils;
+import java.util.Formatter;
 
 @SuppressWarnings("ConstantConditions")
 public class CalculatorFragment extends BaseFragment {
@@ -65,7 +66,6 @@ public class CalculatorFragment extends BaseFragment {
   private Context mContext;
   private SharePrefUtils sharePref;
   private View rootView;
-  //private int viewHeight;
   private RotateAnimation rotateClockwise;
   private RotateAnimation rotateAntiClockwise;
 
@@ -211,16 +211,6 @@ public class CalculatorFragment extends BaseFragment {
 
         }
       });
-    } else {
-      mCurrencies.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-        @Override public void onItemSelected(AdapterView<?> parent, View view, int position,
-            long id) {
-        }
-
-        @Override public void onNothingSelected(AdapterView<?> parent) {
-
-        }
-      });
     }
 
     // Inflate the layout for this fragment
@@ -313,10 +303,11 @@ public class CalculatorFragment extends BaseFragment {
 
         @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
           if (s.length() > 0) {
-            mResult.setText(insertComma(
+            Formatter f = new Formatter();
+            mResult.setText((f.format("%,d",
                 ((Math.round(Float.parseFloat(sharePref.getUSD().replace(",", ""))))
-                    * (Long.parseLong(s.toString()))) + ""
-            ));
+                    * (Long.parseLong(s.toString())))
+            ) + ""));
             mResultCurrency.setText(getString(R.string.label_mmk));
           } else {
             mResult.setText("-");
@@ -333,10 +324,11 @@ public class CalculatorFragment extends BaseFragment {
 
         @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
           if (s.length() > 0) {
-            mResult.setText(insertComma(
+            Formatter f = new Formatter();
+            mResult.setText((f.format("%,d",
                 ((Math.round(Float.parseFloat(sharePref.getSGD().replace(",", ""))))
-                    * (Long.parseLong(s.toString()))) + ""
-            ));
+                    * (Long.parseLong(s.toString())))
+            ) + ""));
             mResultCurrency.setText(getString(R.string.label_mmk));
           } else {
             mResult.setText("-");
@@ -353,8 +345,9 @@ public class CalculatorFragment extends BaseFragment {
 
         @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
           if (s.length() > 0) {
+            Formatter f = new Formatter();
             int special = Math.round(Float.parseFloat(sharePref.getEUR().replace(",", "")));
-            mResult.setText(insertComma((special * (Long.parseLong(s.toString()))) + ""));
+            mResult.setText((f.format("%,d", ((special) * (Long.parseLong(s.toString())))) + ""));
             mResultCurrency.setText(getString(R.string.label_mmk));
           } else {
             mResult.setText("-");
@@ -371,10 +364,11 @@ public class CalculatorFragment extends BaseFragment {
 
         @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
           if (s.length() > 0) {
-            mResult.setText(insertComma(
+            Formatter f = new Formatter();
+            mResult.setText((f.format("%,d",
                 ((Math.round(Float.parseFloat(sharePref.getMYR().replace(",", ""))))
-                    * (Long.parseLong(s.toString()))) + ""
-            ));
+                    * (Long.parseLong(s.toString())))
+            ) + ""));
             mResultCurrency.setText(getString(R.string.label_mmk));
           } else {
             mResult.setText("-");
@@ -391,10 +385,11 @@ public class CalculatorFragment extends BaseFragment {
 
         @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
           if (s.length() > 0) {
-            mResult.setText(insertComma(
+            Formatter f = new Formatter();
+            mResult.setText((f.format("%,d",
                 ((Math.round(Float.parseFloat(sharePref.getGBP().replace(",", ""))))
-                    * (Long.parseLong(s.toString()))) + ""
-            ));
+                    * (Long.parseLong(s.toString())))
+            ) + ""));
             mResultCurrency.setText(getString(R.string.label_mmk));
           } else {
             mResult.setText("-");
@@ -411,10 +406,11 @@ public class CalculatorFragment extends BaseFragment {
 
         @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
           if (s.length() > 0) {
-            mResult.setText(insertComma(
+            Formatter f = new Formatter();
+            mResult.setText((f.format("%,d",
                 ((Math.round(Float.parseFloat(sharePref.getTHB().replace(",", ""))))
-                    * (Long.parseLong(s.toString()))) + ""
-            ));
+                    * (Long.parseLong(s.toString())))
+            ) + ""));
             mResultCurrency.setText(getString(R.string.label_mmk));
           } else {
             mResult.setText("-");
@@ -440,9 +436,11 @@ public class CalculatorFragment extends BaseFragment {
 
         @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
           if (s.length() > 0) {
-            mResult.setText(insertComma(((Long.parseLong(s.toString()) / (Math.round(
-                    Float.parseFloat(sharePref.getUSD().replace(",", ""))))) + "")
-            ));
+            Formatter f = new Formatter();
+            Long l = (Long.parseLong(s.toString()));
+            int c = (Math.round(Float.parseFloat(sharePref.getUSD().replace(",", ""))));
+            String result = f.format("%,d", (l / c)) + "";
+            mResult.setText(result);
             mResultCurrency.setText(getString(R.string.usd));
           } else {
             mResult.setText("-");
@@ -459,9 +457,11 @@ public class CalculatorFragment extends BaseFragment {
 
         @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
           if (s.length() > 0) {
-            mResult.setText(insertComma(((Long.parseLong(s.toString()) / (Math.round(
-                    Float.parseFloat(sharePref.getSGD().replace(",", ""))))) + "")
-            ));
+            Formatter f = new Formatter();
+            Long l = (Long.parseLong(s.toString()));
+            int c = (Math.round(Float.parseFloat(sharePref.getSGD().replace(",", ""))));
+            String result = f.format("%,d", (l / c)) + "";
+            mResult.setText(result);
             mResultCurrency.setText(getString(R.string.sgd));
           } else {
             mResult.setText("-");
@@ -478,9 +478,11 @@ public class CalculatorFragment extends BaseFragment {
 
         @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
           if (s.length() > 0) {
-            mResult.setText(insertComma(((Long.parseLong(s.toString()) / (Math.round(
-                    Float.parseFloat(sharePref.getEUR().replace(",", ""))))) + "")
-            ));
+            Formatter f = new Formatter();
+            Long l = (Long.parseLong(s.toString()));
+            int c = (Math.round(Float.parseFloat(sharePref.getEUR().replace(",", ""))));
+            String result = f.format("%,d", (l / c)) + "";
+            mResult.setText(result);
             mResultCurrency.setText(getString(R.string.eur));
           } else {
             mResult.setText("-");
@@ -497,9 +499,11 @@ public class CalculatorFragment extends BaseFragment {
 
         @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
           if (s.length() > 0) {
-            mResult.setText(insertComma(((Long.parseLong(s.toString()) / (Math.round(
-                    Float.parseFloat(sharePref.getMYR().replace(",", ""))))) + "")
-            ));
+            Formatter f = new Formatter();
+            Long l = (Long.parseLong(s.toString()));
+            int c = (Math.round(Float.parseFloat(sharePref.getMYR().replace(",", ""))));
+            String result = f.format("%,d", (l / c)) + "";
+            mResult.setText(result);
             mResultCurrency.setText(getString(R.string.myr));
           } else {
             mResult.setText("-");
@@ -516,9 +520,11 @@ public class CalculatorFragment extends BaseFragment {
 
         @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
           if (s.length() > 0) {
-            mResult.setText(insertComma(((Long.parseLong(s.toString()) / (Math.round(
-                    Float.parseFloat(sharePref.getGBP().replace(",", ""))))) + "")
-            ));
+            Formatter f = new Formatter();
+            Long l = (Long.parseLong(s.toString()));
+            int c = (Math.round(Float.parseFloat(sharePref.getGBP().replace(",", ""))));
+            String result = f.format("%,d", (l / c)) + "";
+            mResult.setText(result);
             mResultCurrency.setText(getString(R.string.gbp));
           } else {
             mResult.setText("-");
@@ -535,9 +541,11 @@ public class CalculatorFragment extends BaseFragment {
 
         @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
           if (s.length() > 0) {
-            mResult.setText(insertComma(((Long.parseLong(s.toString()) / (Math.round(
-                    Float.parseFloat(sharePref.getTHB().replace(",", ""))))) + "")
-            ));
+            Formatter f = new Formatter();
+            Long l = (Long.parseLong(s.toString()));
+            int c = (Math.round(Float.parseFloat(sharePref.getTHB().replace(",", ""))));
+            String result = f.format("%,d", (l / c)) + "";
+            mResult.setText(result);
             mResultCurrency.setText(getString(R.string.thb));
           } else {
             mResult.setText("-");
@@ -548,12 +556,6 @@ public class CalculatorFragment extends BaseFragment {
         }
       });
     }
-    //}
-
-    //@Override public void onNothingSelected(AdapterView<?> parent) {
-    //
-    //}
-    //});
   }
 
   // TODO Refact with this method
