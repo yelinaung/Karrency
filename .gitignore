@@ -4,3 +4,4 @@
 .DS_Store
 *apk
 /build
+com_crashlytics_export_strings.xml
