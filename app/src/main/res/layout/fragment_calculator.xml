@@ -86,31 +86,39 @@
       android:layout_below="@+id/from_to_wrapper"
       android:layout_width="wrap_content"
       android:layout_height="1dp"
-      android:layout_marginTop="15dp"
+      android:layout_marginTop="10dp"
       android:layout_marginBottom="5dp"
-      android:paddingLeft="@dimen/listPreferredItemPaddingLeft"
-      android:paddingRight="@dimen/listPreferredItemPaddingRight"
-      android:background="?android:attr/listDivider"/>
-
-  <com.yelinaung.karrency.app.ui.ClearableEditText
-      android:id="@+id/edittext_amount"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="5dp"
-      android:layout_marginBottom="15dp"
-      android:layout_below="@id/mSeparator"
-      android:maxLength="15"
-      android:hint="@string/enter_amount"
-      android:textSize="@dimen/result_font_size"
-      android:fontFamily="sans-serif-light"
       android:layout_marginLeft="@dimen/listPreferredItemPaddingLeft"
       android:layout_marginRight="@dimen/listPreferredItemPaddingRight"
-      android:inputType="number"/>
+      android:background="?android:attr/listDivider"/>
+
+  <com.yelinaung.karrency.app.ui.FloatLabelLayout
+      android:id="@+id/float_label"
+      android:layout_below="@id/mSeparator"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="10dp">
+
+    <com.yelinaung.karrency.app.ui.ClearableEditText
+        android:id="@+id/edittext_amount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="15dp"
+        android:layout_below="@id/mSeparator"
+        android:maxLength="15"
+        android:hint="@string/enter_amount"
+        android:textSize="@dimen/result_font_size"
+        android:fontFamily="sans-serif-light"
+        android:layout_marginLeft="@dimen/listPreferredItemPaddingLeft"
+        android:layout_marginRight="@dimen/listPreferredItemPaddingRight"
+        android:inputType="number"/>
+  </com.yelinaung.karrency.app.ui.FloatLabelLayout>
 
   <LinearLayout
       android:id="@+id/result"
       android:orientation="horizontal"
-      android:layout_below="@id/edittext_amount"
+      android:layout_below="@id/float_label"
       android:layout_alignParentBottom="true"
       android:layout_marginTop="10dp"
       android:layout_width="match_parent"
