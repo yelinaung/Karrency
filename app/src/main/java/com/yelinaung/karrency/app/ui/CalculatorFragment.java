@@ -36,6 +36,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.animation.AnimationUtils;
 import android.view.animation.RotateAnimation;
 import android.view.animation.TranslateAnimation;
@@ -68,6 +69,7 @@ public class CalculatorFragment extends BaseFragment {
   private View rootView;
   private RotateAnimation rotateClockwise;
   private RotateAnimation rotateAntiClockwise;
+  private int viewHeight;
 
   public CalculatorFragment() {
     // Required empty public constructor
@@ -118,6 +120,19 @@ public class CalculatorFragment extends BaseFragment {
         (RotateAnimation) AnimationUtils.loadAnimation(mContext, R.anim.rotate_anitclockwise);
     rotateAntiClockwise.setDuration(ANIMATION_DURATION);
 
+    final ViewTreeObserver viewTreeObserver = mCurrencies.getViewTreeObserver();
+    if (viewTreeObserver.isAlive()) {
+      viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        @Override
+        public void onGlobalLayout() {
+          mCurrencies.getViewTreeObserver().addOnGlobalLayoutListener(this);
+          viewHeight = mCurrencies.getHeight();
+          mCurrencies.getLayoutParams();
+          mCurrencies.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+        }
+      });
+    }
+
     mChange.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
         System.gc();
@@ -128,7 +143,7 @@ public class CalculatorFragment extends BaseFragment {
 
           //ObjectAnimator ta1 = new TranslateAnimation(0, 0, 0, viewHeight);
           ObjectAnimator objectAnimator =
-              ObjectAnimator.ofFloat(mCurrencies, "translationY", 0, 150);
+              ObjectAnimator.ofFloat(mCurrencies, "translationY", 0, viewHeight);
           objectAnimator.setDuration(ANIMATION_DURATION);
           objectAnimator.start();
 
@@ -137,7 +152,7 @@ public class CalculatorFragment extends BaseFragment {
           //mCurrencies.startAnimation(ta1);
           mCurrencies.bringToFront();
 
-          TranslateAnimation ta2 = new TranslateAnimation(0, 0, 0, -150);
+          TranslateAnimation ta2 = new TranslateAnimation(0, 0, 0, -viewHeight);
           ta2.setDuration(ANIMATION_DURATION);
           ta2.setFillAfter(true);
           mMMK.startAnimation(ta2);
@@ -166,18 +181,18 @@ public class CalculatorFragment extends BaseFragment {
 
           mCurrencies.setY(0);
 
-          ObjectAnimator objectAnimator =
-              ObjectAnimator.ofFloat(mCurrencies, "translationY", 150, 0);
-          objectAnimator.setDuration(ANIMATION_DURATION);
-          objectAnimator.start();
+          //ObjectAnimator objectAnimator =
+          //    ObjectAnimator.ofFloat(mCurrencies, "translationY", 150, 0);
+          //objectAnimator.setDuration(ANIMATION_DURATION);
+          //objectAnimator.start();
 
-          //TranslateAnimation ta1 = new TranslateAnimation(0, 0, viewHeight, 0);
-          //ta1.setDuration(ANIMATION_DURATION);
-          //ta1.setFillAfter(true);
-          //mCurrencies.startAnimation(ta1);
+          TranslateAnimation ta1 = new TranslateAnimation(0, 0, viewHeight, 0);
+          ta1.setDuration(ANIMATION_DURATION);
+          ta1.setFillAfter(true);
+          mCurrencies.startAnimation(ta1);
           mCurrencies.bringToFront();
 
-          TranslateAnimation ta2 = new TranslateAnimation(0, 0, -150, 0);
+          TranslateAnimation ta2 = new TranslateAnimation(0, 0, -viewHeight, 0);
           ta2.setDuration(ANIMATION_DURATION);
           ta2.setFillAfter(true);
           mMMK.startAnimation(ta2);
