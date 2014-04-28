@@ -48,7 +48,7 @@ public class ExchangeRateWidget extends AppWidgetProvider {
         views.setTextViewText(R.id.currency_value, sharePrefUtils.getTHB() + " MMK");
       }
 
-      Intent intent = new Intent(context, com.yelinaung.karrency.app.ui.HomeActivity.class);
+      Intent intent = new Intent(context, HomeActivity.class);
       PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
       views.setOnClickPendingIntent(R.id.widget_configure, pendingIntent);
 
