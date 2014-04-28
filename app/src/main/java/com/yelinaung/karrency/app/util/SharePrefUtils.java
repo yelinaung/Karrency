@@ -18,7 +18,6 @@ package com.yelinaung.karrency.app.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import java.util.Map;
 
 /**
  * Created by Ye Lin Aung on 14/04/14.
@@ -75,15 +74,19 @@ public class SharePrefUtils {
     return mSharePreferences.getString("THB", "30");
   }
 
-  public Map<String, ?> getAll() {
-    return mSharePreferences.getAll();
-  }
-
   public boolean isFirstTime() {
     return mSharePreferences.getBoolean("firstTime", true);
   }
 
   public void noMoreFirstTime() {
     mEditor.putBoolean("firstTime", false).commit();
+  }
+
+  public void saveSelectedValue(int value) {
+    mEditor.putInt("selectedValue", value).commit();
+  }
+
+  public int getSavedValue() {
+    return mSharePreferences.getInt("selectedValue", 0);
   }
 }
