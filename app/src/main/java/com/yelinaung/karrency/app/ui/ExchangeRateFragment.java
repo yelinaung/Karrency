@@ -204,7 +204,7 @@ public class ExchangeRateFragment extends BaseFragment {
   }
 
   private class GetData extends AsyncTask<Void, Void, Exchange> {
-    Exchange ex;
+    Exchange ex = new Exchange();
 
     @Override protected void onPreExecute() {
       super.onPreExecute();
@@ -242,15 +242,19 @@ public class ExchangeRateFragment extends BaseFragment {
       hidePg(usdProgress, sgdProgress, euroProgress, gbpProgress, myrProgress, thbProgress);
       showTv(USD, SGD, EURO, MYR, GBP, THB);
 
-      USD.setText(ex.usd);
-      SGD.setText(ex.sgd);
-      EURO.setText(ex.eur);
-      MYR.setText(ex.myr);
-      GBP.setText(ex.gbp);
-      THB.setText(ex.thb);
+      if (ex != null) {
+        USD.setText(ex.usd);
+        SGD.setText(ex.sgd);
+        EURO.setText(ex.eur);
+        MYR.setText(ex.myr);
+        GBP.setText(ex.gbp);
+        THB.setText(ex.thb);
 
-      SharePrefUtils.getInstance(mContext)
-          .saveCurrencies(ex.usd, ex.sgd, ex.eur, ex.myr, ex.gbp, ex.thb);
+        SharePrefUtils.getInstance(mContext)
+            .saveCurrencies(ex.usd, ex.sgd, ex.eur, ex.myr, ex.gbp, ex.thb);
+      } else {
+        Toast.makeText(mContext, R.string.no_connection, Toast.LENGTH_SHORT).show();
+      }
     }
 
     Exchange parse(String result) throws JSONException {
