@@ -50,6 +50,7 @@ import butterknife.InjectView;
 import com.yelinaung.karrency.app.R;
 import com.yelinaung.karrency.app.util.SharePrefUtils;
 import java.util.Formatter;
+import rx.Observable;
 
 @SuppressWarnings("ConstantConditions")
 public class CalculatorFragment extends BaseFragment {
@@ -132,6 +133,8 @@ public class CalculatorFragment extends BaseFragment {
         }
       });
     }
+
+    final Observable<String> messageBodyText = Events.text(mEnterAmount);
 
     mChange.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
@@ -274,6 +277,13 @@ public class CalculatorFragment extends BaseFragment {
     String result = digits;
     if (digits.length() <= 3) {
       return digits;
+    } else if (digits.contains(".")) {
+      String[] x = digits.split("\\.");
+      for (int i = 0; i < (x[0].length() - 1) / 3; i++) {
+        int commaPos = (x[0].length() - 3) - (3 * i);
+        result = result.substring(0, commaPos) + "," + result.substring(commaPos);
+      }
+      return result;
     } else {
       for (int i = 0; i < (digits.length() - 1) / 3; i++) {
         int commaPos = (digits.length() - 3) - (3 * i);
@@ -317,12 +327,12 @@ public class CalculatorFragment extends BaseFragment {
         }
 
         @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+          Log.i("s", s.toString());
           if (s.length() > 0) {
-            Formatter f = new Formatter();
-            mResult.setText((f.format("%,d",
-                ((Math.round(Float.parseFloat(sharePref.getUSD().replace(",", ""))))
-                    * (Long.parseLong(s.toString())))
-            ) + ""));
+            mResult.setText((insertComma(
+                (((Double.parseDouble(sharePref.getUSD().replace(",", "")))) * (Double.parseDouble(
+                    s.toString())) + "")
+            )));
             mResultCurrency.setText(getString(R.string.label_mmk));
           } else {
             mResult.setText("-");
@@ -339,11 +349,10 @@ public class CalculatorFragment extends BaseFragment {
 
         @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
           if (s.length() > 0) {
-            Formatter f = new Formatter();
-            mResult.setText((f.format("%,d",
-                ((Math.round(Float.parseFloat(sharePref.getSGD().replace(",", ""))))
-                    * (Long.parseLong(s.toString())))
-            ) + ""));
+            mResult.setText((insertComma(
+                (((Double.parseDouble(sharePref.getSGD().replace(",", "")))) * (Double.parseDouble(
+                    s.toString())) + "")
+            )));
             mResultCurrency.setText(getString(R.string.label_mmk));
           } else {
             mResult.setText("-");
@@ -360,9 +369,15 @@ public class CalculatorFragment extends BaseFragment {
 
         @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
           if (s.length() > 0) {
-            Formatter f = new Formatter();
-            int special = Math.round(Float.parseFloat(sharePref.getEUR().replace(",", "")));
-            mResult.setText((f.format("%,d", ((special) * (Long.parseLong(s.toString())))) + ""));
+            //Formatter f = new Formatter();
+            //int special = Math.round(Float.parseFloat(sharePref.getEUR().replace(",", "")));
+            //mResult.setText((f.format("%,d", ((special) * (Long.parseLong(s.toString())))) + ""));
+
+            mResult.setText((insertComma(
+                (((Double.parseDouble(sharePref.getEUR().replace(",", "")))) * (Double.parseDouble(
+                    s.toString())) + "")
+            )));
+
             mResultCurrency.setText(getString(R.string.label_mmk));
           } else {
             mResult.setText("-");
@@ -380,10 +395,10 @@ public class CalculatorFragment extends BaseFragment {
         @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
           if (s.length() > 0) {
             Formatter f = new Formatter();
-            mResult.setText((f.format("%,d",
-                ((Math.round(Float.parseFloat(sharePref.getMYR().replace(",", ""))))
-                    * (Long.parseLong(s.toString())))
-            ) + ""));
+            mResult.setText((insertComma(
+                (((Double.parseDouble(sharePref.getMYR().replace(",", "")))) * (Double.parseDouble(
+                    s.toString())) + "")
+            )));
             mResultCurrency.setText(getString(R.string.label_mmk));
           } else {
             mResult.setText("-");
@@ -400,11 +415,10 @@ public class CalculatorFragment extends BaseFragment {
 
         @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
           if (s.length() > 0) {
-            Formatter f = new Formatter();
-            mResult.setText((f.format("%,d",
-                ((Math.round(Float.parseFloat(sharePref.getGBP().replace(",", ""))))
-                    * (Long.parseLong(s.toString())))
-            ) + ""));
+            mResult.setText((insertComma(
+                (((Double.parseDouble(sharePref.getGBP().replace(",", "")))) * (Double.parseDouble(
+                    s.toString())) + "")
+            )));
             mResultCurrency.setText(getString(R.string.label_mmk));
           } else {
             mResult.setText("-");
@@ -421,11 +435,10 @@ public class CalculatorFragment extends BaseFragment {
 
         @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
           if (s.length() > 0) {
-            Formatter f = new Formatter();
-            mResult.setText((f.format("%,d",
-                ((Math.round(Float.parseFloat(sharePref.getTHB().replace(",", ""))))
-                    * (Long.parseLong(s.toString())))
-            ) + ""));
+            mResult.setText((insertComma(
+                (((Double.parseDouble(sharePref.getTHB().replace(",", "")))) * (Double.parseDouble(
+                    s.toString())) + "")
+            )));
             mResultCurrency.setText(getString(R.string.label_mmk));
           } else {
             mResult.setText("-");

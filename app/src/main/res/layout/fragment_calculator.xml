@@ -112,7 +112,7 @@
         android:fontFamily="sans-serif-light"
         android:layout_marginLeft="@dimen/listPreferredItemPaddingLeft"
         android:layout_marginRight="@dimen/listPreferredItemPaddingRight"
-        android:inputType="number"/>
+        android:inputType="numberDecimal"/>
   </com.yelinaung.karrency.app.ui.FloatLabelLayout>
 
   <LinearLayout

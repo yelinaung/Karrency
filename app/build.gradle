@@ -48,6 +48,7 @@ android {
   dependencies {
     compile 'com.jakewharton:butterknife:5.0.0'
     compile 'com.android.support:support-v4:19.+'
+    compile 'com.netflix.rxjava:rxjava-android:0.11.+'
     compile fileTree(dir: 'libs', include: ['*.jar'])
   }
 }
