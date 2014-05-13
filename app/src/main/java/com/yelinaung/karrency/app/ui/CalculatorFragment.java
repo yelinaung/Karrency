@@ -49,6 +49,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.yelinaung.karrency.app.R;
 import com.yelinaung.karrency.app.util.SharePrefUtils;
+import com.yelinaung.karrency.app.util.SizeAdjustingTextView;
 import java.util.Formatter;
 import rx.Observable;
 
@@ -59,7 +60,7 @@ public class CalculatorFragment extends BaseFragment {
 
   @InjectView(R.id.spinner_currencies) Spinner mCurrencies;
   @InjectView(R.id.edittext_amount) ClearableEditText mEnterAmount;
-  @InjectView(R.id.textview_result) TextView mResult;
+  @InjectView(R.id.textview_result) SizeAdjustingTextView mResult;
   @InjectView(R.id.change) ImageButton mChange;
   @InjectView(R.id.label_mmk) TextView mMMK;
   @InjectView(R.id.result_currency) TextView mResultCurrency;
@@ -327,7 +328,6 @@ public class CalculatorFragment extends BaseFragment {
         }
 
         @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
-          Log.i("s", s.toString());
           if (s.length() > 0) {
             mResult.setText((insertComma(
                 (((Double.parseDouble(sharePref.getUSD().replace(",", "")))) * (Double.parseDouble(

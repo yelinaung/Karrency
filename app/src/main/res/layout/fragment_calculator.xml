@@ -124,7 +124,7 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content">
 
-    <TextView
+    <com.yelinaung.karrency.app.util.SizeAdjustingTextView
         android:id="@+id/textview_result"
         android:fontFamily="sans-serif-light"
         android:text="@string/dummy_result"
