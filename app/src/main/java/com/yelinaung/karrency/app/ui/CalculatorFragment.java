@@ -329,10 +329,14 @@ public class CalculatorFragment extends BaseFragment {
 
         @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
           if (s.length() > 0) {
-            mResult.setText((insertComma(
-                (((Double.parseDouble(sharePref.getUSD().replace(",", "")))) * (Double.parseDouble(
-                    s.toString())) + "")
-            )));
+            try {
+              mResult.setText((insertComma(
+                  (((Double.parseDouble(sharePref.getUSD().replace(",", ""))))
+                      * (Double.parseDouble(s.toString())) + "")
+              )));
+            } catch (NumberFormatException e) {
+              mResult.setText("0");
+            }
             mResultCurrency.setText(getString(R.string.label_mmk));
           } else {
             mResult.setText("-");
@@ -349,10 +353,14 @@ public class CalculatorFragment extends BaseFragment {
 
         @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
           if (s.length() > 0) {
-            mResult.setText((insertComma(
-                (((Double.parseDouble(sharePref.getSGD().replace(",", "")))) * (Double.parseDouble(
-                    s.toString())) + "")
-            )));
+            try {
+              mResult.setText((insertComma(
+                  (((Double.parseDouble(sharePref.getSGD().replace(",", ""))))
+                      * (Double.parseDouble(s.toString())) + "")
+              )));
+            } catch (NumberFormatException e) {
+              mResult.setText("0");
+            }
             mResultCurrency.setText(getString(R.string.label_mmk));
           } else {
             mResult.setText("-");
@@ -373,10 +381,14 @@ public class CalculatorFragment extends BaseFragment {
             //int special = Math.round(Float.parseFloat(sharePref.getEUR().replace(",", "")));
             //mResult.setText((f.format("%,d", ((special) * (Long.parseLong(s.toString())))) + ""));
 
-            mResult.setText((insertComma(
-                (((Double.parseDouble(sharePref.getEUR().replace(",", "")))) * (Double.parseDouble(
-                    s.toString())) + "")
-            )));
+            try {
+              mResult.setText((insertComma(
+                  (((Double.parseDouble(sharePref.getEUR().replace(",", ""))))
+                      * (Double.parseDouble(s.toString())) + "")
+              )));
+            } catch (NumberFormatException e) {
+              mResult.setText("0");
+            }
 
             mResultCurrency.setText(getString(R.string.label_mmk));
           } else {
@@ -394,11 +406,14 @@ public class CalculatorFragment extends BaseFragment {
 
         @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
           if (s.length() > 0) {
-            Formatter f = new Formatter();
-            mResult.setText((insertComma(
-                (((Double.parseDouble(sharePref.getMYR().replace(",", "")))) * (Double.parseDouble(
-                    s.toString())) + "")
-            )));
+            try {
+              mResult.setText((insertComma(
+                  (((Double.parseDouble(sharePref.getMYR().replace(",", ""))))
+                      * (Double.parseDouble(s.toString())) + "")
+              )));
+            } catch (NumberFormatException e) {
+              mResult.setText("0");
+            }
             mResultCurrency.setText(getString(R.string.label_mmk));
           } else {
             mResult.setText("-");
@@ -415,10 +430,14 @@ public class CalculatorFragment extends BaseFragment {
 
         @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
           if (s.length() > 0) {
-            mResult.setText((insertComma(
-                (((Double.parseDouble(sharePref.getGBP().replace(",", "")))) * (Double.parseDouble(
-                    s.toString())) + "")
-            )));
+            try {
+              mResult.setText((insertComma(
+                  (((Double.parseDouble(sharePref.getGBP().replace(",", ""))))
+                      * (Double.parseDouble(s.toString())) + "")
+              )));
+            } catch (NumberFormatException e) {
+              mResult.setText("0");
+            }
             mResultCurrency.setText(getString(R.string.label_mmk));
           } else {
             mResult.setText("-");
@@ -435,10 +454,14 @@ public class CalculatorFragment extends BaseFragment {
 
         @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
           if (s.length() > 0) {
-            mResult.setText((insertComma(
-                (((Double.parseDouble(sharePref.getTHB().replace(",", "")))) * (Double.parseDouble(
-                    s.toString())) + "")
-            )));
+            try {
+              mResult.setText((insertComma(
+                  (((Double.parseDouble(sharePref.getTHB().replace(",", ""))))
+                      * (Double.parseDouble(s.toString())) + "")
+              )));
+            } catch (NumberFormatException e) {
+              mResult.setText("0");
+            }
             mResultCurrency.setText(getString(R.string.label_mmk));
           } else {
             mResult.setText("-");
