@@ -46,6 +46,7 @@
   </string>
   <string name="no_connection">Could not refresh data. Please check your connection.</string>
   <string name="hello_blank_fragment">Hello blank fragment</string>
+  <string name="sync_time">Synced Time - %s</string>
 
   <!-- Converter -->
   <string name="enter_amount">Enter Amount</string>

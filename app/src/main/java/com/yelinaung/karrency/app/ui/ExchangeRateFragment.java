@@ -42,6 +42,8 @@ import com.yelinaung.karrency.app.R;
 import com.yelinaung.karrency.app.model.Exchange;
 import com.yelinaung.karrency.app.util.SharePrefUtils;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
@@ -129,6 +131,9 @@ public class ExchangeRateFragment extends BaseFragment {
         THB.setText("-");
       }
     } else {
+      SpannableStringBuilder aboutBody = new SpannableStringBuilder();
+      aboutBody.append(Html.fromHtml(
+          getString(R.string.sync_time, SharePrefUtils.getInstance(mContext).getTime())));
       USD.setText(SharePrefUtils.getInstance(mContext).getUSD());
       SGD.setText(SharePrefUtils.getInstance(mContext).getSGD());
       EURO.setText(SharePrefUtils.getInstance(mContext).getEUR());
@@ -205,6 +210,9 @@ public class ExchangeRateFragment extends BaseFragment {
 
   private class GetData extends AsyncTask<Void, Void, Exchange> {
     Exchange ex = new Exchange();
+    private Date todayDate = new Date();
+    private String nowTime =
+        String.valueOf(new SimpleDateFormat("hh:mm a - FF MMM yyyy").format(todayDate));
 
     @Override protected void onPreExecute() {
       super.onPreExecute();
@@ -261,7 +269,8 @@ public class ExchangeRateFragment extends BaseFragment {
       Exchange ex = new Exchange();
       ex.info = new JSONObject(result).getString("info");
       ex.description = new JSONObject(result).getString("description");
-      ex.timestamp = new JSONObject(result).getInt("timestamp");
+      //ex.timestamp = new JSONObject(result).getInt("timestamp");
+      ex.timestamp = nowTime;
       ex.usd = new JSONObject(new JSONObject(result).getString("rates")).getString("USD");
       ex.sgd = new JSONObject(new JSONObject(result).getString("rates")).getString("SGD");
       ex.eur = new JSONObject(new JSONObject(result).getString("rates")).getString("EUR");

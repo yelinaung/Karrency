@@ -39,6 +39,10 @@ public class SharePrefUtils {
     return pref;
   }
 
+  public void saveTime(String time) {
+    mEditor.putString("time", time).commit();
+  }
+
   public void saveCurrencies(String usd, String sgd, String euro, String myr, String gbp,
       String thb) {
     mEditor.putString("USD", usd)
@@ -48,6 +52,10 @@ public class SharePrefUtils {
         .putString("GBP", gbp)
         .putString("THB", thb)
         .commit();
+  }
+
+  public String getTime() {
+    return mSharePreferences.getString("time", "11:59 PM - 05 May 2014");
   }
 
   public String getUSD() {
