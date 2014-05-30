@@ -33,6 +33,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,7 +44,7 @@ import com.yelinaung.karrency.app.model.Exchange;
 import com.yelinaung.karrency.app.util.SharePrefUtils;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.Calendar;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
@@ -72,6 +73,7 @@ public class ExchangeRateFragment extends BaseFragment {
   @InjectView(R.id.gbp_progress) ProgressBar gbpProgress;
   @InjectView(R.id.thb_progress) ProgressBar thbProgress;
   @InjectView(R.id.last_sync_time) TextView lastSync;
+  @InjectView(R.id.last_sync_wrapper) LinearLayout lastSyncWrapper;
 
   private Context mContext;
   private MenuItem menuItem;
@@ -119,7 +121,7 @@ public class ExchangeRateFragment extends BaseFragment {
 
     ConnManager manager = new ConnManager(mContext);
     if (SharePrefUtils.getInstance(mContext).isFirstTime()) {
-      lastSync.setVisibility(View.GONE);
+      lastSyncWrapper.setVisibility(View.GONE);
       if (manager.isConnected()) {
         new GetData().execute();
         SharePrefUtils.getInstance(mContext).noMoreFirstTime();
@@ -214,9 +216,8 @@ public class ExchangeRateFragment extends BaseFragment {
 
   private class GetData extends AsyncTask<Void, Void, Exchange> {
     Exchange ex = new Exchange();
-    private Date todayDate = new Date();
     private String nowTime =
-        String.valueOf(new SimpleDateFormat("hh:mm a - FF MMM yyyy").format(todayDate));
+        new SimpleDateFormat("yyyy/LLL/dd - hh:mm a").format(Calendar.getInstance().getTime());
 
     @Override protected void onPreExecute() {
       super.onPreExecute();

@@ -365,6 +365,7 @@
   </ScrollView>
 
   <LinearLayout style="?android:buttonBarStyle"
+      android:id="@+id/last_sync_wrapper"
       android:gravity="center_horizontal"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
