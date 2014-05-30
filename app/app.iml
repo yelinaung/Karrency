@@ -70,6 +70,7 @@
     </content>
     <orderEntry type="jdk" jdkName="Android API 19 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" exported="" name="bugsnag-android-2.2.0" level="project" />
     <orderEntry type="library" exported="" name="support-v4-19.1.0" level="project" />
     <orderEntry type="library" exported="" name="rxjava-android-0.11.3" level="project" />
     <orderEntry type="library" exported="" name="rxjava-core-0.11.3" level="project" />

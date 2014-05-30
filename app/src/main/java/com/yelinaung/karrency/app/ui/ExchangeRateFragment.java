@@ -71,6 +71,7 @@ public class ExchangeRateFragment extends BaseFragment {
   @InjectView(R.id.myr_progress) ProgressBar myrProgress;
   @InjectView(R.id.gbp_progress) ProgressBar gbpProgress;
   @InjectView(R.id.thb_progress) ProgressBar thbProgress;
+  @InjectView(R.id.last_sync_time) TextView lastSync;
 
   private Context mContext;
   private MenuItem menuItem;
@@ -118,11 +119,13 @@ public class ExchangeRateFragment extends BaseFragment {
 
     ConnManager manager = new ConnManager(mContext);
     if (SharePrefUtils.getInstance(mContext).isFirstTime()) {
+      lastSync.setVisibility(View.GONE);
       if (manager.isConnected()) {
         new GetData().execute();
         SharePrefUtils.getInstance(mContext).noMoreFirstTime();
       } else {
         Toast.makeText(mContext, R.string.no_connection, Toast.LENGTH_SHORT).show();
+        lastSync.setText("-");
         USD.setText("-");
         SGD.setText("-");
         EURO.setText("-");
@@ -131,9 +134,10 @@ public class ExchangeRateFragment extends BaseFragment {
         THB.setText("-");
       }
     } else {
-      SpannableStringBuilder aboutBody = new SpannableStringBuilder();
-      aboutBody.append(Html.fromHtml(
-          getString(R.string.sync_time, SharePrefUtils.getInstance(mContext).getTime())));
+      String time = SharePrefUtils.getInstance(mContext).getTime();
+      SpannableStringBuilder lastSyncTime = new SpannableStringBuilder();
+      lastSyncTime.append(Html.fromHtml(getString(R.string.sync_time, time)));
+      lastSync.setText(lastSyncTime);
       USD.setText(SharePrefUtils.getInstance(mContext).getUSD());
       SGD.setText(SharePrefUtils.getInstance(mContext).getSGD());
       EURO.setText(SharePrefUtils.getInstance(mContext).getEUR());
@@ -259,7 +263,7 @@ public class ExchangeRateFragment extends BaseFragment {
         THB.setText(ex.thb);
 
         SharePrefUtils.getInstance(mContext)
-            .saveCurrencies(ex.usd, ex.sgd, ex.eur, ex.myr, ex.gbp, ex.thb);
+            .saveCurrencies(nowTime, ex.usd, ex.sgd, ex.eur, ex.myr, ex.gbp, ex.thb);
       } else {
         Toast.makeText(mContext, R.string.no_connection, Toast.LENGTH_SHORT).show();
       }
@@ -270,7 +274,6 @@ public class ExchangeRateFragment extends BaseFragment {
       ex.info = new JSONObject(result).getString("info");
       ex.description = new JSONObject(result).getString("description");
       //ex.timestamp = new JSONObject(result).getInt("timestamp");
-      ex.timestamp = nowTime;
       ex.usd = new JSONObject(new JSONObject(result).getString("rates")).getString("USD");
       ex.sgd = new JSONObject(new JSONObject(result).getString("rates")).getString("SGD");
       ex.eur = new JSONObject(new JSONObject(result).getString("rates")).getString("EUR");

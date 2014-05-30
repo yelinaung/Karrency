@@ -39,13 +39,10 @@ public class SharePrefUtils {
     return pref;
   }
 
-  public void saveTime(String time) {
-    mEditor.putString("time", time).commit();
-  }
-
-  public void saveCurrencies(String usd, String sgd, String euro, String myr, String gbp,
+  public void saveCurrencies(String time, String usd, String sgd, String euro, String myr, String gbp,
       String thb) {
-    mEditor.putString("USD", usd)
+    mEditor.putString("time", time)
+        .putString("USD", usd)
         .putString("SGD", sgd)
         .putString("EURO", euro)
         .putString("MYR", myr)
