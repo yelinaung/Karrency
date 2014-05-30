@@ -64,6 +64,7 @@ public class CalculatorFragment extends BaseFragment {
   @InjectView(R.id.change) ImageButton mChange;
   @InjectView(R.id.label_mmk) TextView mMMK;
   @InjectView(R.id.result_currency) TextView mResultCurrency;
+  @InjectView(R.id.last_sync_time) TextView lastSync;
 
   boolean noSwap = true;
   private Context mContext;
@@ -99,6 +100,10 @@ public class CalculatorFragment extends BaseFragment {
     ButterKnife.inject(this, rootView);
 
     mResult.setText(" - ");
+    String time = SharePrefUtils.getInstance(mContext).getTime();
+    SpannableStringBuilder lastSyncTime = new SpannableStringBuilder();
+    lastSyncTime.append(Html.fromHtml(getString(R.string.sync_time, time)));
+    lastSync.setText(lastSyncTime);
 
     String[] currencies = getResources().getStringArray(R.array.currencies);
 
