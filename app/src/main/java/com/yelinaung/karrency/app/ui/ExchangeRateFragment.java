@@ -33,7 +33,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -72,8 +71,6 @@ public class ExchangeRateFragment extends BaseFragment {
   @InjectView(R.id.myr_progress) ProgressBar myrProgress;
   @InjectView(R.id.gbp_progress) ProgressBar gbpProgress;
   @InjectView(R.id.thb_progress) ProgressBar thbProgress;
-  @InjectView(R.id.last_sync_time) TextView lastSync;
-  @InjectView(R.id.last_sync_wrapper) LinearLayout lastSyncWrapper;
 
   private Context mContext;
   private MenuItem menuItem;
@@ -121,13 +118,11 @@ public class ExchangeRateFragment extends BaseFragment {
 
     ConnManager manager = new ConnManager(mContext);
     if (SharePrefUtils.getInstance(mContext).isFirstTime()) {
-      lastSyncWrapper.setVisibility(View.GONE);
       if (manager.isConnected()) {
         new GetData().execute();
         SharePrefUtils.getInstance(mContext).noMoreFirstTime();
       } else {
         Toast.makeText(mContext, R.string.no_connection, Toast.LENGTH_SHORT).show();
-        lastSync.setText("-");
         USD.setText("-");
         SGD.setText("-");
         EURO.setText("-");
@@ -136,10 +131,6 @@ public class ExchangeRateFragment extends BaseFragment {
         THB.setText("-");
       }
     } else {
-      String time = SharePrefUtils.getInstance(mContext).getTime();
-      SpannableStringBuilder lastSyncTime = new SpannableStringBuilder();
-      lastSyncTime.append(Html.fromHtml(getString(R.string.sync_time, time)));
-      lastSync.setText(lastSyncTime);
       USD.setText(SharePrefUtils.getInstance(mContext).getUSD());
       SGD.setText(SharePrefUtils.getInstance(mContext).getSGD());
       EURO.setText(SharePrefUtils.getInstance(mContext).getEUR());

@@ -51,7 +51,6 @@ import com.yelinaung.karrency.app.R;
 import com.yelinaung.karrency.app.util.SharePrefUtils;
 import com.yelinaung.karrency.app.util.SizeAdjustingTextView;
 import java.util.Formatter;
-import rx.Observable;
 
 @SuppressWarnings("ConstantConditions")
 public class CalculatorFragment extends BaseFragment {
@@ -64,7 +63,6 @@ public class CalculatorFragment extends BaseFragment {
   @InjectView(R.id.change) ImageButton mChange;
   @InjectView(R.id.label_mmk) TextView mMMK;
   @InjectView(R.id.result_currency) TextView mResultCurrency;
-  @InjectView(R.id.last_sync_time) TextView lastSync;
 
   boolean noSwap = true;
   private Context mContext;
@@ -100,11 +98,6 @@ public class CalculatorFragment extends BaseFragment {
     ButterKnife.inject(this, rootView);
 
     mResult.setText(" - ");
-    String time = SharePrefUtils.getInstance(mContext).getTime();
-    SpannableStringBuilder lastSyncTime = new SpannableStringBuilder();
-    lastSyncTime.append(Html.fromHtml(getString(R.string.sync_time, time)));
-    lastSync.setText(lastSyncTime);
-
     String[] currencies = getResources().getStringArray(R.array.currencies);
 
     final mSpinnerAdapter mSpinnerAdapter =
@@ -140,7 +133,7 @@ public class CalculatorFragment extends BaseFragment {
       });
     }
 
-    final Observable<String> messageBodyText = Events.text(mEnterAmount);
+    //final Observable<String> messageBodyText = Events.text(mEnterAmount);
 
     mChange.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {

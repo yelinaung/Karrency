@@ -13,9 +13,29 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/pager"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity"/>
+    android:layout_height="match_parent">
+
+  <android.support.v4.view.ViewPager
+      android:id="@+id/pager"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_weight="1"
+      tools:context=".MainActivity"/>
+  <TextView
+      android:id="@+id/last_sync_time"
+      android:text="@string/sync_time"
+      android:gravity="center_horizontal"
+      android:textSize="@dimen/text_small_label_size"
+      android:background="@drawable/ab_bottom_solid_karrency"
+      android:padding="5dp"
+      android:layout_weight="0"
+      android:textColor="@android:color/white"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"/>
+</LinearLayout>

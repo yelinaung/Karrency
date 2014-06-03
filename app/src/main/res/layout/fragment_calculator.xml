@@ -144,21 +144,4 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
   </LinearLayout>
-
-  <LinearLayout style="?android:buttonBarStyle"
-      android:gravity="center_horizontal"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:padding="5dp"
-      android:background="@drawable/ab_bottom_solid_karrency"
-      android:layout_alignParentBottom="true"
-      android:orientation="horizontal">
-    <TextView
-        android:id="@+id/last_sync_time"
-        android:text="@string/sync_time"
-        android:textSize="@dimen/text_small_label_size"
-        android:textColor="@android:color/white"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-  </LinearLayout>
 </RelativeLayout>

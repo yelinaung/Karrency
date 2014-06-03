@@ -24,16 +24,22 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.Html;
+import android.text.SpannableStringBuilder;
+import android.view.View;
+import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.bugsnag.android.Bugsnag;
 import com.crashlytics.android.Crashlytics;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.yelinaung.karrency.app.R;
+import com.yelinaung.karrency.app.util.SharePrefUtils;
 
 public class HomeActivity extends FragmentActivity implements ActionBar.TabListener {
 
   @InjectView(R.id.pager) ViewPager mPager;
+  @InjectView(R.id.last_sync_time) TextView lastSync;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -60,6 +66,15 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
 
     mActionBar.addTab(mActionBar.newTab().setText(R.string.rate).setTabListener(this));
     mActionBar.addTab(mActionBar.newTab().setText(R.string.calc).setTabListener(this));
+
+    if (SharePrefUtils.getInstance(getApplicationContext()).isFirstTime()) {
+      lastSync.setVisibility(View.GONE);
+    } else {
+      String time = SharePrefUtils.getInstance(getApplicationContext()).getTime();
+      SpannableStringBuilder lastSyncTime = new SpannableStringBuilder();
+      lastSyncTime.append(Html.fromHtml(getString(R.string.sync_time, time)));
+      lastSync.setText(lastSyncTime);
+    }
   }
 
   @Override public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
