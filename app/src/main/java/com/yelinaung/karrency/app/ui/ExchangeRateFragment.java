@@ -24,7 +24,6 @@ import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
@@ -39,10 +38,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import com.yelinaung.karrency.app.R;
 import com.yelinaung.karrency.app.model.Exchange;
 import com.yelinaung.karrency.app.util.SharePrefUtils;
-import com.yelinaung.myancur.app.R;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
@@ -100,6 +101,7 @@ public class ExchangeRateFragment extends BaseFragment {
 
     // Inject the views here
     ButterKnife.inject(this, rootView);
+
     return rootView;
   }
 
@@ -113,9 +115,21 @@ public class ExchangeRateFragment extends BaseFragment {
 
   @Override public void onResume() {
     super.onResume();
+
+    ConnManager manager = new ConnManager(mContext);
     if (SharePrefUtils.getInstance(mContext).isFirstTime()) {
-      new GetData().execute();
-      SharePrefUtils.getInstance(mContext).noMoreFirstTime();
+      if (manager.isConnected()) {
+        new GetData().execute();
+        SharePrefUtils.getInstance(mContext).noMoreFirstTime();
+      } else {
+        Toast.makeText(mContext, R.string.no_connection, Toast.LENGTH_SHORT).show();
+        USD.setText("-");
+        SGD.setText("-");
+        EURO.setText("-");
+        MYR.setText("-");
+        GBP.setText("-");
+        THB.setText("-");
+      }
     } else {
       USD.setText(SharePrefUtils.getInstance(mContext).getUSD());
       SGD.setText(SharePrefUtils.getInstance(mContext).getSGD());
@@ -152,12 +166,13 @@ public class ExchangeRateFragment extends BaseFragment {
             .show();
         return true;
       case R.id.action_sync:
-        ConnectionManager manager = new ConnectionManager(mContext);
+        ConnManager manager = new ConnManager(mContext);
         if (manager.isConnected()) {
-          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            menuItem.setActionView(R.layout.pg);
-            menuItem.expandActionView();
-          }
+          // FIXME
+          //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+          //  menuItem.setActionView(R.layout.pg);
+          //  menuItem.expandActionView();
+          //}
           new GetData().execute();
         } else {
           Toast.makeText(mContext, R.string.no_connection, Toast.LENGTH_SHORT).show();
@@ -191,7 +206,9 @@ public class ExchangeRateFragment extends BaseFragment {
   }
 
   private class GetData extends AsyncTask<Void, Void, Exchange> {
-    Exchange ex;
+    Exchange ex = new Exchange();
+    private String nowTime =
+        new SimpleDateFormat("yyyy/LLL/dd - hh:mm a").format(Calendar.getInstance().getTime());
 
     @Override protected void onPreExecute() {
       super.onPreExecute();
@@ -220,30 +237,35 @@ public class ExchangeRateFragment extends BaseFragment {
     @Override protected void onPostExecute(Exchange ex) {
       super.onPostExecute(ex);
 
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-        menuItem.collapseActionView();
-        menuItem.setActionView(null);
-      }
+      // FIXME This is raising NPE when the app is launched for the first time
+      //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+      //  menuItem.collapseActionView();
+      //  menuItem.setActionView(null);
+      //}
 
       hidePg(usdProgress, sgdProgress, euroProgress, gbpProgress, myrProgress, thbProgress);
       showTv(USD, SGD, EURO, MYR, GBP, THB);
 
-      USD.setText(ex.usd);
-      SGD.setText(ex.sgd);
-      EURO.setText(ex.eur);
-      MYR.setText(ex.myr);
-      GBP.setText(ex.gbp);
-      THB.setText(ex.thb);
+      if (ex != null) {
+        USD.setText(ex.usd);
+        SGD.setText(ex.sgd);
+        EURO.setText(ex.eur);
+        MYR.setText(ex.myr);
+        GBP.setText(ex.gbp);
+        THB.setText(ex.thb);
 
-      SharePrefUtils.getInstance(mContext)
-          .saveCurrencies(ex.usd, ex.sgd, ex.eur, ex.myr, ex.gbp, ex.thb);
+        SharePrefUtils.getInstance(mContext)
+            .saveCurrencies(nowTime, ex.usd, ex.sgd, ex.eur, ex.myr, ex.gbp, ex.thb);
+      } else {
+        Toast.makeText(mContext, R.string.no_connection, Toast.LENGTH_SHORT).show();
+      }
     }
 
     Exchange parse(String result) throws JSONException {
       Exchange ex = new Exchange();
       ex.info = new JSONObject(result).getString("info");
       ex.description = new JSONObject(result).getString("description");
-      ex.timestamp = new JSONObject(result).getInt("timestamp");
+      //ex.timestamp = new JSONObject(result).getInt("timestamp");
       ex.usd = new JSONObject(new JSONObject(result).getString("rates")).getString("USD");
       ex.sgd = new JSONObject(new JSONObject(result).getString("rates")).getString("SGD");
       ex.eur = new JSONObject(new JSONObject(result).getString("rates")).getString("EUR");
@@ -254,10 +276,10 @@ public class ExchangeRateFragment extends BaseFragment {
     }
   }
 
-  public class ConnectionManager {
+  public class ConnManager {
     private Context mContext;
 
-    public ConnectionManager(Context context) {
+    public ConnManager(Context context) {
       this.mContext = context;
     }
 

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ Copyright (c) 2014. Ye Lin Aung
   ~
@@ -12,20 +13,21 @@
   ~   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~   See the License for the specific language governing permissions and
   ~   limitations under the License.
-  -->
-
+-->
 <resources>
-  <!-- Default screen margins, per the Android Design guidelines. -->
-  <dimen name="text_label_size">20sp</dimen>
-  <dimen name="text_small_label_size">18sp</dimen>
-  <dimen name="result_font_size">25sp</dimen>
 
-  <dimen name="rate_width">130dp</dimen>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="text_label_size">20sp</dimen>
+    <dimen name="text_small_label_size">18sp</dimen>
+    <dimen name="result_font_size">25sp</dimen>
+    <dimen name="rate_width">130dp</dimen>
 
-  <!-- From
+    <!--
+  From
   http://stackoverflow.com/questions/13655577/android-list-preferred-left-padding-value-and-hide-textview-in-array-adapter
-  -->
-  <dimen name="listPreferredItemPaddingLeft">6dip</dimen>
-  <dimen name="listPreferredItemPaddingRight">6dip</dimen>
+    -->
+    <dimen name="listPreferredItemPaddingLeft">6dip</dimen>
+    <dimen name="listPreferredItemPaddingRight">6dip</dimen>
+    <dimen name="widget_margin">8dp</dimen>
 
 </resources>

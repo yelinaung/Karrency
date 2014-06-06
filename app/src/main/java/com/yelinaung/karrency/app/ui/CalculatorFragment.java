@@ -24,8 +24,11 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -39,14 +42,15 @@ import android.view.animation.RotateAnimation;
 import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import com.yelinaung.karrency.app.R;
 import com.yelinaung.karrency.app.util.SharePrefUtils;
-import com.yelinaung.myancur.app.R;
+import com.yelinaung.karrency.app.util.SizeAdjustingTextView;
+import java.util.Formatter;
 
 @SuppressWarnings("ConstantConditions")
 public class CalculatorFragment extends BaseFragment {
@@ -54,9 +58,8 @@ public class CalculatorFragment extends BaseFragment {
   private static int ANIMATION_DURATION = 300;
 
   @InjectView(R.id.spinner_currencies) Spinner mCurrencies;
-  @InjectView(R.id.edittext_amount) ClearableEditText mEditText;
-  @InjectView(R.id.textview_result) TextView mResult;
-  @InjectView(R.id.calculate) Button mCalculate;
+  @InjectView(R.id.edittext_amount) ClearableEditText mEnterAmount;
+  @InjectView(R.id.textview_result) SizeAdjustingTextView mResult;
   @InjectView(R.id.change) ImageButton mChange;
   @InjectView(R.id.label_mmk) TextView mMMK;
   @InjectView(R.id.result_currency) TextView mResultCurrency;
@@ -65,9 +68,9 @@ public class CalculatorFragment extends BaseFragment {
   private Context mContext;
   private SharePrefUtils sharePref;
   private View rootView;
-  private int viewHeight;
   private RotateAnimation rotateClockwise;
   private RotateAnimation rotateAntiClockwise;
+  private int viewHeight;
 
   public CalculatorFragment() {
     // Required empty public constructor
@@ -95,15 +98,7 @@ public class CalculatorFragment extends BaseFragment {
     ButterKnife.inject(this, rootView);
 
     mResult.setText(" - ");
-
-    // TODO Probably, can iterate through SharePref and XML String array
-    String[] currencies = {
-        "USD - " + sharePref.getUSD() + " MMK", "SGD - " + sharePref.getSGD() + " MMK",
-        "EUR - " + sharePref.getEUR() + " MMK", "MYR - " + sharePref.getMYR() + " MMK",
-        "GBP - " + sharePref.getGBP() + " MMK", "THB - " + sharePref.getTHB() + " MMK"
-    };
-
-    //String[] currencies = getResources().getStringArray(R.array.currencies);
+    String[] currencies = getResources().getStringArray(R.array.currencies);
 
     final mSpinnerAdapter mSpinnerAdapter =
         new mSpinnerAdapter(mContext, R.layout.actionbar_spinner, currencies);
@@ -115,18 +110,6 @@ public class CalculatorFragment extends BaseFragment {
     //        mContext)
     //);
 
-    ViewTreeObserver viewTreeObserver = mCurrencies.getViewTreeObserver();
-    if (viewTreeObserver.isAlive()) {
-      viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-        @Override
-        public void onGlobalLayout() {
-          mCurrencies.getViewTreeObserver().addOnGlobalLayoutListener(this);
-          viewHeight = mCurrencies.getHeight();
-          mCurrencies.getLayoutParams();
-        }
-      });
-    }
-
     mCurrencies.setAdapter(mSpinnerAdapter);
 
     rotateClockwise =
@@ -137,8 +120,24 @@ public class CalculatorFragment extends BaseFragment {
         (RotateAnimation) AnimationUtils.loadAnimation(mContext, R.anim.rotate_anitclockwise);
     rotateAntiClockwise.setDuration(ANIMATION_DURATION);
 
+    final ViewTreeObserver viewTreeObserver = mCurrencies.getViewTreeObserver();
+    if (viewTreeObserver.isAlive()) {
+      viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        @Override
+        public void onGlobalLayout() {
+          mCurrencies.getViewTreeObserver().addOnGlobalLayoutListener(this);
+          viewHeight = mCurrencies.getHeight();
+          mCurrencies.getLayoutParams();
+          mCurrencies.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+        }
+      });
+    }
+
+    //final Observable<String> messageBodyText = Events.text(mEnterAmount);
+
     mChange.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
+        System.gc();
         if (noSwap) {
 
           mChange.setAnimation(rotateClockwise);
@@ -162,21 +161,37 @@ public class CalculatorFragment extends BaseFragment {
           mMMK.bringToFront();
 
           noSwap = false;
+          Log.i("Just swapped", "" + noSwap);
+          mResultCurrency.setText("");
+
+          System.gc();
+          fromMMKToOthers();
+          mCurrencies.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override public void onItemSelected(AdapterView<?> parent, View view, int position,
+                long id) {
+              Log.i("selected", parent.getSelectedItem().toString());
+              fromMMKToOthers();
+            }
+
+            @Override public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+          });
         } else {
           mChange.setAnimation(rotateAntiClockwise);
           rotateAntiClockwise.start();
 
           mCurrencies.setY(0);
 
-          ObjectAnimator objectAnimator =
-              ObjectAnimator.ofFloat(mCurrencies, "translationY", viewHeight, 0);
-          objectAnimator.setDuration(ANIMATION_DURATION);
-          objectAnimator.start();
+          //ObjectAnimator objectAnimator =
+          //    ObjectAnimator.ofFloat(mCurrencies, "translationY", 150, 0);
+          //objectAnimator.setDuration(ANIMATION_DURATION);
+          //objectAnimator.start();
 
-          //TranslateAnimation ta1 = new TranslateAnimation(0, 0, viewHeight, 0);
-          //ta1.setDuration(ANIMATION_DURATION);
-          //ta1.setFillAfter(true);
-          //mCurrencies.startAnimation(ta1);
+          TranslateAnimation ta1 = new TranslateAnimation(0, 0, viewHeight, 0);
+          ta1.setDuration(ANIMATION_DURATION);
+          ta1.setFillAfter(true);
+          mCurrencies.startAnimation(ta1);
           mCurrencies.bringToFront();
 
           TranslateAnimation ta2 = new TranslateAnimation(0, 0, -viewHeight, 0);
@@ -186,130 +201,34 @@ public class CalculatorFragment extends BaseFragment {
           mMMK.bringToFront();
 
           noSwap = true;
+          Log.i("Reswap", "" + noSwap);
+          fromOthersToMMK();
+          mCurrencies.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override public void onItemSelected(AdapterView<?> parent, View view, int position,
+                long id) {
+              fromOthersToMMK();
+            }
+
+            @Override public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+          });
         }
       }
     });
 
-    mCurrencies.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-      @Override public void onItemSelected(AdapterView<?> parent, View view, int position,
-          long id) {
-        mCalculate.setOnClickListener(new View.OnClickListener() {
-          @Override public void onClick(View v) {
-            if (noSwap) {
-              if (mEditText.getText().toString().isEmpty()) {
-                mEditText.setError(getString(R.string.enter_amount));
-              } else {
-                if (mCurrencies.getSelectedItem()
-                    .toString()
-                    .equalsIgnoreCase("USD - " + sharePref.getUSD() + " MMK")) {
-                  mResult.setText(insertComma(
-                      ((Math.round(Float.parseFloat(sharePref.getUSD().replace(",", ""))))
-                          * (Long.parseLong(mEditText.getText().toString()))) + ""
-                  ));
-                  mResultCurrency.setText(getString(R.string.label_mmk));
-                } else if (mCurrencies.getSelectedItem()
-                    .toString()
-                    .equalsIgnoreCase("SGD - " + sharePref.getSGD() + " MMK")) {
-                  mResult.setText(insertComma(
-                      ((Math.round(Float.parseFloat(sharePref.getSGD()))) * (Integer.parseInt(
-                          mEditText.getText().toString()))) + " "
-                  ));
-                  mResultCurrency.setText(getString(R.string.label_mmk));
-                } else if (mCurrencies.getSelectedItem()
-                    .toString()
-                    .equalsIgnoreCase("EUR - " + sharePref.getEUR() + " MMK")) {
-                  // yah. there was a command so. Float.parseFloat can't parse
-                  int special = Math.round(Float.parseFloat(sharePref.getEUR().replace(",", "")));
-                  mResult.setText(insertComma(
-                      (special * (Long.parseLong(mEditText.getText().toString()))) + ""));
-                  mResultCurrency.setText(getString(R.string.label_mmk));
-                } else if (mCurrencies.getSelectedItem()
-                    .toString()
-                    .equalsIgnoreCase("MYR - " + sharePref.getMYR() + " MMK")) {
-                  mResult.setText(insertComma(
-                      ((Math.round(Float.parseFloat(sharePref.getMYR()))) * (Long.parseLong(
-                          mEditText.getText().toString()))) + " "
-                  ));
-                  mResultCurrency.setText(getString(R.string.label_mmk));
-                } else if (mCurrencies.getSelectedItem()
-                    .toString()
-                    .equalsIgnoreCase("GBP - " + sharePref.getGBP() + " MMK")) {
-                  mResult.setText(insertComma(
-                      ((Math.round(Float.parseFloat(sharePref.getGBP().replace(",", ""))))
-                          * (Long.parseLong(mEditText.getText().toString()))) + " "
-                  ));
-                  mResultCurrency.setText(getString(R.string.label_mmk));
-                } else if (mCurrencies.getSelectedItem()
-                    .toString()
-                    .equalsIgnoreCase("THB - " + sharePref.getTHB() + " MMK")) {
-                  mResult.setText(insertComma(
-                      ((Math.round(Float.parseFloat(sharePref.getTHB()))) * (Long.parseLong(
-                          mEditText.getText().toString()))) + " "
-                  ));
-                  mResultCurrency.setText(getString(R.string.label_mmk));
-                }
-              }
-            } else {
-              if (mEditText.getText().toString().isEmpty()) {
-                mEditText.setError(getString(R.string.enter_amount));
-              } else {
-                if (mCurrencies.getSelectedItem()
-                    .toString()
-                    .equalsIgnoreCase("USD - " + sharePref.getUSD() + " MMK")) {
-                  mResult.setText(insertComma(
-                      ((Long.parseLong(mEditText.getText().toString())) / (Math.round(
-                          Float.parseFloat(sharePref.getUSD().replace(",", ""))))) + ""
-                  ));
-                  mResultCurrency.setText(getString(R.string.usd));
-                } else if (mCurrencies.getSelectedItem()
-                    .toString()
-                    .equalsIgnoreCase("SGD - " + sharePref.getSGD() + " MMK")) {
-                  mResult.setText(insertComma(
-                      ((Integer.parseInt(mEditText.getText().toString())) / (Math.round(
-                          Float.parseFloat(sharePref.getSGD())))) + " "
-                  ));
-                  mResultCurrency.setText(getString(R.string.sgd));
-                } else if (mCurrencies.getSelectedItem()
-                    .toString()
-                    .equalsIgnoreCase("EUR - " + sharePref.getEUR() + " MMK")) {
-                  int special = Math.round(Float.parseFloat(sharePref.getEUR().replace(",", "")));
-                  mResult.setText(insertComma(
-                      ((Long.parseLong(mEditText.getText().toString()))) / special + ""));
-                  mResultCurrency.setText(getString(R.string.eur));
-                } else if (mCurrencies.getSelectedItem()
-                    .toString()
-                    .equalsIgnoreCase("MYR - " + sharePref.getMYR() + " MMK")) {
-                  mResult.setText(insertComma(
-                      (Long.parseLong(mEditText.getText().toString())) / ((Math.round(
-                          Float.parseFloat(sharePref.getMYR())))) + " "
-                  ));
-                  mResultCurrency.setText(getString(R.string.myr));
-                } else if (mCurrencies.getSelectedItem()
-                    .toString()
-                    .equalsIgnoreCase("GBP - " + sharePref.getGBP() + " MMK")) {
-                  mResult.setText(insertComma(
-                      ((Long.parseLong(mEditText.getText().toString())) / (Math.round(
-                          Float.parseFloat(sharePref.getGBP().replace(",", ""))))) + " "
-                  ));
-                  mResultCurrency.setText(getString(R.string.gbp));
-                } else if (mCurrencies.getSelectedItem()
-                    .toString()
-                    .equalsIgnoreCase("THB - " + sharePref.getTHB() + " MMK")) {
-                  mResult.setText(insertComma(
-                      ((Long.parseLong(mEditText.getText().toString())) / (Math.round(
-                          Float.parseFloat(sharePref.getTHB())))) + " "
-                  ));
-                  mResultCurrency.setText(getString(R.string.thb));
-                }
-              }
-            }
-          }
-        });
-      }
+    if (noSwap) {
+      mCurrencies.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        @Override public void onItemSelected(AdapterView<?> parent, View view, int position,
+            long id) {
+          fromOthersToMMK();
+        }
 
-      @Override public void onNothingSelected(AdapterView<?> parent) {
-      }
-    });
+        @Override public void onNothingSelected(AdapterView<?> parent) {
+
+        }
+      });
+    }
 
     // Inflate the layout for this fragment
     return rootView;
@@ -357,6 +276,13 @@ public class CalculatorFragment extends BaseFragment {
     String result = digits;
     if (digits.length() <= 3) {
       return digits;
+    } else if (digits.contains(".")) {
+      String[] x = digits.split("\\.");
+      for (int i = 0; i < (x[0].length() - 1) / 3; i++) {
+        int commaPos = (x[0].length() - 3) - (3 * i);
+        result = result.substring(0, commaPos) + "," + result.substring(commaPos);
+      }
+      return result;
     } else {
       for (int i = 0; i < (digits.length() - 1) / 3; i++) {
         int commaPos = (digits.length() - 3) - (3 * i);
@@ -390,5 +316,298 @@ public class CalculatorFragment extends BaseFragment {
     @Override public int getPosition(String item) {
       return super.getPosition(item) - 1;
     }
+  }
+
+  private void fromOthersToMMK() {
+
+    if (mCurrencies.getSelectedItem().toString().equalsIgnoreCase(getString(R.string.usd))) {
+      mEnterAmount.addTextChangedListener(new TextWatcher() {
+        @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+          if (s.length() > 0) {
+            try {
+              mResult.setText((insertComma(
+                  (((Double.parseDouble(sharePref.getUSD().replace(",", ""))))
+                      * (Double.parseDouble(s.toString())) + "")
+              )));
+            } catch (NumberFormatException e) {
+              mResult.setText("0");
+            }
+            mResultCurrency.setText(getString(R.string.label_mmk));
+          } else {
+            mResult.setText("-");
+          }
+        }
+
+        @Override public void afterTextChanged(Editable s) {
+        }
+      });
+    } else if (mCurrencies.getSelectedItem().toString().equalsIgnoreCase(getString(R.string.sgd))) {
+      mEnterAmount.addTextChangedListener(new TextWatcher() {
+        @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+          if (s.length() > 0) {
+            try {
+              mResult.setText((insertComma(
+                  (((Double.parseDouble(sharePref.getSGD().replace(",", ""))))
+                      * (Double.parseDouble(s.toString())) + "")
+              )));
+            } catch (NumberFormatException e) {
+              mResult.setText("0");
+            }
+            mResultCurrency.setText(getString(R.string.label_mmk));
+          } else {
+            mResult.setText("-");
+          }
+        }
+
+        @Override public void afterTextChanged(Editable s) {
+        }
+      });
+    } else if (mCurrencies.getSelectedItem().toString().equalsIgnoreCase(getString(R.string.eur))) {
+      mEnterAmount.addTextChangedListener(new TextWatcher() {
+        @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+          if (s.length() > 0) {
+            //Formatter f = new Formatter();
+            //int special = Math.round(Float.parseFloat(sharePref.getEUR().replace(",", "")));
+            //mResult.setText((f.format("%,d", ((special) * (Long.parseLong(s.toString())))) + ""));
+
+            try {
+              mResult.setText((insertComma(
+                  (((Double.parseDouble(sharePref.getEUR().replace(",", ""))))
+                      * (Double.parseDouble(s.toString())) + "")
+              )));
+            } catch (NumberFormatException e) {
+              mResult.setText("0");
+            }
+
+            mResultCurrency.setText(getString(R.string.label_mmk));
+          } else {
+            mResult.setText("-");
+          }
+        }
+
+        @Override public void afterTextChanged(Editable s) {
+        }
+      });
+    } else if (mCurrencies.getSelectedItem().toString().equalsIgnoreCase(getString(R.string.myr))) {
+      mEnterAmount.addTextChangedListener(new TextWatcher() {
+        @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+          if (s.length() > 0) {
+            try {
+              mResult.setText((insertComma(
+                  (((Double.parseDouble(sharePref.getMYR().replace(",", ""))))
+                      * (Double.parseDouble(s.toString())) + "")
+              )));
+            } catch (NumberFormatException e) {
+              mResult.setText("0");
+            }
+            mResultCurrency.setText(getString(R.string.label_mmk));
+          } else {
+            mResult.setText("-");
+          }
+        }
+
+        @Override public void afterTextChanged(Editable s) {
+        }
+      });
+    } else if (mCurrencies.getSelectedItem().toString().equalsIgnoreCase(getString(R.string.gbp))) {
+      mEnterAmount.addTextChangedListener(new TextWatcher() {
+        @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+          if (s.length() > 0) {
+            try {
+              mResult.setText((insertComma(
+                  (((Double.parseDouble(sharePref.getGBP().replace(",", ""))))
+                      * (Double.parseDouble(s.toString())) + "")
+              )));
+            } catch (NumberFormatException e) {
+              mResult.setText("0");
+            }
+            mResultCurrency.setText(getString(R.string.label_mmk));
+          } else {
+            mResult.setText("-");
+          }
+        }
+
+        @Override public void afterTextChanged(Editable s) {
+        }
+      });
+    } else if (mCurrencies.getSelectedItem().toString().equalsIgnoreCase(getString(R.string.thb))) {
+      mEnterAmount.addTextChangedListener(new TextWatcher() {
+        @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+          if (s.length() > 0) {
+            try {
+              mResult.setText((insertComma(
+                  (((Double.parseDouble(sharePref.getTHB().replace(",", ""))))
+                      * (Double.parseDouble(s.toString())) + "")
+              )));
+            } catch (NumberFormatException e) {
+              mResult.setText("0");
+            }
+            mResultCurrency.setText(getString(R.string.label_mmk));
+          } else {
+            mResult.setText("-");
+          }
+        }
+
+        @Override public void afterTextChanged(Editable s) {
+        }
+      });
+    }
+  }
+
+  private void fromMMKToOthers() {
+
+    //mCurrencies.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+    //  @Override public void onItemSelected(AdapterView<?> parent, View view, int position,
+    //      long id) {
+
+    if (mCurrencies.getSelectedItem().toString().equalsIgnoreCase(getString(R.string.usd))) {
+      mEnterAmount.addTextChangedListener(new TextWatcher() {
+        @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+          if (s.length() > 0) {
+            Formatter f = new Formatter();
+            Long l = (Long.parseLong(s.toString()));
+            int c = (Math.round(Float.parseFloat(sharePref.getUSD().replace(",", ""))));
+            String result = f.format("%,d", (l / c)) + "";
+            mResult.setText(result);
+            mResultCurrency.setText(getString(R.string.usd));
+          } else {
+            mResult.setText("-");
+          }
+        }
+
+        @Override public void afterTextChanged(Editable s) {
+        }
+      });
+    } else if (mCurrencies.getSelectedItem().toString().equalsIgnoreCase(getString(R.string.sgd))) {
+      mEnterAmount.addTextChangedListener(new TextWatcher() {
+        @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+          if (s.length() > 0) {
+            Formatter f = new Formatter();
+            Long l = (Long.parseLong(s.toString()));
+            int c = (Math.round(Float.parseFloat(sharePref.getSGD().replace(",", ""))));
+            String result = f.format("%,d", (l / c)) + "";
+            mResult.setText(result);
+            mResultCurrency.setText(getString(R.string.sgd));
+          } else {
+            mResult.setText("-");
+          }
+        }
+
+        @Override public void afterTextChanged(Editable s) {
+        }
+      });
+    } else if (mCurrencies.getSelectedItem().toString().equalsIgnoreCase(getString(R.string.eur))) {
+      mEnterAmount.addTextChangedListener(new TextWatcher() {
+        @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+          if (s.length() > 0) {
+            Formatter f = new Formatter();
+            Long l = (Long.parseLong(s.toString()));
+            int c = (Math.round(Float.parseFloat(sharePref.getEUR().replace(",", ""))));
+            String result = f.format("%,d", (l / c)) + "";
+            mResult.setText(result);
+            mResultCurrency.setText(getString(R.string.eur));
+          } else {
+            mResult.setText("-");
+          }
+        }
+
+        @Override public void afterTextChanged(Editable s) {
+        }
+      });
+    } else if (mCurrencies.getSelectedItem().toString().equalsIgnoreCase(getString(R.string.myr))) {
+      mEnterAmount.addTextChangedListener(new TextWatcher() {
+        @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+          if (s.length() > 0) {
+            Formatter f = new Formatter();
+            Long l = (Long.parseLong(s.toString()));
+            int c = (Math.round(Float.parseFloat(sharePref.getMYR().replace(",", ""))));
+            String result = f.format("%,d", (l / c)) + "";
+            mResult.setText(result);
+            mResultCurrency.setText(getString(R.string.myr));
+          } else {
+            mResult.setText("-");
+          }
+        }
+
+        @Override public void afterTextChanged(Editable s) {
+        }
+      });
+    } else if (mCurrencies.getSelectedItem().toString().equalsIgnoreCase(getString(R.string.gbp))) {
+      mEnterAmount.addTextChangedListener(new TextWatcher() {
+        @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+          if (s.length() > 0) {
+            Formatter f = new Formatter();
+            Long l = (Long.parseLong(s.toString()));
+            int c = (Math.round(Float.parseFloat(sharePref.getGBP().replace(",", ""))));
+            String result = f.format("%,d", (l / c)) + "";
+            mResult.setText(result);
+            mResultCurrency.setText(getString(R.string.gbp));
+          } else {
+            mResult.setText("-");
+          }
+        }
+
+        @Override public void afterTextChanged(Editable s) {
+        }
+      });
+    } else if (mCurrencies.getSelectedItem().toString().equalsIgnoreCase(getString(R.string.thb))) {
+      mEnterAmount.addTextChangedListener(new TextWatcher() {
+        @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+          if (s.length() > 0) {
+            Formatter f = new Formatter();
+            Long l = (Long.parseLong(s.toString()));
+            int c = (Math.round(Float.parseFloat(sharePref.getTHB().replace(",", ""))));
+            String result = f.format("%,d", (l / c)) + "";
+            mResult.setText(result);
+            mResultCurrency.setText(getString(R.string.thb));
+          } else {
+            mResult.setText("-");
+          }
+        }
+
+        @Override public void afterTextChanged(Editable s) {
+        }
+      });
+    }
+  }
+
+  // TODO Refact with this method
+  private void calculateMMKToOther(String from, String to, String amount) {
   }
 }

@@ -22,7 +22,7 @@ package com.yelinaung.karrency.app.model;
 
 // Exchange Object
 public class Exchange {
-  public int timestamp;
+  public String timestamp;
   public String usd;
   public String sgd;
   public String eur;

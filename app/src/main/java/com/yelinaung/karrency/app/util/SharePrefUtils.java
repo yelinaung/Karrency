@@ -18,7 +18,6 @@ package com.yelinaung.karrency.app.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import java.util.Map;
 
 /**
  * Created by Ye Lin Aung on 14/04/14.
@@ -40,15 +39,20 @@ public class SharePrefUtils {
     return pref;
   }
 
-  public void saveCurrencies(String usd, String sgd, String euro, String myr, String gbp,
+  public void saveCurrencies(String time, String usd, String sgd, String euro, String myr, String gbp,
       String thb) {
-    mEditor.putString("USD", usd)
+    mEditor.putString("time", time)
+        .putString("USD", usd)
         .putString("SGD", sgd)
         .putString("EURO", euro)
         .putString("MYR", myr)
         .putString("GBP", gbp)
         .putString("THB", thb)
         .commit();
+  }
+
+  public String getTime() {
+    return mSharePreferences.getString("time", "11:59 PM - 05 May 2014");
   }
 
   public String getUSD() {
@@ -75,15 +79,19 @@ public class SharePrefUtils {
     return mSharePreferences.getString("THB", "30");
   }
 
-  public Map<String, ?> getAll() {
-    return mSharePreferences.getAll();
-  }
-
   public boolean isFirstTime() {
     return mSharePreferences.getBoolean("firstTime", true);
   }
 
   public void noMoreFirstTime() {
     mEditor.putBoolean("firstTime", false).commit();
+  }
+
+  public void saveSelectedValue(int value) {
+    mEditor.putInt("selectedValue", value).commit();
+  }
+
+  public int getSavedValue() {
+    return mSharePreferences.getInt("selectedValue", 0);
   }
 }

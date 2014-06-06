@@ -2,11 +2,21 @@ Karrency
 ========
 
 Karrency - A Simple Exchange Rate Checker & Currency Calculator. (MMK <=> Other Currencies)
+
 Minimum SDK 16 (ICS) is required.
 I can support for 2.3+ but I don't see a lot of people are using it, so I dropped it.
 
 
 ![Alt](https://raw.githubusercontent.com/yelinaung/Karrency/master/device-2014-04-16-223625_framed.png)
+
+
+
+It's now available on Play Store
+
+<a href="https://play.google.com/store/apps/details?id=com.yelinaung.karrency.app">
+  <img alt="Get it on Google Play" src="https://developer.android.com/images/brand/en_generic_rgb_wo_60.png" />
+</a>
+
 
 Data is provide by Central Bank of Myanmar [API](http://forex.cbm.gov.mm)
 
