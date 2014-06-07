@@ -19,6 +19,7 @@ package com.yelinaung.karrency.app.ui;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -253,23 +254,29 @@ public class CalculatorFragment extends BaseFragment {
   @Override public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
       case R.id.action_about:
-        PackageManager pm = mContext.getPackageManager();
-        String packageName = mContext.getPackageName();
-        String versionName;
-        try {
-          assert pm != null;
-          PackageInfo info = pm.getPackageInfo(packageName, 0);
-          versionName = info.versionName;
-        } catch (PackageManager.NameNotFoundException e) {
-          versionName = "";
-        }
-        new AlertDialog.Builder(rootView.getRootView().getContext()).setTitle(R.string.about)
-            .setMessage(new SpannableStringBuilder().append(
-                Html.fromHtml(getString(R.string.about_body, versionName))))
-            .show();
+        showAbout();
         return true;
     }
     return super.onOptionsItemSelected(item);
+  }
+
+  private void showAbout() {
+    PackageManager pm = mContext.getPackageManager();
+    String packageName = mContext.getPackageName();
+    String versionName;
+    try {
+      assert pm != null;
+      PackageInfo info = pm.getPackageInfo(packageName, 0);
+      versionName = info.versionName;
+    } catch (PackageManager.NameNotFoundException e) {
+      versionName = "";
+    }
+    AlertDialog.Builder b =
+        new AlertDialog.Builder(rootView.getRootView().getContext()).setTitle(R.string.about)
+            .setMessage(new SpannableStringBuilder().append(
+                Html.fromHtml(getString(R.string.about_body, versionName))));
+    Dialog d = b.show();
+    showCustomDialog(d);
   }
 
   private String insertComma(String digits) {
