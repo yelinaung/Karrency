@@ -45,6 +45,7 @@ import com.yelinaung.karrency.app.util.SharePrefUtils;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
@@ -213,8 +214,8 @@ public class ExchangeRateFragment extends BaseFragment {
 
   private class GetData extends AsyncTask<Void, Void, Exchange> {
     Exchange ex = new Exchange();
-    private String nowTime =
-        new SimpleDateFormat("yyyy/LLL/dd - hh:mm a").format(Calendar.getInstance().getTime());
+    private String nowTime = new SimpleDateFormat("yyyy/LLL/dd - hh:mm a", Locale.US).format(
+        Calendar.getInstance().getTime());
 
     @Override protected void onPreExecute() {
       super.onPreExecute();
