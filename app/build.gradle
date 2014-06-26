@@ -24,13 +24,13 @@ def versionMajor = 1
 def versionMinor = 4
 def versionPatch = 0
 android {
-  compileSdkVersion 19
+  compileSdkVersion 20
   buildToolsVersion '19.1.0'
 
   sourceSets {
     defaultConfig {
       minSdkVersion 16
-      targetSdkVersion 19
+      targetSdkVersion 20
       versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100
       versionName "${versionMajor}.${versionMinor}.${versionPatch}"
     }
@@ -48,7 +48,7 @@ android {
 
   dependencies {
     compile 'com.jakewharton:butterknife:5.0.0'
-    compile 'com.android.support:support-v4:19.+'
+    compile 'com.android.support:support-v4:19+'
     compile 'com.netflix.rxjava:rxjava-android:0.11.+'
     compile fileTree(dir: 'libs', include: ['*.jar'])
   }
