@@ -24,13 +24,13 @@ def versionMajor = 1
 def versionMinor = 4
 def versionPatch = 0
 android {
-  compileSdkVersion 'android-L'
-  buildToolsVersion '20'
+  compileSdkVersion 20
+  buildToolsVersion '20.0.0'
 
   sourceSets {
     defaultConfig {
-      minSdkVersion 'L'
-      targetSdkVersion 'L'
+      minSdkVersion 14
+      targetSdkVersion 19
       versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100
       versionName "${versionMajor}.${versionMinor}.${versionPatch}"
     }
