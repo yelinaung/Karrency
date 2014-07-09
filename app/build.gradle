@@ -7,7 +7,7 @@ buildscript {
     classpath 'com.crashlytics.tools.gradle:crashlytics-gradle:1.+'
   }
 }
-apply plugin: 'android'
+apply plugin: 'com.android.application'
 apply plugin: 'crashlytics'
 repositories {
   maven { url 'http://download.crashlytics.com/maven' }
@@ -46,10 +46,11 @@ android {
     }
   }
 
-  dependencies {
-    compile 'com.jakewharton:butterknife:5.0.0'
-    compile 'com.android.support:support-v4:19+'
-    compile 'com.netflix.rxjava:rxjava-android:0.11.+'
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-  }
+}
+
+dependencies {
+  compile 'com.jakewharton:butterknife:5.0.0'
+  compile 'com.android.support:support-v4:19+'
+  compile 'com.netflix.rxjava:rxjava-android:0.11.+'
+  compile fileTree(dir: 'libs', include: ['*.jar'])
 }
