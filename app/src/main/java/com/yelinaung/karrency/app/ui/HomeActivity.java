@@ -31,6 +31,7 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.bugsnag.android.Bugsnag;
+import com.crashlytics.android.Crashlytics;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.yelinaung.karrency.app.R;
 import com.yelinaung.karrency.app.util.SharePrefUtils;
@@ -42,7 +43,7 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    //Crashlytics.start(this);
+    Crashlytics.start(this);
     Bugsnag.register(this, "e8f35ea322d1f0fd3772434967d89c72");
 
     setContentView(R.layout.activity_home);

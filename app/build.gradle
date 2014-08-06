@@ -1,22 +1,17 @@
 buildscript {
   repositories {
-    //maven { url 'http://download.crashlytics.com/maven' }
+    maven { url 'http://download.crashlytics.com/maven' }
   }
 
   dependencies {
-    // classpath 'com.crashlytics.tools.gradle:crashlytics-gradle:1.+'
+    classpath 'com.crashlytics.tools.gradle:crashlytics-gradle:1.+'
   }
 }
 apply plugin: 'com.android.application'
-// apply plugin: 'crashlytics'
+apply plugin: 'crashlytics'
 
 repositories {
- // maven { url 'http://download.crashlytics.com/maven' }
-}
-
-dependencies {
-  //compile 'com.crashlytics.android:crashlytics:1.+'
-  compile files('libs/bugsnag-android-2.2.0.jar')
+  maven { url 'http://download.crashlytics.com/maven' }
 }
 
 // Manifest version information!
@@ -31,7 +26,7 @@ android {
   sourceSets {
     defaultConfig {
       minSdkVersion 14
-      targetSdkVersion 19
+      targetSdkVersion 20
       versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100
       versionName "${versionMajor}.${versionMinor}.${versionPatch}"
     }
@@ -46,12 +41,13 @@ android {
       abortOnError false
     }
   }
-
 }
 
 dependencies {
+  compile 'com.crashlytics.android:crashlytics:1.+'
+  compile files('libs/bugsnag-android-2.2.0.jar')
   compile 'com.jakewharton:butterknife:5.0.0'
-  compile 'com.android.support:support-v4:19+'
+  compile 'com.android.support:support-v4:20+'
   compile 'com.netflix.rxjava:rxjava-android:0.11.+'
   compile fileTree(dir: 'libs', include: ['*.jar'])
 }
