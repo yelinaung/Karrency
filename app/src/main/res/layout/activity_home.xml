@@ -20,7 +20,10 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
+  <com.yelinaung.karrency.app.ui.widget.SlidingTabLayout
+      android:id="@+id/sliding_tabs"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"/>
   <android.support.v4.view.ViewPager
       android:id="@+id/pager"
       android:layout_width="match_parent"

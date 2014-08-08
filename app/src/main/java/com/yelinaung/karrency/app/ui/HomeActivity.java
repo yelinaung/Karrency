@@ -17,7 +17,7 @@
 package com.yelinaung.karrency.app.ui;
 
 import android.app.ActionBar;
-import android.app.FragmentTransaction;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -34,9 +34,10 @@ import com.bugsnag.android.Bugsnag;
 import com.crashlytics.android.Crashlytics;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.yelinaung.karrency.app.R;
+import com.yelinaung.karrency.app.ui.widget.SlidingTabLayout;
 import com.yelinaung.karrency.app.util.SharePrefUtils;
 
-public class HomeActivity extends FragmentActivity implements ActionBar.TabListener {
+public class HomeActivity extends FragmentActivity {
 
   @InjectView(R.id.pager) ViewPager mPager;
   @InjectView(R.id.last_sync_time) TextView lastSync;
@@ -52,47 +53,15 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
 
     final ActionBar mActionBar = getActionBar();
     assert mActionBar != null;
-    mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-    PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager());
+    SlidingTabLayout slidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tabs);
+    int mPrimaryColor = getResources().getColor(R.color.accent_color);
+    slidingTabLayout.setSelectedIndicatorColors(mPrimaryColor);
+    slidingTabLayout.setDividerColors(mPrimaryColor);
 
-    mPager.setAdapter(pagerAdapter);
+    mPager.setAdapter(new SlidingTabAdapter(getSupportFragmentManager(), HomeActivity.this));
 
-    mPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-      @Override public void onPageSelected(int position) {
-        mActionBar.setSelectedNavigationItem(position);
-      }
-    });
-
-    mActionBar.addTab(mActionBar.newTab().setText(R.string.rate).setTabListener(this));
-    mActionBar.addTab(mActionBar.newTab().setText(R.string.calc).setTabListener(this));
-
-    if (SharePrefUtils.getInstance(getApplicationContext()).isFirstTime()) {
-      lastSync.setVisibility(View.GONE);
-    } else {
-      String time = SharePrefUtils.getInstance(getApplicationContext()).getTime();
-      SpannableStringBuilder lastSyncTime = new SpannableStringBuilder();
-      lastSyncTime.append(Html.fromHtml(getString(R.string.sync_time, time)));
-      lastSync.setText(lastSyncTime);
-    }
-  }
-
-  @Override public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
-    switch (tab.getPosition()) {
-      case 0:
-        new ExchangeRateFragment();
-      case 1:
-        new CalculatorFragment();
-      default:
-        new ExchangeRateFragment();
-    }
-    mPager.setCurrentItem(tab.getPosition());
-  }
-
-  @Override public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
-  }
-
-  @Override public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
+    firstTimeTask();
   }
 
   @Override
@@ -107,25 +76,51 @@ public class HomeActivity extends FragmentActivity implements ActionBar.TabListe
     EasyTracker.getInstance(this).activityStop(this);  // Add this method.
   }
 
-  public class PagerAdapter extends FragmentPagerAdapter {
+  public class SlidingTabAdapter extends FragmentPagerAdapter {
 
-    public PagerAdapter(FragmentManager fm) {
+    Context mContext;
+
+    public SlidingTabAdapter(FragmentManager fm, Context context) {
       super(fm);
-    }
-
-    @Override public Fragment getItem(int position) {
-      switch (position) {
-        case 0:
-          return ExchangeRateFragment.newInstance();
-        case 1:
-          return CalculatorFragment.newInstance();
-        default:
-          return null;
-      }
+      this.mContext = context;
     }
 
     @Override public int getCount() {
       return 2;
+    }
+
+    @Override public Fragment getItem(int position) {
+      Fragment f = null;
+      switch (position) {
+        case 0:
+          f = ExchangeRateFragment.newInstance();
+          break;
+        case 1:
+          f = CalculatorFragment.newInstance();
+          break;
+      }
+      return f;
+    }
+
+    @Override public CharSequence getPageTitle(int position) {
+      switch (position) {
+        case 0:
+          return mContext.getString(R.string.rate);
+        case 1:
+          return mContext.getString(R.string.calc);
+      }
+      return null;
+    }
+  }
+
+  private void firstTimeTask() {
+    if (SharePrefUtils.getInstance(getApplicationContext()).isFirstTime()) {
+      lastSync.setVisibility(View.GONE);
+    } else {
+      String time = SharePrefUtils.getInstance(getApplicationContext()).getTime();
+      SpannableStringBuilder lastSyncTime = new SpannableStringBuilder();
+      lastSyncTime.append(Html.fromHtml(getString(R.string.sync_time, time)));
+      lastSync.setText(lastSyncTime);
     }
   }
 }
