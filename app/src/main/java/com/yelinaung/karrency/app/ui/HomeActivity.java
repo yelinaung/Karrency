@@ -60,7 +60,7 @@ public class HomeActivity extends FragmentActivity {
     slidingTabLayout.setDividerColors(mPrimaryColor);
 
     mPager.setAdapter(new SlidingTabAdapter(getSupportFragmentManager(), HomeActivity.this));
-
+    slidingTabLayout.setViewPager(mPager);
     firstTimeTask();
   }
 
@@ -110,6 +110,10 @@ public class HomeActivity extends FragmentActivity {
           return mContext.getString(R.string.calc);
       }
       return null;
+    }
+
+    @Override public long getItemId(int position) {
+      return super.getItemId(position);
     }
   }
 
