@@ -20,7 +20,7 @@ def versionMinor = 5
 def versionPatch = 0
 
 android {
-  compileSdkVersion 20
+  compileSdkVersion 'android-L'
   buildToolsVersion '20.0.0'
 
   sourceSets {
