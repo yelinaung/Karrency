@@ -18,7 +18,6 @@ package com.yelinaung.karrency.app.ui;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -184,8 +183,7 @@ public class ExchangeRateFragment extends BaseFragment {
         new AlertDialog.Builder(rootView.getRootView().getContext()).setTitle(R.string.about)
             .setMessage(new SpannableStringBuilder().append(
                 Html.fromHtml(getString(R.string.about_body, versionName))));
-    Dialog d = b.show();
-    showCustomDialog(d);
+    b.create().show();
   }
 
   private void showPg(ProgressBar... pg) {

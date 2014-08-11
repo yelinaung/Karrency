@@ -276,7 +276,7 @@ public class CalculatorFragment extends BaseFragment {
             .setMessage(new SpannableStringBuilder().append(
                 Html.fromHtml(getString(R.string.about_body, versionName))));
     Dialog d = b.show();
-    showCustomDialog(d);
+    b.create().show();
   }
 
   private String insertComma(String digits) {
@@ -337,8 +337,7 @@ public class CalculatorFragment extends BaseFragment {
             try {
               mResult.setText((insertComma(
                   (((Double.parseDouble(sharePref.getUSD().replace(",", ""))))
-                      * (Double.parseDouble(s.toString())) + "")
-              )));
+                      * (Double.parseDouble(s.toString())) + ""))));
             } catch (NumberFormatException e) {
               mResult.setText("0");
             }
@@ -361,8 +360,7 @@ public class CalculatorFragment extends BaseFragment {
             try {
               mResult.setText((insertComma(
                   (((Double.parseDouble(sharePref.getSGD().replace(",", ""))))
-                      * (Double.parseDouble(s.toString())) + "")
-              )));
+                      * (Double.parseDouble(s.toString())) + ""))));
             } catch (NumberFormatException e) {
               mResult.setText("0");
             }
@@ -389,8 +387,7 @@ public class CalculatorFragment extends BaseFragment {
             try {
               mResult.setText((insertComma(
                   (((Double.parseDouble(sharePref.getEUR().replace(",", ""))))
-                      * (Double.parseDouble(s.toString())) + "")
-              )));
+                      * (Double.parseDouble(s.toString())) + ""))));
             } catch (NumberFormatException e) {
               mResult.setText("0");
             }
@@ -414,8 +411,7 @@ public class CalculatorFragment extends BaseFragment {
             try {
               mResult.setText((insertComma(
                   (((Double.parseDouble(sharePref.getMYR().replace(",", ""))))
-                      * (Double.parseDouble(s.toString())) + "")
-              )));
+                      * (Double.parseDouble(s.toString())) + ""))));
             } catch (NumberFormatException e) {
               mResult.setText("0");
             }
@@ -438,8 +434,7 @@ public class CalculatorFragment extends BaseFragment {
             try {
               mResult.setText((insertComma(
                   (((Double.parseDouble(sharePref.getGBP().replace(",", ""))))
-                      * (Double.parseDouble(s.toString())) + "")
-              )));
+                      * (Double.parseDouble(s.toString())) + ""))));
             } catch (NumberFormatException e) {
               mResult.setText("0");
             }
@@ -462,8 +457,7 @@ public class CalculatorFragment extends BaseFragment {
             try {
               mResult.setText((insertComma(
                   (((Double.parseDouble(sharePref.getTHB().replace(",", ""))))
-                      * (Double.parseDouble(s.toString())) + "")
-              )));
+                      * (Double.parseDouble(s.toString())) + ""))));
             } catch (NumberFormatException e) {
               mResult.setText("0");
             }
