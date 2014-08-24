@@ -18,6 +18,7 @@ package com.yelinaung.karrency.app.ui;
 
 import android.app.ActionBar;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -53,6 +54,10 @@ public class HomeActivity extends FragmentActivity {
 
     final ActionBar mActionBar = getActionBar();
     assert mActionBar != null;
+
+    if (android.os.Build.VERSION.SDK_INT == Build.VERSION_CODES.L) {
+      mActionBar.setIcon(android.R.color.transparent);
+    }
 
     SlidingTabLayout slidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tabs);
     int mPrimaryColor = getResources().getColor(R.color.accent_color);
