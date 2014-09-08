@@ -17,6 +17,7 @@
 package com.yelinaung.karrency.app.ui;
 
 import android.animation.ObjectAnimator;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -24,6 +25,7 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.Html;
@@ -124,7 +126,7 @@ public class CalculatorFragment extends BaseFragment {
     final ViewTreeObserver viewTreeObserver = mCurrencies.getViewTreeObserver();
     if (viewTreeObserver.isAlive()) {
       viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-        @Override
+        @TargetApi(Build.VERSION_CODES.JELLY_BEAN) @Override
         public void onGlobalLayout() {
           mCurrencies.getViewTreeObserver().addOnGlobalLayoutListener(this);
           viewHeight = mCurrencies.getHeight();
