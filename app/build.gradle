@@ -1,17 +1,17 @@
 buildscript {
   repositories {
-    maven { url 'http://download.crashlytics.com/maven' }
+    maven { url 'https://maven.fabric.io/repo' }
   }
 
   dependencies {
-    classpath 'com.crashlytics.tools.gradle:crashlytics-gradle:1+'
+    classpath 'io.fabric.tools:gradle:1.+'
   }
 }
 apply plugin: 'com.android.application'
-apply plugin: 'crashlytics'
+apply plugin: 'io.fabric'
 
 repositories {
-  maven { url 'http://download.crashlytics.com/maven' }
+  maven { url 'https://maven.fabric.io/repo' }
 }
 
 // Manifest version information!
@@ -49,11 +49,13 @@ android {
 }
 
 dependencies {
-  compile 'com.crashlytics.android:crashlytics:1+'
   compile files('libs/bugsnag-android-2.2.0.jar')
   compile 'com.jakewharton:butterknife:5.1.1'
-  compile 'com.android.support:support-v4:20.0.0'
+  compile 'com.android.support:support-v4:21.0.0'
   compile 'com.netflix.rxjava:rxjava-core:0.20.6'
   compile 'com.netflix.rxjava:rxjava-android:0.20.6'
   compile fileTree(dir: 'libs', include: ['*.jar'])
+  compile('com.crashlytics.sdk.android:crashlytics:2.0.0@aar') {
+    transitive = true;
+  }
 }

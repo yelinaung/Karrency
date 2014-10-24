@@ -37,6 +37,7 @@ import com.google.analytics.tracking.android.EasyTracker;
 import com.yelinaung.karrency.app.R;
 import com.yelinaung.karrency.app.ui.widget.SlidingTabLayout;
 import com.yelinaung.karrency.app.util.SharePrefUtils;
+import io.fabric.sdk.android.Fabric;
 
 public class HomeActivity extends FragmentActivity {
 
@@ -45,7 +46,8 @@ public class HomeActivity extends FragmentActivity {
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    Crashlytics.start(this);
+    Fabric.with(this, new Crashlytics());
+
     Bugsnag.register(this, "e8f35ea322d1f0fd3772434967d89c72");
 
     setContentView(R.layout.activity_home);
