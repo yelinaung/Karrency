@@ -4,7 +4,7 @@ buildscript {
   }
 
   dependencies {
-    classpath 'com.crashlytics.tools.gradle:crashlytics-gradle:1.12.0'
+    classpath 'com.crashlytics.tools.gradle:crashlytics-gradle:1+'
   }
 }
 apply plugin: 'com.android.application'
@@ -20,13 +20,13 @@ def versionMinor = 5
 def versionPatch = 0
 
 android {
-  compileSdkVersion 'android-L'
+  compileSdkVersion 21
   buildToolsVersion '20.0.0'
 
   sourceSets {
     defaultConfig {
       minSdkVersion 14
-      targetSdkVersion 20
+      targetSdkVersion 21
       versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100
       versionName "${versionMajor}.${versionMinor}.${versionPatch}"
     }
@@ -49,11 +49,11 @@ android {
 }
 
 dependencies {
-  compile 'com.crashlytics.android:crashlytics:1.1.11'
+  compile 'com.crashlytics.android:crashlytics:1+'
   compile files('libs/bugsnag-android-2.2.0.jar')
   compile 'com.jakewharton:butterknife:5.1.1'
   compile 'com.android.support:support-v4:20.0.0'
-  compile 'com.netflix.rxjava:rxjava-core:0.20.0-RC4'
-  compile 'com.netflix.rxjava:rxjava-android:0.20.0-RC4'
+  compile 'com.netflix.rxjava:rxjava-core:0.20.6'
+  compile 'com.netflix.rxjava:rxjava-android:0.20.6'
   compile fileTree(dir: 'libs', include: ['*.jar'])
 }
