@@ -17,11 +17,11 @@ repositories {
 // Manifest version information!
 def versionMajor = 1
 def versionMinor = 5
-def versionPatch = 0
+def versionPatch = 1
 
 android {
   compileSdkVersion 21
-  buildToolsVersion '20.0.0'
+  buildToolsVersion '21.1.1'
 
   sourceSets {
     defaultConfig {
@@ -33,12 +33,13 @@ android {
 
     buildTypes {
       release {
-        runProguard false
+        minifyEnabled true
+        shrinkResources true
         proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
       }
 
       beta {
-        runProguard false
+        minifyEnabled false
         versionNameSuffix "-beta"
       }
     }
@@ -49,11 +50,8 @@ android {
 }
 
 dependencies {
-  compile files('libs/bugsnag-android-2.2.0.jar')
   compile 'com.jakewharton:butterknife:5.1.1'
   compile 'com.android.support:support-v4:21.0.0'
-  compile 'com.netflix.rxjava:rxjava-core:0.20.6'
-  compile 'com.netflix.rxjava:rxjava-android:0.20.6'
   compile fileTree(dir: 'libs', include: ['*.jar'])
   compile('com.crashlytics.sdk.android:crashlytics:2.0.0@aar') {
     transitive = true;

@@ -31,7 +31,6 @@ import android.view.View;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import com.bugsnag.android.Bugsnag;
 import com.crashlytics.android.Crashlytics;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.yelinaung.karrency.app.R;
@@ -47,8 +46,6 @@ public class HomeActivity extends FragmentActivity {
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     Fabric.with(this, new Crashlytics());
-
-    Bugsnag.register(this, "e8f35ea322d1f0fd3772434967d89c72");
 
     setContentView(R.layout.activity_home);
 
