@@ -16,6 +16,10 @@
   -->
 
 <resources>
+
+  <color name="theme_primary">#FF2798F3</color>
+  <color name="theme_primary_dark">#ff247dd3</color>
+
   <color name="accent_color">#269dff</color>
 
   <color name="btn_pressed">#ff268fef</color>

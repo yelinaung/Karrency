@@ -91,6 +91,7 @@
     <orderEntry type="library" exported="" name="fabric-1.0.0" level="project" />
     <orderEntry type="library" exported="" name="Analytics" level="project" />
     <orderEntry type="library" exported="" name="answers-1.0.0" level="project" />
+    <orderEntry type="library" exported="" name="appcompat-v7-21.0.0" level="project" />
   </component>
 </module>
 
