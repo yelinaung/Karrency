@@ -20,6 +20,10 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+  <include android:id="@+id/toolbar"
+      layout="@layout/toolbar"/>
+
   <com.yelinaung.karrency.app.ui.widget.SlidingTabLayout
       android:id="@+id/sliding_tabs"
       android:layout_width="match_parent"

@@ -16,47 +16,40 @@
 
 package com.yelinaung.karrency.app.ui;
 
-import android.app.ActionBar;
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.view.View;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import com.crashlytics.android.Crashlytics;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.yelinaung.karrency.app.R;
 import com.yelinaung.karrency.app.ui.widget.SlidingTabLayout;
 import com.yelinaung.karrency.app.util.SharePrefUtils;
-import io.fabric.sdk.android.Fabric;
 
-public class HomeActivity extends FragmentActivity {
+public class HomeActivity extends ActionBarActivity {
 
   @InjectView(R.id.pager) ViewPager mPager;
   @InjectView(R.id.last_sync_time) TextView lastSync;
+  @InjectView(R.id.toolbar) Toolbar mToolbar;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    Fabric.with(this, new Crashlytics());
+    //Fabric.with(this, new Crashlytics());
 
     setContentView(R.layout.activity_home);
 
     ButterKnife.inject(this);
 
-    final ActionBar mActionBar = getActionBar();
-    assert mActionBar != null;
-
-    if (android.os.Build.VERSION.SDK_INT == Build.VERSION_CODES.L) {
-      mActionBar.setIcon(android.R.color.transparent);
-    }
+    this.setSupportActionBar(mToolbar);
 
     SlidingTabLayout slidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tabs);
     int mPrimaryColor = getResources().getColor(R.color.accent_color);
