@@ -1,4 +1,4 @@
-package org.devconmyanmar.apps.devcon;
+package com.yelinaung.karrency.apps;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
