@@ -16,18 +16,14 @@
 
 package com.yelinaung.karrency.app.ui;
 
-import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.view.View;
-import android.widget.TextView;
-import com.google.analytics.tracking.android.EasyTracker;
-import com.yelinaung.karrency.app.R;
 
 /**
  * Created by Ye Lin Aung on 14/04/14.
  */
 public class BaseFragment extends Fragment {
+
   @Override public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setHasOptionsMenu(true);
@@ -40,17 +36,6 @@ public class BaseFragment extends Fragment {
   @Override
   public void onStart() {
     super.onStart();
-    EasyTracker.getInstance(getActivity()).activityStart(getActivity());  // Add this method.
-  }
-
-  protected void showCustomDialog(Dialog d) {
-    int newCodeViewId =
-        d.getContext().getResources().getIdentifier("android:id/titleDivider", null, null);
-    View newCodeDivider = d.findViewById(newCodeViewId);
-    newCodeDivider.setBackgroundColor(getResources().getColor(R.color.accent_color));
-    int newCodeTextViewId =
-        d.getContext().getResources().getIdentifier("android:id/alertTitle", null, null);
-    TextView newCodeTv = (TextView) d.findViewById(newCodeTextViewId);
-    newCodeTv.setTextColor(getResources().getColor(R.color.accent_color));
+    //EasyTracker.getInstance(getActivity()).activityStart(getActivity());  // Add this method.
   }
 }
