@@ -23,8 +23,8 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.view.LayoutInflater;
@@ -33,48 +33,30 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import com.squareup.okhttp.OkHttpClient;
 import com.yelinaung.karrency.app.R;
-import com.yelinaung.karrency.app.model.Exchange;
+import com.yelinaung.karrency.app.async.CurrencyService;
+import com.yelinaung.karrency.app.model.Currency;
 import com.yelinaung.karrency.app.util.SharePrefUtils;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Locale;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.util.Date;
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.OkClient;
+import retrofit.client.Response;
 
 @SuppressWarnings("ConstantConditions")
 public class ExchangeRateFragment extends BaseFragment {
 
   public static final String BASE_URL = "http://forex.cbm.gov.mm/api";
 
-  @InjectView(R.id.usd) TextView USD;
-  @InjectView(R.id.sgd) TextView SGD;
-  @InjectView(R.id.euro) TextView EURO;
-  @InjectView(R.id.myr) TextView MYR;
-  @InjectView(R.id.gbp) TextView GBP;
-  @InjectView(R.id.thb) TextView THB;
-  @InjectView(R.id.usd_progress) ProgressBar usdProgress;
-  @InjectView(R.id.sgd_progress) ProgressBar sgdProgress;
-  @InjectView(R.id.euro_progress) ProgressBar euroProgress;
-  @InjectView(R.id.myr_progress) ProgressBar myrProgress;
-  @InjectView(R.id.gbp_progress) ProgressBar gbpProgress;
-  @InjectView(R.id.thb_progress) ProgressBar thbProgress;
+  @InjectView(R.id.exchange_rate_swipe_refresh) SwipeRefreshLayout exchangeSRL;
 
+  private OkHttpClient okHttpClient = new OkHttpClient();
   private Context mContext;
-  private MenuItem menuItem;
   private View rootView;
 
   public ExchangeRateFragment() {
@@ -95,13 +77,31 @@ public class ExchangeRateFragment extends BaseFragment {
       Bundle savedInstanceState) {
 
     mContext = getActivity().getApplicationContext();
-
-    // Inflate the layout for this fragment
     rootView = inflater.inflate(R.layout.fragment_exchange_rate, container, false);
     assert rootView != null;
-
-    // Inject the views here
     ButterKnife.inject(this, rootView);
+
+    exchangeSRL.setColorSchemeColors(R.color.theme_primary);
+
+    exchangeSRL.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+      @Override public void onRefresh() {
+        RestAdapter restAdapter = new RestAdapter.Builder().setClient(new OkClient(okHttpClient))
+            .setEndpoint("http://forex.cbm.gov.mm/api")
+            .setLogLevel(RestAdapter.LogLevel.BASIC)
+            .build();
+
+        CurrencyService currencyService = restAdapter.create(CurrencyService.class);
+        currencyService.getLatestCurrencies(new Callback<Currency>() {
+          @Override public void success(Currency currency, Response response) {
+            Date time = new Date((long) (Integer.valueOf(currency.getTimestamp()) * 1000));
+          }
+
+          @Override public void failure(RetrofitError error) {
+
+          }
+        });
+      }
+    });
 
     return rootView;
   }
@@ -120,24 +120,10 @@ public class ExchangeRateFragment extends BaseFragment {
     ConnManager manager = new ConnManager(mContext);
     if (SharePrefUtils.getInstance(mContext).isFirstTime()) {
       if (manager.isConnected()) {
-        new GetData().execute();
         SharePrefUtils.getInstance(mContext).noMoreFirstTime();
       } else {
-        Toast.makeText(mContext, R.string.no_connection, Toast.LENGTH_SHORT).show();
-        USD.setText("-");
-        SGD.setText("-");
-        EURO.setText("-");
-        MYR.setText("-");
-        GBP.setText("-");
-        THB.setText("-");
       }
     } else {
-      USD.setText(SharePrefUtils.getInstance(mContext).getUSD());
-      SGD.setText(SharePrefUtils.getInstance(mContext).getSGD());
-      EURO.setText(SharePrefUtils.getInstance(mContext).getEUR());
-      MYR.setText(SharePrefUtils.getInstance(mContext).getMYR());
-      GBP.setText(SharePrefUtils.getInstance(mContext).getGBP());
-      THB.setText(SharePrefUtils.getInstance(mContext).getTHB());
     }
   }
 
@@ -148,7 +134,6 @@ public class ExchangeRateFragment extends BaseFragment {
   }
 
   @Override public boolean onOptionsItemSelected(MenuItem item) {
-    menuItem = item;
     switch (item.getItemId()) {
       case R.id.action_about:
         showAbout();
@@ -160,7 +145,6 @@ public class ExchangeRateFragment extends BaseFragment {
           //  menuItem.setActionView(R.layout.pg);
           //  menuItem.expandActionView();
           //}
-          new GetData().execute();
         } else {
           Toast.makeText(mContext, R.string.no_connection, Toast.LENGTH_SHORT).show();
         }
@@ -184,101 +168,6 @@ public class ExchangeRateFragment extends BaseFragment {
             .setMessage(new SpannableStringBuilder().append(
                 Html.fromHtml(getString(R.string.about_body, versionName))));
     b.create().show();
-  }
-
-  private void showPg(ProgressBar... pg) {
-    for (ProgressBar mPg : pg) {
-      mPg.setVisibility(View.VISIBLE);
-    }
-  }
-
-  private void hideTv(TextView... tv) {
-    for (TextView mTv : tv) {
-      mTv.setVisibility(View.GONE);
-    }
-  }
-
-  private void hidePg(ProgressBar... pg) {
-    for (ProgressBar mPg : pg) {
-      mPg.setVisibility(View.GONE);
-    }
-  }
-
-  private void showTv(TextView... tv) {
-    for (TextView mTv : tv) {
-      mTv.setVisibility(View.VISIBLE);
-    }
-  }
-
-  private class GetData extends AsyncTask<Void, Void, Exchange> {
-    Exchange ex = new Exchange();
-    private String nowTime = new SimpleDateFormat("yyyy/LLL/dd - hh:mm a", Locale.US).format(
-        Calendar.getInstance().getTime());
-
-    @Override protected void onPreExecute() {
-      super.onPreExecute();
-      showPg(usdProgress, sgdProgress, euroProgress, gbpProgress, myrProgress, thbProgress);
-      hideTv(USD, SGD, EURO, MYR, GBP, THB);
-    }
-
-    @Override protected Exchange doInBackground(Void... urls) {
-      HttpClient defaultHttpClient = new DefaultHttpClient();
-      HttpGet httpGet = new HttpGet(BASE_URL + "/latest");
-      try {
-        HttpResponse response = defaultHttpClient.execute(httpGet);
-        if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-          ex = parse(EntityUtils.toString(response.getEntity()));
-        }
-      } catch (ClientProtocolException e) {
-        e.printStackTrace();
-      } catch (IOException e) {
-        e.printStackTrace();
-      } catch (JSONException e) {
-        e.printStackTrace();
-      }
-      return ex;
-    }
-
-    @Override protected void onPostExecute(Exchange ex) {
-      super.onPostExecute(ex);
-
-      // FIXME This is raising NPE when the app is launched for the first time
-      //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-      //  menuItem.collapseActionView();
-      //  menuItem.setActionView(null);
-      //}
-
-      hidePg(usdProgress, sgdProgress, euroProgress, gbpProgress, myrProgress, thbProgress);
-      showTv(USD, SGD, EURO, MYR, GBP, THB);
-
-      if (ex != null) {
-        USD.setText(ex.usd);
-        SGD.setText(ex.sgd);
-        EURO.setText(ex.eur);
-        MYR.setText(ex.myr);
-        GBP.setText(ex.gbp);
-        THB.setText(ex.thb);
-
-        SharePrefUtils.getInstance(mContext)
-            .saveCurrencies(nowTime, ex.usd, ex.sgd, ex.eur, ex.myr, ex.gbp, ex.thb);
-      } else {
-        Toast.makeText(mContext, R.string.no_connection, Toast.LENGTH_SHORT).show();
-      }
-    }
-
-    Exchange parse(String result) throws JSONException {
-      Exchange ex = new Exchange();
-      ex.info = new JSONObject(result).getString("info");
-      ex.description = new JSONObject(result).getString("description");
-      //ex.timestamp = new JSONObject(result).getInt("timestamp");
-      ex.usd = new JSONObject(new JSONObject(result).getString("rates")).getString("USD");
-      ex.sgd = new JSONObject(new JSONObject(result).getString("rates")).getString("SGD");
-      ex.eur = new JSONObject(new JSONObject(result).getString("rates")).getString("EUR");
-      ex.myr = new JSONObject(new JSONObject(result).getString("rates")).getString("MYR");
-      ex.gbp = new JSONObject(new JSONObject(result).getString("rates")).getString("GBP");
-      ex.thb = new JSONObject(new JSONObject(result).getString("rates")).getString("THB");
-      return ex;
-    }
   }
 
   public class ConnManager {
