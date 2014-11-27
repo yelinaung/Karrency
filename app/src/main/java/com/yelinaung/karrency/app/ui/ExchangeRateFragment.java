@@ -21,8 +21,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Html;
@@ -40,6 +38,7 @@ import com.squareup.okhttp.OkHttpClient;
 import com.yelinaung.karrency.app.R;
 import com.yelinaung.karrency.app.async.CurrencyService;
 import com.yelinaung.karrency.app.model.Currency;
+import com.yelinaung.karrency.app.util.ConnManager;
 import com.yelinaung.karrency.app.util.SharePrefUtils;
 import java.util.Date;
 import retrofit.Callback;
@@ -170,28 +169,4 @@ public class ExchangeRateFragment extends BaseFragment {
     b.create().show();
   }
 
-  public class ConnManager {
-    private Context mContext;
-
-    public ConnManager(Context context) {
-      this.mContext = context;
-    }
-
-    public boolean isConnected() {
-      ConnectivityManager connectivity =
-          (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-
-      if (connectivity != null) {
-        NetworkInfo[] info = connectivity.getAllNetworkInfo();
-        if (info != null) {
-          for (NetworkInfo anInfo : info) {
-            if (anInfo.getState() == NetworkInfo.State.CONNECTED) {
-              return true;
-            }
-          }
-        }
-      }
-      return false;
-    }
-  }
 }
