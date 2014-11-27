@@ -32,3 +32,4 @@
 -keepclasseswithmembers class * {
     @retrofit.http.* <methods>;
 }
+-dontwarn okio.**
