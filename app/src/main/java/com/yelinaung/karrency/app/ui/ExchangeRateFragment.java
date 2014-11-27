@@ -27,7 +27,6 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -42,6 +41,7 @@ import com.yelinaung.karrency.app.R;
 import com.yelinaung.karrency.app.async.CurrencyService;
 import com.yelinaung.karrency.app.model.Currency;
 import com.yelinaung.karrency.app.util.SharePrefUtils;
+import java.util.Date;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
@@ -93,7 +93,7 @@ public class ExchangeRateFragment extends BaseFragment {
         CurrencyService currencyService = restAdapter.create(CurrencyService.class);
         currencyService.getLatestCurrencies(new Callback<Currency>() {
           @Override public void success(Currency currency, Response response) {
-            Log.i("currency", currency.getTimestamp());
+            Date time = new Date((long) (Integer.valueOf(currency.getTimestamp()) * 1000));
           }
 
           @Override public void failure(RetrofitError error) {
