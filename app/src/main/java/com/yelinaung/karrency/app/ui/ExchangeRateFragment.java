@@ -84,7 +84,8 @@ public class ExchangeRateFragment extends BaseFragment {
 
     exchangeSRL.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
       @Override public void onRefresh() {
-        RestAdapter restAdapter = new RestAdapter.Builder().setClient(new OkClient(okHttpClient))
+        RestAdapter restAdapter = new RestAdapter.Builder()
+            .setClient(new OkClient(okHttpClient))
             .setEndpoint(BASE_URL)
             .setLogLevel(RestAdapter.LogLevel.BASIC)
             .build();
