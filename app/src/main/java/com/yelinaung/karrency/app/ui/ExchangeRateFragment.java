@@ -31,6 +31,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -53,6 +55,7 @@ public class ExchangeRateFragment extends BaseFragment {
   public static final String BASE_URL = "http://forex.cbm.gov.mm/api";
 
   @InjectView(R.id.exchange_rate_swipe_refresh) SwipeRefreshLayout exchangeSRL;
+  @InjectView(R.id.currencies_wrapper) LinearLayout currenciesWrapper;
 
   private OkHttpClient okHttpClient = new OkHttpClient();
   private Context mContext;
@@ -72,7 +75,7 @@ public class ExchangeRateFragment extends BaseFragment {
   }
 
   @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+  public View onCreateView(final LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
 
     mContext = getActivity().getApplicationContext();
@@ -84,8 +87,7 @@ public class ExchangeRateFragment extends BaseFragment {
 
     exchangeSRL.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
       @Override public void onRefresh() {
-        RestAdapter restAdapter = new RestAdapter.Builder()
-            .setClient(new OkClient(okHttpClient))
+        RestAdapter restAdapter = new RestAdapter.Builder().setClient(new OkClient(okHttpClient))
             .setEndpoint(BASE_URL)
             .setLogLevel(RestAdapter.LogLevel.BASIC)
             .build();
@@ -94,6 +96,17 @@ public class ExchangeRateFragment extends BaseFragment {
         currencyService.getLatestCurrencies(new Callback<Currency>() {
           @Override public void success(Currency currency, Response response) {
             Date time = new Date((long) (Integer.valueOf(currency.getTimestamp()) * 1000));
+            for (int i = 0; i < currency.getRates().getTotal(); i++) {
+
+              final LinearLayout baseLayout =
+                  (LinearLayout) inflater.inflate(R.layout.currency_row, null, false);
+              TextView currencyName = (TextView) baseLayout.findViewById(R.id.currency_name);
+              TextView currencyValue = (TextView) baseLayout.findViewById(R.id.currency_value);
+
+              currencyValue.setText(currency.getRates().getAll().get(i));
+
+              currenciesWrapper.addView(baseLayout);
+            }
           }
 
           @Override public void failure(RetrofitError error) {
@@ -169,5 +182,4 @@ public class ExchangeRateFragment extends BaseFragment {
                 Html.fromHtml(getString(R.string.about_body, versionName))));
     b.create().show();
   }
-
 }
