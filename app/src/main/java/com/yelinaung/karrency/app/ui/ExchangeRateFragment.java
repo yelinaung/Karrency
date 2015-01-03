@@ -107,6 +107,8 @@ public class ExchangeRateFragment extends BaseFragment {
 
               currenciesWrapper.addView(baseLayout);
             }
+
+            exchangeSRL.setRefreshing(false);
           }
 
           @Override public void failure(RetrofitError error) {
