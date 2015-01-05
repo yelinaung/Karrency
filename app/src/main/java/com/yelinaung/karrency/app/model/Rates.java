@@ -395,4 +395,47 @@ public class Rates {
     all.add(getKES());
     return all;
   }
+
+  public ArrayList<String> getAllCurrencies() {
+    ArrayList<String> all = new ArrayList<>();
+    all.add("USD");
+    all.add("HKD");
+    all.add("BRL");
+    all.add("NOK");
+    all.add("PHP");
+    all.add("CAD");
+    all.add("GBP");
+    all.add("RSD");
+    all.add("VND");
+    all.add("KRW");
+    all.add("DKK");
+    all.add("AUD");
+    all.add("KWD");
+    all.add("NZD");
+    all.add("INR");
+    all.add("BND");
+    all.add("EUR");
+    all.add("RUB");
+    all.add("LKR");
+    all.add("CNY");
+    all.add("CHF");
+    all.add("LAK");
+    all.add("ZAR");
+    all.add("ILS");
+    all.add("EGP");
+    all.add("BDT");
+    all.add("NPR");
+    all.add("PKR");
+    all.add("SGD");
+    all.add("IDR");
+    all.add("KHR");
+    all.add("SAR");
+    all.add("THB");
+    all.add("CZK");
+    all.add("JPY");
+    all.add("MYR");
+    all.add("SEK");
+    all.add("KES");
+    return all;
+  }
 }
