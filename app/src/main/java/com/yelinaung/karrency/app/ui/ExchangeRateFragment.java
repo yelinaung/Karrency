@@ -103,7 +103,7 @@ public class ExchangeRateFragment extends BaseFragment {
               TextView currencyName = (TextView) baseLayout.findViewById(R.id.currency_name);
               TextView currencyValue = (TextView) baseLayout.findViewById(R.id.currency_value);
 
-              currencyName.setText(currency.getRates().getAllCurrencies().get(i));
+              currencyName.setText(currency.getRates().getAllCurrenciesNames().get(i));
               currencyValue.setText(currency.getRates().getAll().get(i));
 
               currenciesWrapper.addView(baseLayout);

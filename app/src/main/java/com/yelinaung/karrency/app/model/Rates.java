@@ -396,7 +396,7 @@ public class Rates {
     return all;
   }
 
-  public ArrayList<String> getAllCurrencies() {
+  public ArrayList<String> getAllCurrenciesNames() {
     ArrayList<String> all = new ArrayList<>();
     all.add("USD");
     all.add("HKD");
@@ -437,5 +437,49 @@ public class Rates {
     all.add("SEK");
     all.add("KES");
     return all;
+  }
+
+  public ArrayList<String> getAllCurrenciesLongNames() {
+    ArrayList<String> longNames = new ArrayList<>();
+    longNames.add("United State Dollar");
+    longNames.add("Euro");
+    longNames.add("Singapore Dollar");
+    longNames.add("Pound Sterling");
+    longNames.add("Swiss Franc");
+    longNames.add("Japanese Yen");
+    longNames.add("Australian Dollar");
+    longNames.add("Bangladesh Taka");
+    longNames.add("Brunei Dollar");
+    longNames.add("Cambodian Riel");
+    longNames.add("Canadian Dollar");
+    longNames.add("Chinese Yuan");
+    longNames.add("Hong Kong Dollar");
+    longNames.add("Indian Rupee");
+    longNames.add("Indonesian Rupiah");
+    longNames.add("Korean Won");
+    longNames.add("Lao Kip");
+    longNames.add("Malaysian Ringgit");
+    longNames.add("New Zealand Dollar");
+    longNames.add("Pakistani Rupee");
+    longNames.add("Philippines Peso");
+    longNames.add("Sri Lankan Rupee");
+    longNames.add("Thai Baht");
+    longNames.add("Vietnamese Dong");
+    longNames.add("Brazilian Real");
+    longNames.add("Czech Koruna");
+    longNames.add("Danish Krone");
+    longNames.add("Egyptian Pound");
+    longNames.add("Israeli Shekel");
+    longNames.add("Kenya Shilling");
+    longNames.add("Kuwaiti Dinar");
+    longNames.add("Nepalese Rupee");
+    longNames.add("Norwegian Kroner");
+    longNames.add("Russian Rouble");
+    longNames.add("Saudi Arabian Riyal");
+    longNames.add("Serbian Dinar");
+    longNames.add("South Africa Rand");
+    longNames.add("Swedish Krona");
+
+    return longNames;
   }
 }
