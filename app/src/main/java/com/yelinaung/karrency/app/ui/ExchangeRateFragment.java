@@ -36,6 +36,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
+import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
+import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
 import com.squareup.okhttp.OkHttpClient;
 import com.yelinaung.karrency.app.R;
 import com.yelinaung.karrency.app.async.CurrencyService;
@@ -52,10 +55,13 @@ import retrofit.client.Response;
 @SuppressWarnings("ConstantConditions")
 public class ExchangeRateFragment extends BaseFragment {
 
+  public static final String ARG_SCROLL_Y = "ARG_SCROLL_Y";
+
   public static final String BASE_URL = "http://forex.cbm.gov.mm/api";
 
   @InjectView(R.id.exchange_rate_swipe_refresh) SwipeRefreshLayout exchangeSRL;
   @InjectView(R.id.currencies_wrapper) LinearLayout currenciesWrapper;
+  @InjectView(R.id.scroll) ObservableScrollView scrollView;
 
   private OkHttpClient okHttpClient = new OkHttpClient();
   private Context mContext;
@@ -121,6 +127,22 @@ public class ExchangeRateFragment extends BaseFragment {
         });
       }
     });
+
+    Activity parentActivity = getActivity();
+    if (parentActivity instanceof ObservableScrollViewCallbacks) {
+      // Scroll to the specified offset after layout
+      Bundle args = getArguments();
+      if (args != null && args.containsKey(ARG_SCROLL_Y)) {
+        final int scrollY = args.getInt(ARG_SCROLL_Y, 0);
+        ScrollUtils.addOnGlobalLayoutListener(scrollView, new Runnable() {
+          @Override
+          public void run() {
+            scrollView.scrollTo(0, scrollY);
+          }
+        });
+      }
+      scrollView.setScrollViewCallbacks((ObservableScrollViewCallbacks) parentActivity);
+    }
 
     return rootView;
   }

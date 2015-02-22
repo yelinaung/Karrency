@@ -21,7 +21,9 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-  <ScrollView
+  <com.github.ksoichiro.android.observablescrollview.ObservableScrollView
+      android:id="@+id/scroll"
+      android:background="@android:color/white"
       android:layout_width="match_parent"
       android:layout_height="match_parent">
 
@@ -32,6 +34,6 @@
         android:layout_height="wrap_content">
     </LinearLayout>
 
-  </ScrollView>
+  </com.github.ksoichiro.android.observablescrollview.ObservableScrollView>
 
 </android.support.v4.widget.SwipeRefreshLayout>
