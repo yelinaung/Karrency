@@ -26,23 +26,15 @@
 
   <com.yelinaung.karrency.app.ui.widget.SlidingTabLayout
       android:id="@+id/sliding_tabs"
+      android:background="@color/theme_primary"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"/>
+      android:layout_height="@dimen/tab_height"/>
+
   <android.support.v4.view.ViewPager
       android:id="@+id/pager"
       android:layout_width="match_parent"
       android:layout_height="0px"
       android:layout_weight="1"
       tools:context=".MainActivity"/>
-  <TextView
-      android:id="@+id/last_sync_time"
-      android:text="@string/sync_time"
-      android:gravity="center_horizontal"
-      android:textSize="@dimen/text_small_label_size"
-      android:background="@drawable/ab_bottom_solid_karrency"
-      android:padding="5dp"
-      android:layout_weight="0"
-      android:textColor="@android:color/white"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"/>
+
 </LinearLayout>

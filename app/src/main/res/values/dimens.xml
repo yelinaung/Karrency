@@ -41,4 +41,5 @@ http://stackoverflow.com/questions/13655577/android-list-preferred-left-padding-
   <dimen name="text_size_medium">18sp</dimen>
   <dimen name="text_size_large">22sp</dimen>
 
+  <dimen name="tab_height">48dp</dimen>
 </resources>

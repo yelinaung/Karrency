@@ -17,6 +17,7 @@
 package com.yelinaung.karrency.app.ui;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -24,21 +25,15 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
-import android.text.SpannableStringBuilder;
-import android.view.View;
-import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.yelinaung.karrency.app.R;
 import com.yelinaung.karrency.app.ui.widget.SlidingTabLayout;
-import com.yelinaung.karrency.app.util.SharePrefUtils;
 
 public class HomeActivity extends ActionBarActivity {
 
   @InjectView(R.id.pager) ViewPager mPager;
-  @InjectView(R.id.last_sync_time) TextView lastSync;
   @InjectView(R.id.toolbar) Toolbar mToolbar;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
@@ -52,13 +47,12 @@ public class HomeActivity extends ActionBarActivity {
     this.setSupportActionBar(mToolbar);
 
     SlidingTabLayout slidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tabs);
-    int mPrimaryColor = getResources().getColor(R.color.accent_color);
-    slidingTabLayout.setSelectedIndicatorColors(mPrimaryColor);
-    slidingTabLayout.setDividerColors(mPrimaryColor);
+    slidingTabLayout.setCustomTabView(R.layout.tab_indicator, android.R.id.text1);
+    slidingTabLayout.setSelectedIndicatorColors(Color.WHITE);
+    slidingTabLayout.setDistributeEvenly(true);
 
     mPager.setAdapter(new SlidingTabAdapter(getSupportFragmentManager(), HomeActivity.this));
     slidingTabLayout.setViewPager(mPager);
-    firstTimeTask();
   }
 
   @Override
@@ -111,17 +105,6 @@ public class HomeActivity extends ActionBarActivity {
 
     @Override public long getItemId(int position) {
       return super.getItemId(position);
-    }
-  }
-
-  private void firstTimeTask() {
-    if (SharePrefUtils.getInstance(getApplicationContext()).isFirstTime()) {
-      lastSync.setVisibility(View.GONE);
-    } else {
-      String time = SharePrefUtils.getInstance(getApplicationContext()).getTime();
-      SpannableStringBuilder lastSyncTime = new SpannableStringBuilder();
-      lastSyncTime.append(Html.fromHtml(getString(R.string.sync_time, time)));
-      lastSync.setText(lastSyncTime);
     }
   }
 }
