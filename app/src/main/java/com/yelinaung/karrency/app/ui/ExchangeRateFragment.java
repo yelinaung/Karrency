@@ -102,10 +102,12 @@ public class ExchangeRateFragment extends BaseFragment {
                   (LinearLayout) inflater.inflate(R.layout.currency_row, null, false);
               TextView currencyName = (TextView) baseLayout.findViewById(R.id.currency_name);
               TextView currencyValue = (TextView) baseLayout.findViewById(R.id.currency_value);
-              TextView currencyLongName = (TextView) baseLayout.findViewById(R.id.currency_long_name);
+              TextView currencyLongName =
+                  (TextView) baseLayout.findViewById(R.id.currency_long_name);
 
               currencyName.setText(currency.getRates().getAllCurrenciesNames().get(i));
               currencyValue.setText(currency.getRates().getAll().get(i));
+              currencyLongName.setText(currency.getRates().getAllCurrenciesLongNames().get(i));
 
               currenciesWrapper.addView(baseLayout);
             }
