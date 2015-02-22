@@ -15,104 +15,100 @@
   -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@android:color/white"
     tools:context="com.yelinaung.karrency.app.ui.CalculatorFragment">
 
-  <RelativeLayout
+  <LinearLayout
       android:id="@+id/from_to_wrapper"
-      android:layout_marginLeft="@dimen/listPreferredItemPaddingLeft"
-      android:layout_marginRight="@dimen/listPreferredItemPaddingRight"
-      android:paddingLeft="@dimen/listPreferredItemPaddingLeft"
-      android:paddingRight="@dimen/listPreferredItemPaddingRight"
+      android:orientation="horizontal"
       android:layout_width="match_parent"
       android:layout_height="wrap_content">
-    <TextView
-        android:id="@+id/label_from"
-        android:layout_gravity="center_vertical"
-        android:text="@string/from"
-        android:layout_width="80dp"
-        android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-light"
-        android:textSize="@dimen/result_font_size"
-        android:layout_marginTop="20dp"
-        android:layout_alignTop="@+id/change"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"/>
-    <Spinner
-        android:id="@+id/spinner_currencies"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="70dp"
-        android:layout_marginTop="5dp"
-        android:entries="@array/currencies"
-        android:prompt="@string/label_select_currency"/>
-    <TextView
-        android:id="@+id/label_to"
-        android:text="@string/to"
-        android:layout_marginTop="10dp"
-        android:layout_below="@+id/spinner_currencies"
-        android:layout_width="80dp"
-        android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-light"
-        android:textSize="@dimen/result_font_size"/>
-    <TextView
-        android:id="@+id/label_mmk"
-        android:layout_toRightOf="@id/label_to"
-        android:text="@string/label_mmk"
-        android:textSize="@dimen/result_font_size"
-        android:layout_below="@+id/spinner_currencies"
-        android:gravity="center"
-        android:fontFamily="sans-serif-light"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"/>
+
+    <LinearLayout
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:padding="@dimen/spacing_minor"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content">
+
+      <LinearLayout
+          android:orientation="horizontal"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/label_from"
+            style="@style/LabelStyle"
+            android:gravity="center_vertical"
+            android:text="@string/from"/>
+
+        <Spinner
+            android:id="@+id/spinner_currencies"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:entries="@array/currencies"
+            android:prompt="@string/label_select_currency"/>
+
+      </LinearLayout>
+
+      <LinearLayout
+          android:orientation="horizontal"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/label_to"
+            style="@style/LabelStyle"
+            android:gravity="center_vertical"
+            android:text="@string/to"/>
+
+        <TextView
+            android:id="@+id/label_mmk"
+            style="@style/LabelStyle"
+            tools:text="@string/label_mmk"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"/>
+
+      </LinearLayout>
+
+    </LinearLayout>
+
     <ImageButton
         style="?android:attr/borderlessButtonStyle"
         android:id="@+id/change"
         android:src="@drawable/ic_action_import_export"
+        android:layout_gravity="center_vertical"
         android:contentDescription="@string/change"
         android:background="?android:attr/selectableItemBackground"
         android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"/>
-  </RelativeLayout>
+        android:layout_height="48dp"/>
+
+  </LinearLayout>
 
   <View
-      android:id="@+id/mSeparator"
+      android:id="@+id/divider"
       android:layout_below="@+id/from_to_wrapper"
-      android:layout_width="wrap_content"
+      android:layout_marginLeft="@dimen/spacing_minor"
+      android:layout_marginRight="@dimen/spacing_minor"
+      android:layout_width="match_parent"
       android:layout_height="1dp"
-      android:layout_marginTop="10dp"
-      android:layout_marginBottom="5dp"
-      android:layout_marginLeft="@dimen/listPreferredItemPaddingLeft"
-      android:layout_marginRight="@dimen/listPreferredItemPaddingRight"
       android:background="?android:attr/listDivider"/>
 
   <com.yelinaung.karrency.app.ui.FloatLabelLayout
       android:id="@+id/float_label"
-      android:layout_below="@id/mSeparator"
+      android:layout_below="@+id/divider"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginTop="10dp">
 
     <com.yelinaung.karrency.app.ui.ClearableEditText
         android:id="@+id/edittext_amount"
+        style="@style/EditTextStyle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="15dp"
-        android:layout_below="@id/mSeparator"
-        android:maxLength="15"
-        android:hint="@string/enter_amount"
-        android:textSize="@dimen/result_font_size"
-        android:fontFamily="sans-serif-light"
-        android:layout_marginLeft="@dimen/listPreferredItemPaddingLeft"
-        android:layout_marginRight="@dimen/listPreferredItemPaddingRight"
-        android:inputType="numberDecimal"/>
+        android:layout_height="wrap_content"/>
+
   </com.yelinaung.karrency.app.ui.FloatLabelLayout>
 
   <LinearLayout
@@ -126,22 +122,16 @@
 
     <com.yelinaung.karrency.app.util.SizeAdjustingTextView
         android:id="@+id/textview_result"
-        android:fontFamily="sans-serif-light"
-        android:text="@string/dummy_result"
-        android:textSize="@dimen/result_font_size"
-        android:layout_weight="1"
-        android:gravity="center"
+        style="@style/ResultStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
     <TextView
         android:id="@+id/result_currency"
-        android:text="@string/label_mmk"
-        android:textSize="@dimen/result_font_size"
-        android:layout_weight="2"
-        android:gravity="center"
-        android:fontFamily="sans-serif-light"
+        style="@style/ResultStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+
   </LinearLayout>
+
 </RelativeLayout>

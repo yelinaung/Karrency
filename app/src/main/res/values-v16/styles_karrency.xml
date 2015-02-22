@@ -74,11 +74,13 @@
     <item name="android:layout_gravity">center_vertical</item>
     <item name="android:layout_width">80dp</item>
     <item name="android:layout_height">50dp</item>
+    <item name="android:fontFamily">sans-serif-light</item>
     <item name="android:textSize">@dimen/result_font_size</item>
     <item name="android:layout_alignParentLeft">true</item>
   </style>
 
   <style name="ResultStyle">
+    <item name="android:fontFamily">sans-serif-light</item>
     <item name="android:text">@string/dummy_result</item>
     <item name="android:textSize">@dimen/result_font_size</item>
     <item name="android:layout_weight">1</item>
@@ -91,6 +93,7 @@
     <item name="android:maxLength">15</item>
     <item name="android:hint">@string/enter_amount</item>
     <item name="android:textSize">@dimen/result_font_size</item>
+    <item name="android:fontFamily">sans-serif-light</item>
     <item name="android:layout_marginLeft">@dimen/listPreferredItemPaddingLeft</item>
     <item name="android:layout_marginRight">@dimen/listPreferredItemPaddingRight</item>
     <item name="android:inputType">numberDecimal</item>
