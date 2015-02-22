@@ -32,13 +32,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
-import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
-import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
 import com.squareup.okhttp.OkHttpClient;
 import com.yelinaung.karrency.app.R;
 import com.yelinaung.karrency.app.async.CurrencyService;
@@ -55,17 +53,16 @@ import retrofit.client.Response;
 @SuppressWarnings("ConstantConditions")
 public class ExchangeRateFragment extends BaseFragment {
 
-  public static final String ARG_SCROLL_Y = "ARG_SCROLL_Y";
-
   public static final String BASE_URL = "http://forex.cbm.gov.mm/api";
 
   @InjectView(R.id.exchange_rate_swipe_refresh) SwipeRefreshLayout exchangeSRL;
   @InjectView(R.id.currencies_wrapper) LinearLayout currenciesWrapper;
-  @InjectView(R.id.scroll) ObservableScrollView scrollView;
+  @InjectView(R.id.scroll) ScrollView scrollView;
 
   private OkHttpClient okHttpClient = new OkHttpClient();
   private Context mContext;
   private View rootView;
+  private LayoutInflater inflater;
 
   public ExchangeRateFragment() {
     // Required empty public constructor
@@ -84,6 +81,8 @@ public class ExchangeRateFragment extends BaseFragment {
   public View onCreateView(final LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
 
+    this.inflater = inflater;
+
     mContext = getActivity().getApplicationContext();
     rootView = inflater.inflate(R.layout.fragment_exchange_rate, container, false);
     assert rootView != null;
@@ -93,56 +92,9 @@ public class ExchangeRateFragment extends BaseFragment {
 
     exchangeSRL.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
       @Override public void onRefresh() {
-        RestAdapter restAdapter = new RestAdapter.Builder().setClient(new OkClient(okHttpClient))
-            .setEndpoint(BASE_URL)
-            .setLogLevel(RestAdapter.LogLevel.BASIC)
-            .build();
-
-        CurrencyService currencyService = restAdapter.create(CurrencyService.class);
-        currencyService.getLatestCurrencies(new Callback<Currency>() {
-          @Override public void success(Currency currency, Response response) {
-            Date time = new Date((long) (Integer.valueOf(currency.getTimestamp()) * 1000));
-            for (int i = 0; i < currency.getRates().getTotal(); i++) {
-
-              final LinearLayout baseLayout =
-                  (LinearLayout) inflater.inflate(R.layout.currency_row, null, false);
-              TextView currencyName = (TextView) baseLayout.findViewById(R.id.currency_name);
-              TextView currencyValue = (TextView) baseLayout.findViewById(R.id.currency_value);
-              TextView currencyLongName =
-                  (TextView) baseLayout.findViewById(R.id.currency_long_name);
-
-              currencyName.setText(currency.getRates().getAllCurrenciesNames().get(i));
-              currencyValue.setText(currency.getRates().getAll().get(i));
-              currencyLongName.setText(currency.getRates().getAllCurrenciesLongNames().get(i));
-
-              currenciesWrapper.addView(baseLayout);
-            }
-
-            exchangeSRL.setRefreshing(false);
-          }
-
-          @Override public void failure(RetrofitError error) {
-
-          }
-        });
+        syncCurrencies();
       }
     });
-
-    Activity parentActivity = getActivity();
-    if (parentActivity instanceof ObservableScrollViewCallbacks) {
-      // Scroll to the specified offset after layout
-      Bundle args = getArguments();
-      if (args != null && args.containsKey(ARG_SCROLL_Y)) {
-        final int scrollY = args.getInt(ARG_SCROLL_Y, 0);
-        ScrollUtils.addOnGlobalLayoutListener(scrollView, new Runnable() {
-          @Override
-          public void run() {
-            scrollView.scrollTo(0, scrollY);
-          }
-        });
-      }
-      scrollView.setScrollViewCallbacks((ObservableScrollViewCallbacks) parentActivity);
-    }
 
     return rootView;
   }
@@ -157,6 +109,8 @@ public class ExchangeRateFragment extends BaseFragment {
 
   @Override public void onResume() {
     super.onResume();
+
+    //syncCurrencies();
 
     ConnManager manager = new ConnManager(mContext);
     if (SharePrefUtils.getInstance(mContext).isFirstTime()) {
@@ -209,5 +163,39 @@ public class ExchangeRateFragment extends BaseFragment {
             .setMessage(new SpannableStringBuilder().append(
                 Html.fromHtml(getString(R.string.about_body, versionName))));
     b.create().show();
+  }
+
+  private void syncCurrencies() {
+    RestAdapter restAdapter = new RestAdapter.Builder().setClient(new OkClient(okHttpClient))
+        .setEndpoint(BASE_URL)
+        .setLogLevel(RestAdapter.LogLevel.BASIC)
+        .build();
+
+    CurrencyService currencyService = restAdapter.create(CurrencyService.class);
+    currencyService.getLatestCurrencies(new Callback<Currency>() {
+      @Override public void success(Currency currency, Response response) {
+        Date time = new Date((long) (Integer.valueOf(currency.getTimestamp()) * 1000));
+        for (int i = 0; i < currency.getRates().getTotal(); i++) {
+
+          final LinearLayout baseLayout =
+              (LinearLayout) inflater.inflate(R.layout.currency_row, null, false);
+          TextView currencyName = (TextView) baseLayout.findViewById(R.id.currency_name);
+          TextView currencyValue = (TextView) baseLayout.findViewById(R.id.currency_value);
+          TextView currencyLongName = (TextView) baseLayout.findViewById(R.id.currency_long_name);
+
+          currencyName.setText(currency.getRates().getAllCurrenciesNames().get(i));
+          currencyValue.setText(currency.getRates().getAll().get(i));
+          currencyLongName.setText(currency.getRates().getAllCurrenciesLongNames().get(i));
+
+          currenciesWrapper.addView(baseLayout);
+        }
+
+        exchangeSRL.setRefreshing(false);
+      }
+
+      @Override public void failure(RetrofitError error) {
+
+      }
+    });
   }
 }
