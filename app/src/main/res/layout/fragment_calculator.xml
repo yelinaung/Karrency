@@ -23,55 +23,49 @@
   <LinearLayout
       android:id="@+id/from_to_wrapper"
       android:orientation="horizontal"
-      android:layout_width="match_parent"
+      android:padding="@dimen/spacing_minor"
+      android:layout_width="wrap_content"
       android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_weight="1"
         android:orientation="vertical"
-        android:padding="@dimen/spacing_minor"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-      <LinearLayout
-          android:orientation="horizontal"
+      <TextView
+          android:id="@+id/label_from"
+          style="@style/LabelStyle"
+          android:gravity="center_vertical"
+          android:text="@string/from"/>
+
+      <TextView
+          android:id="@+id/label_to"
+          style="@style/LabelStyle"
+          android:gravity="center_vertical"
+          android:text="@string/to"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_weight="3"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+      <Spinner
+          android:id="@+id/spinner_currencies"
           android:layout_width="wrap_content"
-          android:layout_height="wrap_content">
+          android:layout_height="50dp"
+          android:entries="@array/currencies"
+          android:prompt="@string/label_select_currency"/>
 
-        <TextView
-            android:id="@+id/label_from"
-            style="@style/LabelStyle"
-            android:gravity="center_vertical"
-            android:text="@string/from"/>
-
-        <Spinner
-            android:id="@+id/spinner_currencies"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:entries="@array/currencies"
-            android:prompt="@string/label_select_currency"/>
-
-      </LinearLayout>
-
-      <LinearLayout
-          android:orientation="horizontal"
+      <TextView
+          android:id="@+id/label_mmk"
+          style="@style/LabelStyle"
+          android:text="@string/label_mmk"
           android:layout_width="wrap_content"
-          android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/label_to"
-            style="@style/LabelStyle"
-            android:gravity="center_vertical"
-            android:text="@string/to"/>
-
-        <TextView
-            android:id="@+id/label_mmk"
-            style="@style/LabelStyle"
-            tools:text="@string/label_mmk"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"/>
-
-      </LinearLayout>
+          android:layout_height="50dp"/>
 
     </LinearLayout>
 
