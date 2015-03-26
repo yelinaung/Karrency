@@ -20,12 +20,12 @@ def versionMinor = 0
 def versionPatch = 0
 
 android {
-  compileSdkVersion 21
-  buildToolsVersion '21.1.1'
+  compileSdkVersion 22
+  buildToolsVersion '21.1.2'
 
   defaultConfig {
     minSdkVersion 14
-    targetSdkVersion 21
+    targetSdkVersion 22
     versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100
     versionName "${versionMajor}.${versionMinor}.${versionPatch}"
   }
@@ -49,8 +49,8 @@ android {
 
 dependencies {
   compile 'com.jakewharton:butterknife:6.0.0'
-  compile 'com.android.support:support-v4:21.0.3'
-  compile 'com.android.support:appcompat-v7:21.0.3'
+  compile 'com.android.support:support-v4:22.0.0'
+  compile 'com.android.support:appcompat-v7:22.0.0'
   compile 'com.squareup.okhttp:okhttp-urlconnection:2.0.0'
   compile 'com.squareup.okhttp:okhttp:2.0.0'
   compile 'com.squareup.retrofit:retrofit:1.8.0'
