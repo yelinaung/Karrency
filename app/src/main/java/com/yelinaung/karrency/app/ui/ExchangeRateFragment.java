@@ -34,7 +34,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.squareup.okhttp.OkHttpClient;
@@ -131,17 +130,6 @@ public class ExchangeRateFragment extends BaseFragment {
     switch (item.getItemId()) {
       case R.id.action_about:
         showAbout();
-      case R.id.action_sync:
-        ConnManager manager = new ConnManager(mContext);
-        if (manager.isConnected()) {
-          // FIXME
-          //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-          //  menuItem.setActionView(R.layout.pg);
-          //  menuItem.expandActionView();
-          //}
-        } else {
-          Toast.makeText(mContext, R.string.no_connection, Toast.LENGTH_SHORT).show();
-        }
     }
     return super.onOptionsItemSelected(item);
   }
