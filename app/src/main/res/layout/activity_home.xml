@@ -22,19 +22,19 @@
 
   <LinearLayout
       android:id="@+id/header"
+      style="@style/HeaderBar"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:orientation="vertical"
-      style="@style/HeaderBar">
+      android:orientation="vertical">
 
-    <include android:id="@+id/toolbar"
+    <include
         layout="@layout/toolbar"/>
 
     <com.yelinaung.karrency.app.ui.widget.SlidingTabLayout
         android:id="@+id/sliding_tabs"
         android:background="@color/theme_primary"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/tab_height"/>
+        android:layout_height="wrap_content"/>
 
   </LinearLayout>
 
