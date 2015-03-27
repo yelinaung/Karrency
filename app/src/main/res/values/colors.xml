@@ -23,4 +23,6 @@
   <color name="accent_color">#269dff</color>
 
   <color name="btn_pressed">#ff268fef</color>
+
+  <color name="indicator_color">#004D40</color>
 </resources>

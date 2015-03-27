@@ -1,0 +1,6 @@
+<resources>
+  <style name="HeaderBar">
+    <item name="android:background">?colorPrimary</item>
+    <item name="android:elevation">@dimen/headerbar_elevation</item>
+  </style>
+</resources>

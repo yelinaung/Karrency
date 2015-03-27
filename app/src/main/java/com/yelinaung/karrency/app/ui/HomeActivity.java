@@ -17,7 +17,6 @@
 package com.yelinaung.karrency.app.ui;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -53,7 +52,7 @@ public class HomeActivity extends ActionBarActivity {
 
     SlidingTabLayout slidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tabs);
     slidingTabLayout.setCustomTabView(R.layout.tab_indicator, android.R.id.text1);
-    slidingTabLayout.setSelectedIndicatorColors(Color.WHITE);
+    slidingTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.indicator_color));
     slidingTabLayout.setDistributeEvenly(true);
 
     mPager.setAdapter(slidingTabAdapter);

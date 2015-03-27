@@ -50,7 +50,6 @@ import retrofit.RetrofitError;
 import retrofit.client.OkClient;
 import retrofit.client.Response;
 
-@SuppressWarnings("ConstantConditions")
 public class ExchangeRateFragment extends BaseFragment {
 
   public static final String BASE_URL = "http://forex.cbm.gov.mm/api";
