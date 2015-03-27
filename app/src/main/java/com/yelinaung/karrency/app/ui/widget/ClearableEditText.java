@@ -19,7 +19,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.yelinaung.karrency.app.ui;
+package com.yelinaung.karrency.app.ui.widget;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.yelinaung.karrency.app.ui;
+package com.yelinaung.karrency.app.ui.widget;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;

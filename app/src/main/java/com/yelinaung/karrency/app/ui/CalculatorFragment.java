@@ -51,6 +51,7 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.yelinaung.karrency.app.R;
+import com.yelinaung.karrency.app.ui.widget.ClearableEditText;
 import com.yelinaung.karrency.app.util.SharePrefUtils;
 import com.yelinaung.karrency.app.util.SizeAdjustingTextView;
 import java.util.Formatter;

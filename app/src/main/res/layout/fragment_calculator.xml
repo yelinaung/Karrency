@@ -90,20 +90,20 @@
       android:layout_height="1dp"
       android:background="?android:attr/listDivider"/>
 
-  <com.yelinaung.karrency.app.ui.FloatLabelLayout
+  <com.yelinaung.karrency.app.ui.widget.FloatLabelLayout
       android:id="@+id/float_label"
       android:layout_below="@+id/divider"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginTop="10dp">
 
-    <com.yelinaung.karrency.app.ui.ClearableEditText
+    <com.yelinaung.karrency.app.ui.widget.ClearableEditText
         android:id="@+id/edittext_amount"
         style="@style/EditTextStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-  </com.yelinaung.karrency.app.ui.FloatLabelLayout>
+  </com.yelinaung.karrency.app.ui.widget.FloatLabelLayout>
 
   <LinearLayout
       android:id="@+id/result"

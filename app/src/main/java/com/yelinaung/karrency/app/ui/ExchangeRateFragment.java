@@ -34,6 +34,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.squareup.okhttp.OkHttpClient;
@@ -108,15 +109,11 @@ public class ExchangeRateFragment extends BaseFragment {
   @Override public void onResume() {
     super.onResume();
 
-    //syncCurrencies();
-
-    ConnManager manager = new ConnManager(mContext);
     if (SharePrefUtils.getInstance(mContext).isFirstTime()) {
-      if (manager.isConnected()) {
-        SharePrefUtils.getInstance(mContext).noMoreFirstTime();
-      } else {
-      }
+      syncCurrencies();
+      SharePrefUtils.getInstance(mContext).noMoreFirstTime();
     } else {
+      syncCurrencies();
     }
   }
 
@@ -153,36 +150,40 @@ public class ExchangeRateFragment extends BaseFragment {
   }
 
   private void syncCurrencies() {
-    RestAdapter restAdapter = new RestAdapter.Builder().setClient(new OkClient(okHttpClient))
-        .setEndpoint(BASE_URL)
-        .setLogLevel(RestAdapter.LogLevel.BASIC)
-        .build();
+    if (new ConnManager(mContext).isConnected()) {
+      RestAdapter restAdapter = new RestAdapter.Builder().setClient(new OkClient(okHttpClient))
+          .setEndpoint(BASE_URL)
+          .setLogLevel(RestAdapter.LogLevel.BASIC)
+          .build();
 
-    CurrencyService currencyService = restAdapter.create(CurrencyService.class);
-    currencyService.getLatestCurrencies(new Callback<Currency>() {
-      @Override public void success(Currency currency, Response response) {
-        Date time = new Date((long) (Integer.valueOf(currency.getTimestamp()) * 1000));
-        for (int i = 0; i < currency.getRates().getTotal(); i++) {
+      CurrencyService currencyService = restAdapter.create(CurrencyService.class);
+      currencyService.getLatestCurrencies(new Callback<Currency>() {
+        @Override public void success(Currency currency, Response response) {
+          Date time = new Date((long) (Integer.valueOf(currency.getTimestamp()) * 1000));
+          for (int i = 0; i < currency.getRates().getTotal(); i++) {
 
-          final LinearLayout baseLayout =
-              (LinearLayout) inflater.inflate(R.layout.currency_row, null, false);
-          TextView currencyName = (TextView) baseLayout.findViewById(R.id.currency_name);
-          TextView currencyValue = (TextView) baseLayout.findViewById(R.id.currency_value);
-          TextView currencyLongName = (TextView) baseLayout.findViewById(R.id.currency_long_name);
+            final LinearLayout baseLayout =
+                (LinearLayout) inflater.inflate(R.layout.currency_row, null, false);
+            TextView currencyName = (TextView) baseLayout.findViewById(R.id.currency_name);
+            TextView currencyValue = (TextView) baseLayout.findViewById(R.id.currency_value);
+            TextView currencyLongName = (TextView) baseLayout.findViewById(R.id.currency_long_name);
 
-          currencyName.setText(currency.getRates().getAllCurrenciesNames().get(i));
-          currencyValue.setText(currency.getRates().getAll().get(i));
-          currencyLongName.setText(currency.getRates().getAllCurrenciesLongNames().get(i));
+            currencyName.setText(currency.getRates().getAllCurrenciesNames().get(i));
+            currencyValue.setText(currency.getRates().getAll().get(i));
+            currencyLongName.setText(currency.getRates().getAllCurrenciesLongNames().get(i));
 
-          currenciesWrapper.addView(baseLayout);
+            currenciesWrapper.addView(baseLayout);
+          }
+
+          exchangeSRL.setRefreshing(false);
         }
 
-        exchangeSRL.setRefreshing(false);
-      }
-
-      @Override public void failure(RetrofitError error) {
-
-      }
-    });
+        @Override public void failure(RetrofitError error) {
+          error.printStackTrace();
+        }
+      });
+    } else {
+      Toast.makeText(mContext, getString(R.string.no_connection), Toast.LENGTH_SHORT).show();
+    }
   }
 }
