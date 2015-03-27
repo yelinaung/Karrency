@@ -5,7 +5,7 @@ Karrency - A Simple Exchange Rate Checker & Currency Calculator. (MMK <=> Other 
 
 Minimum SDK 16 (ICS) is required.
 
-<a href="https://raw.githubusercontent.com/yelinaung/Karrency/master/device-2014-04-16-223625_framed.png"><img src="https://raw.githubusercontent.com/yelinaung/Karrency/master/device-2014-04-16-223625_framed.png" height="1352" width="800" ></a>
+<!-- <a href="https://raw.githubusercontent.com/yelinaung/Karrency/master/device-2014-04-16-223625_framed.png"><img src="https://raw.githubusercontent.com/yelinaung/Karrency/master/device-2014-04-16-223625_framed.png" height="1352" width="800" ></a> -->
 
 
 It's now available on Play Store
