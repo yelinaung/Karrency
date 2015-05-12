@@ -56,7 +56,6 @@ import com.yelinaung.karrency.app.util.SharePrefUtils;
 import com.yelinaung.karrency.app.util.SizeAdjustingTextView;
 import java.util.Formatter;
 
-@SuppressWarnings("ConstantConditions")
 public class CalculatorFragment extends BaseFragment {
 
   private static int ANIMATION_DURATION = 300;

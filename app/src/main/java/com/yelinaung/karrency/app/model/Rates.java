@@ -1,5 +1,6 @@
 package com.yelinaung.karrency.app.model;
 
+import io.realm.RealmObject;
 import java.util.ArrayList;
 
 /**

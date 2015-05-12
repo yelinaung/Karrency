@@ -32,18 +32,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.squareup.okhttp.OkHttpClient;
+import com.yelinaung.karrency.app.BuildConfig;
 import com.yelinaung.karrency.app.R;
 import com.yelinaung.karrency.app.async.CurrencyService;
 import com.yelinaung.karrency.app.model.Currency;
 import com.yelinaung.karrency.app.util.ConnManager;
 import com.yelinaung.karrency.app.util.SharePrefUtils;
-import java.util.Date;
+import io.realm.Realm;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
@@ -56,12 +56,12 @@ public class ExchangeRateFragment extends BaseFragment {
 
   @InjectView(R.id.exchange_rate_swipe_refresh) SwipeRefreshLayout exchangeSRL;
   @InjectView(R.id.currencies_wrapper) LinearLayout currenciesWrapper;
-  @InjectView(R.id.scroll) ScrollView scrollView;
 
-  private OkHttpClient okHttpClient = new OkHttpClient();
   private Context mContext;
   private View rootView;
   private LayoutInflater inflater;
+  private OkHttpClient okHttpClient;
+  private Realm realm;
 
   public ExchangeRateFragment() {
     // Required empty public constructor
@@ -74,6 +74,7 @@ public class ExchangeRateFragment extends BaseFragment {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    okHttpClient = new OkHttpClient();
   }
 
   @Override
@@ -86,6 +87,8 @@ public class ExchangeRateFragment extends BaseFragment {
     rootView = inflater.inflate(R.layout.fragment_exchange_rate, container, false);
     assert rootView != null;
     ButterKnife.inject(this, rootView);
+
+    //realm = Realm.getInstance(mContext);
 
     exchangeSRL.setColorSchemeColors(R.color.theme_primary);
 
@@ -151,16 +154,29 @@ public class ExchangeRateFragment extends BaseFragment {
 
   private void syncCurrencies() {
     if (new ConnManager(mContext).isConnected()) {
-      RestAdapter restAdapter = new RestAdapter.Builder().setClient(new OkClient(okHttpClient))
-          .setEndpoint(BASE_URL)
-          .setLogLevel(RestAdapter.LogLevel.BASIC)
-          .build();
+
+      RestAdapter restAdapter;
+      if (BuildConfig.DEBUG) {
+        restAdapter = new RestAdapter.Builder().setClient(new OkClient(okHttpClient))
+            .setEndpoint(BASE_URL)
+            .setLogLevel(RestAdapter.LogLevel.BASIC)
+            .build();
+      } else {
+        restAdapter = new RestAdapter.Builder().setClient(new OkClient(okHttpClient))
+            .setEndpoint(BASE_URL)
+            .build();
+      }
 
       CurrencyService currencyService = restAdapter.create(CurrencyService.class);
       currencyService.getLatestCurrencies(new Callback<Currency>() {
         @Override public void success(Currency currency, Response response) {
-          Date time = new Date((long) (Integer.valueOf(currency.getTimestamp()) * 1000));
+          //Date time = new Date((long) (Integer.valueOf(currency.getTimestamp()) * 1000));
           for (int i = 0; i < currency.getRates().getTotal(); i++) {
+
+            //realm.beginTransaction();
+            //Currency c = new Currency();
+            //c.setRates(currency.getRates());
+            //realm.commitTransaction();
 
             final LinearLayout baseLayout =
                 (LinearLayout) inflater.inflate(R.layout.currency_row, null, false);

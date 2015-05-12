@@ -42,9 +42,7 @@ public class HomeActivity extends ActionBarActivity {
     //Fabric.with(this, new Crashlytics());
 
     setContentView(R.layout.activity_home);
-
     ButterKnife.inject(this);
-
     this.setSupportActionBar(mToolbar);
 
     SlidingTabAdapter slidingTabAdapter =
