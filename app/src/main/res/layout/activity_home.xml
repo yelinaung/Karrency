@@ -30,25 +30,29 @@
     <include
         layout="@layout/toolbar"/>
 
-    <com.yelinaung.karrency.app.ui.widget.SlidingTabLayout
-        android:id="@+id/sliding_tabs"
-        android:background="@color/theme_primary"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
   </LinearLayout>
 
-  <FrameLayout
-      android:id="@+id/pager_wrapper"
-      android:background="@android:color/transparent"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent">
+  <android.support.v4.widget.SwipeRefreshLayout
+      xmlns:android="http://schemas.android.com/apk/res/android"
+      android:id="@+id/exchange_rate_swipe_refresh"
+      android:orientation="vertical"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content">
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/pager"
+    <ScrollView
+        android:id="@+id/scroll"
+        android:background="@android:color/white"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent">
 
-  </FrameLayout>
+      <LinearLayout
+          android:id="@+id/currencies_wrapper"
+          android:orientation="vertical"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"/>
+
+    </ScrollView>
+
+  </android.support.v4.widget.SwipeRefreshLayout>
 
 </LinearLayout>

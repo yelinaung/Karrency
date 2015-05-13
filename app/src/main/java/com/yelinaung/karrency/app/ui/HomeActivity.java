@@ -16,26 +16,41 @@
 
 package com.yelinaung.karrency.app.ui;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
+import android.view.LayoutInflater;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.google.analytics.tracking.android.EasyTracker;
+import com.squareup.okhttp.OkHttpClient;
+import com.yelinaung.karrency.app.BuildConfig;
 import com.yelinaung.karrency.app.R;
-import com.yelinaung.karrency.app.ui.widget.SlidingTabLayout;
+import com.yelinaung.karrency.app.async.CurrencyService;
+import com.yelinaung.karrency.app.model.Currency;
+import com.yelinaung.karrency.app.util.ConnManager;
+import com.yelinaung.karrency.app.util.SharePrefUtils;
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.OkClient;
+import retrofit.client.Response;
 
 public class HomeActivity extends ActionBarActivity {
 
-  @InjectView(R.id.pager) ViewPager mPager;
   @InjectView(R.id.toolbar) Toolbar mToolbar;
-  @InjectView(R.id.header) View mHeaderView;
+  @InjectView(R.id.exchange_rate_swipe_refresh) SwipeRefreshLayout exchangeSRL;
+  @InjectView(R.id.currencies_wrapper) LinearLayout currenciesWrapper;
+
+  public static final String BASE_URL = "http://forex.cbm.gov.mm/api";
+
+  private OkHttpClient okHttpClient = new OkHttpClient();
+  // private Realm realm;
+  private LayoutInflater inflater;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -45,16 +60,25 @@ public class HomeActivity extends ActionBarActivity {
     ButterKnife.inject(this);
     this.setSupportActionBar(mToolbar);
 
-    SlidingTabAdapter slidingTabAdapter =
-        new SlidingTabAdapter(getSupportFragmentManager(), HomeActivity.this);
+    exchangeSRL.setColorSchemeColors(R.color.theme_primary);
 
-    SlidingTabLayout slidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tabs);
-    slidingTabLayout.setCustomTabView(R.layout.tab_indicator, android.R.id.text1);
-    slidingTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.indicator_color));
-    slidingTabLayout.setDistributeEvenly(true);
+    exchangeSRL.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+      @Override public void onRefresh() {
+        syncCurrencies();
+      }
+    });
 
-    mPager.setAdapter(slidingTabAdapter);
-    slidingTabLayout.setViewPager(mPager);
+    inflater = this.getLayoutInflater();
+  }
+
+  @Override protected void onResume() {
+    if (SharePrefUtils.getInstance(HomeActivity.this).isFirstTime()) {
+      syncCurrencies();
+      SharePrefUtils.getInstance(HomeActivity.this).noMoreFirstTime();
+    } else {
+      syncCurrencies();
+    }
+    super.onResume();
   }
 
   @Override public void onStart() {
@@ -67,40 +91,54 @@ public class HomeActivity extends ActionBarActivity {
     EasyTracker.getInstance(this).activityStop(this);  // Add this method.
   }
 
-  public class SlidingTabAdapter extends FragmentStatePagerAdapter {
-
-    private Context mContext;
-
-    public SlidingTabAdapter(FragmentManager fm, Context context) {
-      super(fm);
-      this.mContext = context;
-    }
-
-    @Override public int getCount() {
-      return 2;
-    }
-
-    @Override public Fragment getItem(int position) {
-      Fragment f = null;
-      switch (position) {
-        case 0:
-          f = ExchangeRateFragment.newInstance();
-          break;
-        case 1:
-          f = CalculatorFragment.newInstance();
-          break;
+  private void syncCurrencies() {
+    if (new ConnManager(HomeActivity.this).isConnected()) {
+      RestAdapter restAdapter;
+      if (BuildConfig.DEBUG) {
+        restAdapter = new RestAdapter.Builder().setClient(new OkClient(okHttpClient))
+            .setEndpoint(BASE_URL)
+            .setLogLevel(RestAdapter.LogLevel.BASIC)
+            .build();
+      } else {
+        restAdapter = new RestAdapter.Builder().setClient(new OkClient(okHttpClient))
+            .setEndpoint(BASE_URL)
+            .build();
       }
-      return f;
-    }
 
-    @Override public CharSequence getPageTitle(int position) {
-      switch (position) {
-        case 0:
-          return mContext.getString(R.string.rate);
-        case 1:
-          return mContext.getString(R.string.calc);
-      }
-      return null;
+      CurrencyService currencyService = restAdapter.create(CurrencyService.class);
+      currencyService.getLatestCurrencies(new Callback<Currency>() {
+        @Override public void success(Currency currency, Response response) {
+          //Date time = new Date((long) (Integer.valueOf(currency.getTimestamp()) * 1000));
+          for (int i = 0; i < currency.getRates().getTotal(); i++) {
+
+            //realm.beginTransaction();
+            //Currency c = new Currency();
+            //c.setRates(currency.getRates());
+            //realm.commitTransaction();
+
+            final LinearLayout baseLayout =
+                (LinearLayout) inflater.inflate(R.layout.currency_row, null, false);
+            TextView currencyName = (TextView) baseLayout.findViewById(R.id.currency_name);
+            TextView currencyValue = (TextView) baseLayout.findViewById(R.id.currency_value);
+            TextView currencyLongName = (TextView) baseLayout.findViewById(R.id.currency_long_name);
+
+            currencyName.setText(currency.getRates().getAllCurrenciesNames().get(i));
+            currencyValue.setText(currency.getRates().getAll().get(i));
+            currencyLongName.setText(currency.getRates().getAllCurrenciesLongNames().get(i));
+
+            currenciesWrapper.addView(baseLayout);
+          }
+
+          exchangeSRL.setRefreshing(false);
+        }
+
+        @Override public void failure(RetrofitError error) {
+          error.printStackTrace();
+        }
+      });
+    } else {
+      Toast.makeText(HomeActivity.this, getString(R.string.no_connection), Toast.LENGTH_SHORT)
+          .show();
     }
   }
 }
